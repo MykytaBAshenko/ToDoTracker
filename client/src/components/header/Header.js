@@ -20,7 +20,7 @@ function Header() {
 
     const userLink = () => {
         return <li className="header-acc-control">
-            <Link to={"/user/" + user._id} className="avatar">
+            <Link to={"/user/" + user?._id} className="avatar">
                 <img src={user.avatar} alt="" />
             </Link>
             <div className="nav-item dropdown">

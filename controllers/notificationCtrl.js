@@ -26,7 +26,7 @@ const notificationCtrl = {
     getNotifications: async (req, res) => {
         try {
             let user = await Users.find({ "_id": req.user.id })
-            if (user[0].role) {
+            if (user[0]?.role) {
                 let nots = await Notification.find({ wasseen: false })
                 res.json({ notifications: nots })
             }
