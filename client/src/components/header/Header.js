@@ -22,6 +22,7 @@ function Header() {
 
     return (
         <div>
+            <img src="/images/defaultUser.jpg"/>
             <Link className="dropdown-item" to="/" onClick={handleLogout}>Logout</Link>
         </div>
 

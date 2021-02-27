@@ -5,7 +5,11 @@ const userSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users'
-      },
+    },
+    project: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Projects'
+    },
     nickname: {
         type: String,
         trim: true,
@@ -14,13 +18,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
-    password: {
+    whatDo: {
         type: String,
-        required: [true, "Please enter your password!"]
+        trim: true,
     },
-    avatar: {
+    about: {
         type: String,
-        default: "https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png"
+        trim: true,
     }
 }, {
     timestamps: true
