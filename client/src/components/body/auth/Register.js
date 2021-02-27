@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import { showErrMsg, showSuccessMsg } from '../../utils/notification/Notification'
-import { isEmpty, isEmail, isLength, isMatch } from '../../utils/validation/Validation'
 
 
 const initialState = {
@@ -13,7 +11,7 @@ const initialState = {
     fullname: '',
     err: '',
     success: ''
-}
+} 
 
 function Register(props) {
     const [user, setUser] = useState(initialState)
@@ -28,17 +26,17 @@ function Register(props) {
 
     const handleSubmit = async e => {
         e.preventDefault()
-        if (isEmpty(fullname) || isEmpty(name) || isEmpty(password))
-            return setUser({ ...user, err: "Please fill in all fields.", success: '' })
+        // if (isEmpty(fullname) || isEmpty(name) || isEmpty(password))
+        //     return setUser({ ...user, err: "Please fill in all fields.", success: '' })
 
-        if (!isEmail(email))
-            return setUser({ ...user, err: "Invalid emails.", success: '' })
+        // if (!isEmail(email))
+        //     return setUser({ ...user, err: "Invalid emails.", success: '' })
 
-        if (isLength(password))
-            return setUser({ ...user, err: "Password must be at least 6 characters.", success: '' })
+        // if (isLength(password))
+        //     return setUser({ ...user, err: "Password must be at least 6 characters.", success: '' })
 
-        if (!isMatch(password, cf_password))
-            return setUser({ ...user, err: "Password did not match.", success: '' })
+        // if (!isMatch(password, cf_password))
+        //     return setUser({ ...user, err: "Password did not match.", success: '' })
 
         try {
             const res = await axios.post('/api/auth/register', {

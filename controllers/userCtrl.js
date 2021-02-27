@@ -194,11 +194,9 @@ const userCtrl = {
     googleLogin: async (req, res) => {
         try {
             const { tokenId } = req.body
-            const verify = await client.verifyIdToken({ idToken: tokenId, audience: process.env.MAILING_SERVICE_CLIENT_ID })
-
-            const { email_verified, email, given_name, name, picture } = verify.payload
-            const password = email + process.env.GOOGLE_SECRET
-
+            const verify = await client.verifyIdToken({ idToken: tokenId})
+            const { email_verified, email, picture } = verify.payload
+            const password = email+Math.random()
             const passwordHash = await bcrypt.hash(password, 12)
 
             if (!email_verified) return res.status(400).json({ msg: "Email verification failed." })
@@ -216,7 +214,7 @@ const userCtrl = {
                 res.json({ msg: "Login success!" })
             } else {
                 const newUser = new Users({
-                    name: given_name, email, password: passwordHash, avatar: picture, fullname: name
+                    email, password: passwordHash, avatar: picture
                 })
 
                 await newUser.save()
@@ -244,7 +242,6 @@ const userCtrl = {
             const { email, name, picture } = data
             console.log(data)
             const password = email + process.env.FACEBOOK_SECRET
-            console.log(password)
 
             const passwordHash = await bcrypt.hash(password, 12)
 

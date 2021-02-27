@@ -15,14 +15,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-.App{
-  max-width: 1800px;
-  width: 100%;
-  min-height: 100vh;
-  box-shadow: 0 0 20px #eee;
-  margin: 0 auto;
-  overflow: hidden;
-}
+
 a{
   text-decoration: none;
 }
@@ -35,6 +28,5 @@ button{
   cursor: pointer;
 }
 
-@import url("./components/header/header.css");
 
 @import url("./components/body/auth/auth.css");

@@ -2,16 +2,17 @@ const mongoose = require('mongoose')
 
 
 const userSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users'
+      },
     nickname: {
         type: String,
         trim: true,
-        unique: true
     },
     email: {
         type: String,
-        required: [true, "Please enter your email!"],
         trim: true,
-        unique: true
     },
     password: {
         type: String,
@@ -19,7 +20,7 @@ const userSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        default: "/images/defaultUser.jpg"
+        default: "https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png"
     }
 }, {
     timestamps: true

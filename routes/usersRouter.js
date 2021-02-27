@@ -4,7 +4,7 @@ const auth = require('../middleware/auth')
 const authAdmin = require('../middleware/authAdmin')
 const usersCtrl = require('../controllers/usersCtrl')
 
-
+ 
 router.post('/', usersCtrl.getAllUsers)
 
 router.get('/:id', usersCtrl.getUser)
@@ -24,7 +24,7 @@ router.post('/uploadavatar',auth, usersCtrl.uploadImage)
 router.patch('/update_role/:id', auth, authAdmin, usersCtrl.updateUsersRole)
 
 
-
+ 
 
 
 module.exports = router

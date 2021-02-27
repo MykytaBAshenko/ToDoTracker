@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import { isEmail } from '../../utils/validation/Validation'
+// import { isEmail } from '../../utils/validation/Validation'
 
 const initialState = {
     email: '',
@@ -19,8 +19,8 @@ function ForgotPassword() {
     }
 
     const forgotPassword = async () => {
-        if (!isEmail(email))
-            alert("Email")
+        // if (!isEmail(email))
+        //     alert("Email")
             const res = await axios.post('/api/auth/forgot', { email })
             alert(res.data.msg)
         

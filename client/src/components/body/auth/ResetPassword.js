@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
-import { showErrMsg, showSuccessMsg } from '../../utils/notification/Notification'
-import { isLength, isMatch } from '../../utils/validation/Validation'
 
 
 const initialState = {
@@ -25,11 +23,11 @@ function ResetPassword(props) {
 
 
     const handleResetPass = async () => {
-        if (isLength(password))
-            return setData({ ...data, err: "Password must be at least 6 characters.", success: '' })
+        // if (isLength(password))
+        //     return setData({ ...data, err: "Password must be at least 6 characters.", success: '' })
 
-        if (!isMatch(password, cf_password))
-            return setData({ ...data, err: "Password did not match.", success: '' })
+        // if (!isMatch(password, cf_password))
+        //     return setData({ ...data, err: "Password did not match.", success: '' })
 
             const res = await axios.post('/api/auth/reset', { password }, {
                 headers: { Authorization: token }
@@ -49,8 +47,7 @@ function ResetPassword(props) {
             <h2>Reset Your Password</h2>
 
             <div className="row">
-                {err && showErrMsg(err)}
-                {success && showSuccessMsg(success)}
+      
 
                 <label htmlFor="password">Password</label>
                 <input type="password" name="password" id="password" value={password}

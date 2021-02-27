@@ -17,17 +17,7 @@ app.use(fileUpload({
 
 app.use('/api/auth', require('./routes/authRouter'))
 
-app.use('/api/users', require('./routes/usersRouter'))
 
-app.use('/api/question', require('./routes/questionRouter'))
-
-app.use('/api/answear', require('./routes/answearRouter'))
-
-app.use('/api/comment', require('./routes/commentRouter'))
-
-app.use('/api/notifications', require('./routes/notificationRouter'))
-
-app.use('/uploads', express.static('uploads'));
 // Connect to mongodb
 const URI = process.env.MONGODB_URL
 mongoose.connect(URI, {

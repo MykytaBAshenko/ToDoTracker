@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
-import { showErrMsg, showSuccessMsg } from '../../utils/notification/Notification'
 
 function ActivationEmail(props) {
     const { activation_token } = useParams()
-    const [err, setErr] = useState('')
-    const [success, setSuccess] = useState('')
 
     useEffect(() => {
         if (activation_token) {
@@ -26,8 +23,7 @@ function ActivationEmail(props) {
 
     return (
         <div className="active_page">
-            {err && showErrMsg(err)}
-            {success && showSuccessMsg(success)}
+      
         </div>
     )
 }
