@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 
-const userSchema = new mongoose.Schema({
+const userInProjectSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users',
@@ -20,10 +20,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
-    email: {
-        type: String,
-        trim: true,
-    },
     whatDo: {
         type: String,
         trim: true,
@@ -31,12 +27,9 @@ const userSchema = new mongoose.Schema({
     about: {
         type: String,
         trim: true,
-    },
-    avatar: {
-        type: String
     }
 }, {
     timestamps: true
 })
 
-module.exports = mongoose.model("UsersInProject", userSchema)
+module.exports = mongoose.model("UsersInProject", userInProjectSchema)

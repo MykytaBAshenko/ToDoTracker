@@ -195,7 +195,7 @@ const userCtrl = {
         try {
             const { tokenId } = req.body
             const verify = await client.verifyIdToken({ idToken: tokenId})
-            const { email_verified, email, picture } = verify.payload
+            const { email_verified, email, picture, name } = verify.payload
             const password = email+Math.random()
             const passwordHash = await bcrypt.hash(password, 12)
 
@@ -214,7 +214,7 @@ const userCtrl = {
                 res.json({ msg: "Login success!" })
             } else {
                 const newUser = new Users({
-                    email, password: passwordHash, avatar: picture
+                    email, password: passwordHash, avatar: picture, nickname: name
                 })
 
                 await newUser.save()

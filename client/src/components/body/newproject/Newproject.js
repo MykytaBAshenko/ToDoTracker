@@ -8,7 +8,10 @@ import './Newproject.css'
 function Home() {
     const [name, setname] = useState("")
     const [description, setdescription] = useState("")
-    const [logoLink, setlogoLink] = useState("/images/company-placeholder.png")
+    const [logo, setlogo] = useState("/images/company-placeholder.png")
+    const [imageinput, setimageinput] = useState("")
+    const [uniqueLink, setuniqueLink] = useState("")
+    
     const [arrayOfLinks, setarrayOfLinks] = useState([])
     const auth = useSelector(state => state.auth)
     const token = useSelector(state => state.token)
@@ -22,6 +25,7 @@ function Home() {
     const [Link4, setLink4] = useState("")
     const [onWhatLink5, setonWhatLink5] = useState("")
     const [Link5, setLink5] = useState("")
+
 
     const [howManyInputs,sethowManyInputs] = useState(1)
 
@@ -70,24 +74,71 @@ function Home() {
           let formData = new FormData()
           formData.append('file', file)
     
-          const res = await axios.post('/api/question/uploadimage', formData, {
+          const res = await axios.post('/api/project/uploadlogo', formData, {
             headers: { 'content-type': 'multipart/form-data', Authorization: token }
           })
     
-          logoLink( "/" + res.data.url)
+          setlogo( "/" + res.data.url)
     
         } catch (err) {
           console.log({ err: err.response.data.msg, success: '' })
         }
       }
+
+    const createNewProject = async () =>{
+        const sendobj = {}
+        sendobj.name  = name
+        sendobj.description = description
+        sendobj.uniqueLink = uniqueLink
+        sendobj.logo = logo
+        sendobj.arrayOfLinks = []
+        if(onWhatLink1 && Link1) 
+            sendobj.arrayOfLinks.push({
+                onwhat: onWhatLink1,
+                link: Link1
+            })
+        if(onWhatLink2 && Link2) 
+            sendobj.arrayOfLinks.push({
+                onwhat: onWhatLink2,
+                link: Link2
+            })
+        if(onWhatLink3 && Link3) 
+            sendobj.arrayOfLinks.push({
+                onwhat: onWhatLink3,
+                link: Link3
+            })
+        if(onWhatLink4 && Link4) 
+            sendobj.arrayOfLinks.push({
+                onwhat: onWhatLink4,
+                link: Link4
+            })
+        if(onWhatLink5 && Link5) 
+            sendobj.arrayOfLinks.push({
+                onwhat: onWhatLink5,
+                link: Link5
+            })
+            // console.log(sendobj)
+        axios.post("/api/project/new", sendobj, {
+        headers: {  Authorization: token }
+      }).then(d => console.log(d))
+    }
+
     return (
         <div className="dashboard_page">
-            {/* dashboard
-            <Link to="new">Create new project</Link> */}
-            <img src={logoLink}/>
+            <img src={logo}/>
             <input type="file" name="file" id="file_up" onChange={uploadLogo} />
+
+            <input type="text" value={imageinput} onChange={e => setimageinput(e.target.value)}/>
+            <button onClick={
+                () => {
+                    setlogo(imageinput)
+                    setimageinput("")
+                }
+            }>setimage</button>
             <input value={name} onChange={e => setname(e.target.value)}/>
             <textarea value={description} onChange={e => setdescription(e.target.value)}/>
+            <input placeholder={"uniqueLink"} value={uniqueLink} onChange={e => setuniqueLink(e.target.value)}/>
+            
             {
                 howManyInputs > 0 ? 
                 <div>
@@ -141,7 +192,8 @@ function Home() {
                 </div>
             }
 
-            
+            <button onClick={() => createNewProject()}>Create new project</button>
+
             </div>
     )
 }

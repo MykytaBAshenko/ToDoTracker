@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import './Dashboard.css'
 
-function Dashboard() {
+function Project() {
 
     useEffect(() => {
       
@@ -13,10 +13,11 @@ function Dashboard() {
 
     return (
         <div className="dashboard_page">
-            dashboard
-            <Link to="new">Create new project</Link>
+            project
+            {/* dashboard
+            <Link to="new">Create new project</Link> */}
         </div>
     )
 }
 
-export default Dashboard
+export default Project
