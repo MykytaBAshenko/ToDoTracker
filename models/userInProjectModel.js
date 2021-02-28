@@ -4,11 +4,17 @@ const mongoose = require('mongoose')
 const userSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Users'
+        ref: 'Users',
+        require: true
     },
     project: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Projects'
+        ref: 'Projects',
+        require: true
+    },
+    status: {
+        type: String,
+        trim: true
     },
     nickname: {
         type: String,
@@ -25,9 +31,12 @@ const userSchema = new mongoose.Schema({
     about: {
         type: String,
         trim: true,
+    },
+    avatar: {
+        type: String
     }
 }, {
     timestamps: true
 })
 
-module.exports = mongoose.model("Users", userSchema)
+module.exports = mongoose.model("UsersInProject", userSchema)

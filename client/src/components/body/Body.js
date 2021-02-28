@@ -9,19 +9,27 @@ import ForgotPass from '../body/auth/ForgotPassword'
 import ResetPass from '../body/auth/ResetPassword'
 
 import Home from '../body/home/Home'
+import Dashboard from '../body/dashboard/Dashboard'
+import Newproject from '../body/newproject/Newproject'
+
+
 
 
 
 import {useSelector} from 'react-redux'
 const NotFound =() => <div>posoi</div>
 
-function Body() {
+function Body(props) {
     const auth = useSelector(state => state.auth)
     const {isLogged, isAdmin} = auth
     return (
         <section>
             <Switch>
                 <Route path="/" component={Home} exact />
+                <Route path="/dashboard" component={isLogged ? Dashboard : Login} exact />
+                <Route path="/new" component={isLogged ? Newproject : Login} exact />
+
+
                 <Route path="/login" component={isLogged ? NotFound : Login} exact />
                 <Route path="/register" component={isLogged ? NotFound : Register} exact />
                 <Route path="/forgot_password" component={isLogged ? NotFound : ForgotPass} exact />

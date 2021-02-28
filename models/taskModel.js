@@ -2,7 +2,17 @@ const mongoose = require('mongoose')
 
 
 const projectSchema = new mongoose.Schema({
-    name: {
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UsersInProject',
+        required: true
+    },
+    project: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Projects',
+        required: true
+    },
+    title: {
         type: String,
         trim: true,
         required: true
@@ -12,24 +22,30 @@ const projectSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
-    usefulLink: {
+    state: {
         type: String,
-        default: ""
+        trim: true,
+        required: true,
+        default: "In Progress",
     },
-    link: {
+    type: {
         type: String,
-        default: ""
+        trim: true,
+        required: true,
+        default: "Task",
     },
-    design: {
-        type: String,
-        default: ""
+    priority: {
+        type: Number,
+        trim: true,
+        required: true,
+        default: 4,
     },
-    logo: {
-        type: String,
-        default: "/images/company-placeholder.png"
+    images: {
+        type: Array,
+        default: []
     }
 }, {
     timestamps: true
 })
 
-module.exports = mongoose.model("Projects", projectSchema)
+module.exports = mongoose.model("Tasks", projectSchema)

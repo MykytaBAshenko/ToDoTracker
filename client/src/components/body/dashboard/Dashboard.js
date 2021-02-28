@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
+import './Dashboard.css'
 
 function Home() {
 
@@ -11,8 +12,9 @@ function Home() {
 
 
     return (
-        <div className="home_page">
-            home
+        <div className="dashboard_page">
+            dashboard
+            <Link>Create new project</Link>
         </div>
     )
 }

@@ -12,17 +12,9 @@ const projectSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
-    usefulLink: {
-        type: String,
-        default: ""
-    },
-    link: {
-        type: String,
-        default: ""
-    },
-    design: {
-        type: String,
-        default: ""
+    arrayOfLinks: {
+        type: Array,
+        default: []
     },
     logo: {
         type: String,
