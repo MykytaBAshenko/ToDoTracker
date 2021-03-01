@@ -5,14 +5,12 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import './Newproject.css'
 
-function Home() {
+function Home(props) {
     const [name, setname] = useState("")
     const [description, setdescription] = useState("")
     const [logo, setlogo] = useState("/images/company-placeholder.png")
     const [imageinput, setimageinput] = useState("")
     const [uniqueLink, setuniqueLink] = useState("")
-    
-    const [arrayOfLinks, setarrayOfLinks] = useState([])
     const auth = useSelector(state => state.auth)
     const token = useSelector(state => state.token)
     const [onWhatLink1, setonWhatLink1] = useState("")
@@ -120,7 +118,9 @@ function Home() {
             // console.log(sendobj)
         axios.post("/api/project/new", sendobj, {
         headers: {  Authorization: token }
-      }).then(d => console.log(d))
+      }).then(d => {
+          props.history.push(`/project/${d.data.createdProject.uniqueLink}`)
+      })
     }
 
     return (
