@@ -26,7 +26,7 @@ function Body(props) {
     return (
         <section>
             <Switch>
-                <Route path="/" component={Home} exact />
+                <Route path="/" component={isLogged ? Dashboard : Login} exact />
                 <Route path="/dashboard" component={isLogged ? Dashboard : Login} exact />
                 <Route path="/new" component={isLogged ? Newproject : Login} exact />
                 <Route path="/project/:projectId" component={isLogged ? Project : Login}/>

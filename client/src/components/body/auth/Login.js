@@ -40,7 +40,7 @@ function Login() {
     }
 
     const responseGoogle = async (response) => {
-            const res = await axios.post('/api/auth/google_login', { tokenId: response.tokenId })
+            const res = await axios.post('/api/auth/googlelogin', { tokenId: response.tokenId })
             setUser({ ...user, error: '', success: res.data.msg })
             localStorage.setItem('firstLogin', true)
 

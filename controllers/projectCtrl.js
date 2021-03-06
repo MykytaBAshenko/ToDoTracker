@@ -75,10 +75,39 @@ const projectCtrl = {
             res.json({success: false, msg: err})
         }
     },
+    getProjects: async (req,res) => {
+        try {
+            let rolesInProjects = await UsersInProject.find({"user": mongoose.Types.ObjectId(req.user.id)}).populate("project")
+            res.json({success:true, projects: rolesInProjects})
+        } catch (err) {
+            res.json({success: false, msg: err})
+        }
+    },
+    addUser: async (req,res) => {
+        try {
+            let project = await Project.find({uniqueLink: req.params.projectLink})
+            // console.log(project, req.user, req.body)
+            let users_in_project = await UsersInProject.find({project: project[0]._id })
+            // console.log(users_in_project)
+            let user_exist = false;
+            for(let o  = 0; o < users_in_project.length; o++) {
+                if (users_in_project[o].user.toString() == req.user.id)
+                    user_exist = true
+            }
+            let invate_user = await Users.find({ email:req.body.adduser})
+            console.log(invate_user)
+            // console.log(user_exist)
+            // let rolesInProjects = await UsersInProject.find({"user": mongoose.Types.ObjectId(req.user.id)}).populate("project")
+            // res.json({success:true, projects: rolesInProjects})
+        } catch (err) {
+            res.json({success: false, msg: err})
+        }
+    },
     getProject: async (req,res) => {
         try {
             // console.log(req.user,req.params.projectLink)
             const project = await Project.find({ "uniqueLink": req.params.projectLink })
+            console.log(project)
             if(project.length) {
                 const UsersIn = await UsersInProject
                     .find({project: project[0]._id})

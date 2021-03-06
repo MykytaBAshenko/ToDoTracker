@@ -4,12 +4,12 @@ const mongoose = require('mongoose')
 const userInProjectSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Users',
+        ref: 'users',
         require: true
     },
     project: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Projects',
+        ref: 'projects',
         require: true
     },
     status: {
@@ -32,4 +32,4 @@ const userInProjectSchema = new mongoose.Schema({
     timestamps: true
 })
 
-module.exports = mongoose.model("UsersInProject", userInProjectSchema)
+module.exports = mongoose.model("usersinproject", userInProjectSchema)

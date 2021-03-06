@@ -6,6 +6,8 @@ import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import ProjectDashboard from './dashboard/ProjectDashboard'
 import Users from './users/Users'
+import Newtask from './newtask/Newtask'
+
 
 
 
@@ -19,6 +21,8 @@ function Project(props) {
           axios.get(`/api/project/get/${projectId}`, {
         headers: {  Authorization: token }
       }).then(d => {
+        console.log(d)
+
           if(d?.data?.success){
             console.log(d)
           } else {
@@ -30,8 +34,9 @@ function Project(props) {
 
     return (
         <Switch>
-            <Route path="/project/:projectId" component={ProjectDashboard} exact/>
-            <Route path="/project/:projectId/users" component={Users} exact/>
+            <Route path="/project/:projectLink" component={ProjectDashboard} exact/>
+            <Route path="/project/:projectLink/users" component={Users} exact/>
+            <Route path="/project/:projectLink/newtask" component={Newtask} exact/>
 
 
         </Switch>

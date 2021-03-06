@@ -8,30 +8,39 @@ import { useSelector, useDispatch } from 'react-redux'
 
 
 
-function Project(props) {
-    const projectId = props.match.params.projectId;
+function Users(props) {
+    const projectLink = props.match.params.projectLink;
     const auth = useSelector(state => state.auth)
     const token = useSelector(state => state.token)
     const {isLogged, isAdmin} = auth
     useEffect(() => {
-        console.log(projectId)
-    //       axios.get(`/api/project/get/${projectId}`, {
+    //       axios.post(`/api/project/${projectLink}/adduser`, {
     //     headers: {  Authorization: token }
     //   }).then(d => {
     //       if(d?.data?.success){
-    //         console.log(d)
+    //             console.log(d)
     //       } else {
     //           props.history.push("/dashboard")
     //       }
     //   })
-    }, [projectId])
+    }, [])
+
+    const [AddUserInput,setAddUserInput] = useState("")
+
+    const AddUserToProject = () => {
+        axios.post(`/api/project/${projectLink}/adduser`,{adduser:AddUserInput}, {
+            headers: {  Authorization: token }
+        }).then(d => console.log(d))
+    }
 
 
     return (
         <div>
+            <input value={AddUserInput} onChange={e => setAddUserInput(e.target.value)}></input>
+            <button onClick={() => AddUserToProject()}>ssss</button>
             users
         </div>
     )
 }
 
-export default Project
+export default Users

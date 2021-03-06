@@ -18,7 +18,7 @@ router.get('/infor', auth, userCtrl.getUserInfor)
 
 router.get('/logout', userCtrl.logout)
 
-router.post('/google_login', userCtrl.googleLogin)
+router.post('/googlelogin', userCtrl.googleLogin)
 
 router.post('/facebook_login', userCtrl.facebookLogin)
 

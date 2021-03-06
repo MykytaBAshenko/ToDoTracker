@@ -198,11 +198,10 @@ const userCtrl = {
             const { email_verified, email, picture, name } = verify.payload
             const password = email+Math.random()
             const passwordHash = await bcrypt.hash(password, 12)
-
+            console.log(verify)
             if (!email_verified) return res.status(400).json({ msg: "Email verification failed." })
 
             const user = await Users.findOne({ email })
-
             if (user) {
                 const refresh_token = createRefreshToken({ id: user._id })
                 res.cookie('refreshtoken', refresh_token, {
@@ -228,6 +227,7 @@ const userCtrl = {
                 res.json({ msg: "Login success!" })
             }
         } catch (err) {
+            console.log(err)
             return res.status(500).json({ msg: err.message })
         }
     },

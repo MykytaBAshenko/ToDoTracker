@@ -4,12 +4,12 @@ const mongoose = require('mongoose')
 const projectSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'UsersInProject',
+        ref: 'usersinproject',
         required: true
     },
     project: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Projects',
+        ref: 'projects',
         required: true
     },
     title: {
@@ -48,4 +48,4 @@ const projectSchema = new mongoose.Schema({
     timestamps: true
 })
 
-module.exports = mongoose.model("Tasks", projectSchema)
+module.exports = mongoose.model("tasks", projectSchema)

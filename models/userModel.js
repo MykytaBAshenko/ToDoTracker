@@ -4,8 +4,7 @@ const mongoose = require('mongoose')
 const userSchema = new mongoose.Schema({
     nickname: {
         type: String,
-        trim: true,
-        unique: true
+        trim: true
     },
     email: {
         type: String,
@@ -25,4 +24,4 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 })
 
-module.exports = mongoose.model("Users", userSchema)
+module.exports = mongoose.model("users", userSchema)
