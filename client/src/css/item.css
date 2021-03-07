@@ -1,0 +1,40 @@
+.select-element{
+    display: flex;
+    align-items: center;
+}
+.select-text{
+    margin-left: 5px;
+    font-size: 16px;
+}
+.select-element svg{
+    width: 16px;
+    height:  16px;
+}
+
+
+
+
+
+
+
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    }
+    
+    /* Track */
+    ::-webkit-scrollbar-track {
+    background: #e0e0e0; 
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+    background: #ffcc00; 
+    }
+    
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+    background: #ffcc0080; 
+    }
+    

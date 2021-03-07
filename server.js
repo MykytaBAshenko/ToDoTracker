@@ -16,7 +16,7 @@ app.use(fileUpload({
 }))
 
 app.use('/api/auth', require('./routes/authRouter'))
-
+app.use('/api/task', require('./routes/taskRouter'))
 app.use('/api/project', require('./routes/projectRouter'))
 
 

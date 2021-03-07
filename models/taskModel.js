@@ -2,11 +2,6 @@ const mongoose = require('mongoose')
 
 
 const projectSchema = new mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'usersinproject',
-        required: true
-    },
     project: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'projects',
@@ -26,19 +21,19 @@ const projectSchema = new mongoose.Schema({
         type: String,
         trim: true,
         required: true,
-        default: "In Progress",
+        default: "progress",
     },
     type: {
         type: String,
         trim: true,
         required: true,
-        default: "Task",
+        default: "task",
     },
     priority: {
         type: Number,
         trim: true,
         required: true,
-        default: 4,
+        default: "blank",
     },
     images: {
         type: Array,

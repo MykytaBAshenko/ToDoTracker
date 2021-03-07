@@ -12,9 +12,11 @@
     "react-dom": "^16.14.0",
     "react-facebook-login": "^4.1.1",
     "react-google-login": "^5.1.21",
+    "react-icons": "^4.2.0",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
+    "react-select": "^4.2.1",
     "react-toast-notifications": "^2.4.3",
     "react-toastify": "^6.2.0",
     "redux": "^4.0.5"

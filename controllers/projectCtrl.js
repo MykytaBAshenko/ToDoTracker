@@ -86,20 +86,44 @@ const projectCtrl = {
     addUser: async (req,res) => {
         try {
             let project = await Project.find({uniqueLink: req.params.projectLink})
-            // console.log(project, req.user, req.body)
-            let users_in_project = await UsersInProject.find({project: project[0]._id })
-            // console.log(users_in_project)
-            let user_exist = false;
-            for(let o  = 0; o < users_in_project.length; o++) {
-                if (users_in_project[o].user.toString() == req.user.id)
-                    user_exist = true
+            if(project.length) {
+                let users_in_project = await UsersInProject.find({project: project[0]._id })
+                let user_exist = false
+                for(let o  = 0; o < users_in_project.length; o++) {
+                    if (users_in_project[o].user.toString() == req.user.id)
+                        user_exist = true
+                }
+                if(user_exist) {
+                    let invate_user = await Users.find({ email:req.body.adduser})
+                    if(invate_user.length) {
+                        let user_exist_in_proj = false
+                        for (let y = 0; y < users_in_project.length; y++)
+                            if(invate_user[0]._id.toString() == users_in_project[y].user.toString())
+                                user_exist_in_proj = true
+                        if(!user_exist_in_proj) {
+                            const UserInProj = new UsersInProject({
+                                user: invate_user[0]._id,
+                                project: mongoose.Types.ObjectId(project[0]._id),
+                                status: "Member",
+                                nickname: invate_user[0].nickname,
+                                whatDo: "Project owner",
+                                about: ""
+                            })
+                            await UserInProj.save()
+                            const UsersInProj = await UsersInProject.find({project:mongoose.Types.ObjectId(project[0]._id)})
+                            return res.json({success:true, msg: UsersInProj })
+                        }
+                        return res.json({success:false, msg: "User with such mail already exists in the project."  })
+                    }
+                    return res.json({success:false, msg: "User with such mail does not exist."  })
+                }
+                return res.json({success:false, msg: "Project does not exist."  })
+            } else {
+                return res.json({success:false, msg: "Current user not in project."  })
             }
-            let invate_user = await Users.find({ email:req.body.adduser})
-            console.log(invate_user)
-            // console.log(user_exist)
-            // let rolesInProjects = await UsersInProject.find({"user": mongoose.Types.ObjectId(req.user.id)}).populate("project")
-            // res.json({success:true, projects: rolesInProjects})
+
         } catch (err) {
+            console.log(err)
             res.json({success: false, msg: err})
         }
     },
