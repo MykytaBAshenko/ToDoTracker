@@ -7,7 +7,7 @@ import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 
 const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
-const SOCKET_SERVER_URL = "http://localhost:5000";
+const SOCKET_SERVER_URL = "https://todotrackerapp.herokuapp.com";
 
 const useChat = (roomId) => {
   const [messages, setMessages] = useState([]);
