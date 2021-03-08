@@ -16,6 +16,8 @@ function ProjectDashboard() {
             
             <Link to={window.location.pathname+"/users"}>Users</Link>
             <Link to={window.location.pathname+"/newtask"}>New Task</Link>
+            <Link to={window.location.pathname+"/chat"}>New Task</Link>
+
             ProjectDashboard
             
         </div>

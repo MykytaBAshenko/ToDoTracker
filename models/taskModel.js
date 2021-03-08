@@ -30,7 +30,7 @@ const projectSchema = new mongoose.Schema({
         default: "task",
     },
     priority: {
-        type: Number,
+        type: String,
         trim: true,
         required: true,
         default: "blank",

@@ -13,10 +13,6 @@ import Dashboard from '../body/dashboard/Dashboard'
 import Newproject from '../body/newproject/Newproject'
 import Project from '../body/project/Project'
 
-
-
-
-
 import {useSelector} from 'react-redux'
 const NotFound =() => <div>posoi</div>
 
@@ -29,10 +25,7 @@ function Body(props) {
                 <Route path="/" component={isLogged ? Dashboard : Login} exact />
                 <Route path="/dashboard" component={isLogged ? Dashboard : Login} exact />
                 <Route path="/new" component={isLogged ? Newproject : Login} exact />
-                <Route path="/project/:projectId" component={isLogged ? Project : Login}/>
-
-                
-
+                <Route path="/project/:uniqueLink" component={isLogged ? Project : Login}/>
                 <Route path="/login" component={isLogged ? NotFound : Login} exact />
                 <Route path="/register" component={isLogged ? NotFound : Register} exact />
                 <Route path="/forgot_password" component={isLogged ? NotFound : ForgotPass} exact />

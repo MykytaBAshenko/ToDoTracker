@@ -47,7 +47,6 @@ function App() {
           <Header />
           <Body />
           <ToastContainer />
-
         </div>
       </Router>
   );
