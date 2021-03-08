@@ -2,9 +2,11 @@ import React, { useState, useRef, useEffect } from 'react'
 import {Switch, Route} from 'react-router-dom'
 import socketIOClient from "socket.io-client";
 
+
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
+require('dotenv').config()
 
 const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
 const SOCKET_SERVER_URL = "https://todotrackerapp.herokuapp.com";
@@ -64,6 +66,7 @@ function Chat(props) {
 
     return (
         <div>
+          {console.log(process.env)}
             chat
             <h1 className="room-name">Room: {roomId}</h1>
       <div className="messages-container">
