@@ -20,7 +20,7 @@ router.get('/logout', userCtrl.logout)
 
 router.post('/googlelogin', userCtrl.googleLogin)
 
-router.post('/facebook_login', userCtrl.facebookLogin)
+// router.post('/facebook_login', userCtrl.facebookLogin)
 
 
 module.exports = router

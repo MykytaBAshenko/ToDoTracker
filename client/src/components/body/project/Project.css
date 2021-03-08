@@ -1,0 +1,45 @@
+.dashboard-body{
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+.left-control{
+    background-color: #23262e;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 17px 15px;
+}
+
+.left-control-link{
+    display: grid;
+    margin: 40px 0;
+
+    grid-template-columns: auto 1fr;
+    align-items: center;
+}
+
+
+
+
+.left-control-link-text{
+    margin-left: 15px;
+    font-weight: bold;
+    padding-right: 25px;
+    color: white;
+}
+
+.left-control-link svg{
+    width: 35px;
+    fill: white;
+    height: 35px;
+}
+
+.left-control-link:hover svg{
+    fill: #0aa699;
+   }
+
+.left-control-link:hover .left-control-link-text{
+    color: #0aa699;
+}

@@ -1,1 +1,103 @@
- 
+.form-container {
+    min-height: calc(100vh - 60px);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(0, 144, 217, 1) 0, #A5DED9 90%);
+}
+
+.form-body {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    font-weight: bold;
+}
+
+.form-body form .title{
+    color: white;
+    font-size: 30px;
+}
+.form-body form {
+    display: grid;
+    padding: 20px;
+    max-width: 500px;
+    gap: 10px;
+    width: 100%;
+}
+.form-body form  .form-input{
+    display: grid;
+    gap: 5px;
+    flex-direction: column;
+}
+
+.form-body form  .form-input input{
+    font-size: 18px;
+    padding: 10px ;
+    transition: .5s;
+
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
+    border: 2px solid white;
+    background-color: white;
+}
+.form-body form  .form-input input.error-input{
+    border: 2px solid #f35958;
+    color: #f35958;
+}
+.form-input label {
+    font-size: 14px;
+    color: white;
+    transition: .5s;
+
+}
+
+.form-input label.error-text {
+    color: #f35958;
+}
+
+.form-body form .form-actions{
+    margin-top: 18px;
+    display: grid;
+    gap: 10px;
+}
+
+.form-actions .form-actions-links{
+    display: flex;
+    justify-content: space-between;  
+}
+
+.form-actions .form-actions-links a{
+    color: white;
+    transition: .5s;
+
+}
+
+.form-actions-links a:hover{
+    color: #1B1E24;
+     
+}
+.form-actions .form-actions-btn {
+    width: 100%;
+    font-weight: bold;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
+    padding: 10px;
+    font-size: 18px;
+    color: #22262e;
+    transition: .5s;
+
+    background-color: white;
+    border: 2px solid white;   
+}
+.form-actions .form-actions-btn:hover{
+    background-color: #22262e;
+    color: white;
+    border: 2px solid #22262e;   
+
+}
+.google-btn{
+    border-radius: 0 !important;
+    height: 45px;
+}
+
