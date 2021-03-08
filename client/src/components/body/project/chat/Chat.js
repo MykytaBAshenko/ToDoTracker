@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux'
 require('dotenv').config()
 
 const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
-const SOCKET_SERVER_URL = "https://todotrackerapp.herokuapp.com";
+const SOCKET_SERVER_URL = "http://localhost:5000";
 
 const useChat = (roomId) => {
   const [messages, setMessages] = useState([]);

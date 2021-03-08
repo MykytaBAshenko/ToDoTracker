@@ -67,7 +67,7 @@ function Project(props) {
               <Route path="/project/:projectLink/tasks" component={ProjectDashboard} exact/>
               <Route path="/project/:projectLink/users" component={Users} exact/>
               <Route path="/project/:projectLink/newtask" component={Newtask} exact/>
-              {/* <Route path="/project/:projectLink/chat" component={Chat} exact/> */}
+              <Route path="/project/:projectLink/chat" component={Chat} exact/>
               <Route path="/project/:projectLink/news" component={ProjectDashboard} exact/>
 
 

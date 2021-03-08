@@ -36,9 +36,9 @@
     background-color: white;
 }
 .header-body-content-right a:hover{
-    border: 2px solid white;
+    border: 2px solid #0aa699;
     background-color: #1B1E24;
-    color: white;
+    color: #0aa699;
 
 }
 .header-body-content{
@@ -57,11 +57,11 @@
     border: 2px solid white;
 }
 .open-chat-btn:hover{
-    border: 2px solid white;
+    border: 2px solid #0aa699;
     background-color: #1B1E24;
 }
 .open-chat-btn:hover svg{
-    fill: white;
+    fill: #0aa699;
 }
 .open-chat-btn svg{
     fill:#1B1E24;
@@ -77,6 +77,11 @@
     overflow: hidden;
     border-radius: 50%;
 }
+
+.header-body-content-right a.acc-control:hover{
+    border: 1px solid #0aa699;
+}
+
 .header-body-content-right a.acc-control img{
     position: absolute;
     top: 50%;
@@ -98,6 +103,8 @@
 
 .header-menu-btn:hover{
     background-color:#1B1E24;
+    border: 2px solid #0aa699;
+
 }
 
 
@@ -109,5 +116,5 @@
     height: 30px;
 }
 .header-menu-btn:hover svg{
-    fill: white;
+    fill: #0aa699;
 }

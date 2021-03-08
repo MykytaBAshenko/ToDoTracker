@@ -19,9 +19,7 @@ function Header(props) {
             window.location.href = "/";
         }
     }
-    const setOpenMenu = () => {
 
-    }
     const setOpenChat = () => {
 
     }
