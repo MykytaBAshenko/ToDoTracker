@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(0, 144, 217, 1) 0, #A5DED9 90%);
+    background-image: radial-gradient(circle farthest-corner at 30% 20%, rgba(0, 144, 217, .8) 0, #735f87 90%);
 }
 
 .form-body {
@@ -47,7 +47,7 @@
     color: #f35958;
 }
 .form-input label {
-    font-size: 14px;
+    font-size: 16px;
     color: white;
     transition: .5s;
 
@@ -75,7 +75,7 @@
 }
 
 .form-actions-links a:hover{
-    color: #1B1E24;
+    color: #0aa699;
      
 }
 .form-actions .form-actions-btn {
@@ -91,9 +91,9 @@
     border: 2px solid white;   
 }
 .form-actions .form-actions-btn:hover{
-    background-color: #22262e;
+    background-color: #0aa699;
     color: white;
-    border: 2px solid #22262e;   
+    border: 2px solid #0aa699; 
 
 }
 .google-btn{
