@@ -12,7 +12,7 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
     cors: {
       origin: "*",
-    },
+    }, 
   });
  
 app.use(express.json())
@@ -20,7 +20,7 @@ app.use(cors())
 app.use(cookieParser())
 app.use(fileUpload({
     useTempFiles: true
-}))
+})) 
 
 app.use('/api/auth', require('./routes/authRouter'))
 app.use('/api/task', require('./routes/taskRouter'))

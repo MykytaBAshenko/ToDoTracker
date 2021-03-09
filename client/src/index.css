@@ -32,6 +32,7 @@ button{
 }
 
 @import url("./components/body/project/Project.css");
+@import url("./components/body/dashboard/Dashboard.css");
 @import url("./components/body/project/chat/Chat.css");
 @import url("./components/header/header.css");
 @import url("./components/body/auth/auth.css");

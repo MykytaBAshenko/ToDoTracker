@@ -38,3 +38,13 @@
     background: #0aa6998f; 
     }
     
+    .black-btn{
+        background-color: #1B1E24;
+        color: white;
+        font-size: 20px;
+        display: block;
+    padding: 5px 15px;
+    font-weight: bold;
+    transition: .5s;
+    border: 2px solid #1B1E24;
+    }
