@@ -2,14 +2,13 @@ import React, { useState, useRef, useEffect } from 'react'
 import {Switch, Route} from 'react-router-dom'
 import socketIOClient from "socket.io-client";
 
-
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 require('dotenv').config()
 
 const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
-const SOCKET_SERVER_URL = "http://localhost:5000";
+const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_SERVER_URL;
 
 const useChat = (roomId) => {
   const [messages, setMessages] = useState([]);
@@ -45,10 +44,9 @@ const useChat = (roomId) => {
 
 
 function Chat(props) {
-    const projectLink = props.match.params.projectLink;
     const auth = useSelector(state => state.auth)
     const token = useSelector(state => state.token)
-    const roomId = projectLink ;
+    const roomId = "dasdasdasdasd" ;
   const { messages, sendMessage } = useChat(roomId);
   const [newMessage, setNewMessage] = React.useState("");
 
@@ -65,9 +63,8 @@ function Chat(props) {
 
 
     return (
-        <div>
+        <div className={"chat-window "+(props.isshow ? "" : "display-none")}>
           {console.log(process.env)}
-            chat
             <h1 className="room-name">Room: {roomId}</h1>
       <div className="messages-container">
         <ol className="messages-list">

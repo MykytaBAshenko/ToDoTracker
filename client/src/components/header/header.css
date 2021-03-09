@@ -26,6 +26,7 @@
 .header-body-content-right{
     display: flex;
     gap: 20px;
+    transition: 0;
 }
 .header-body-content-right a{
     font-size: 20px;
@@ -72,6 +73,7 @@
     height: 40px;
     width: 40px;
     padding: 0;
+    transition: 0s;
     border: 1px solid white;
     position: relative;
     overflow: hidden;
@@ -84,6 +86,7 @@
 
 .header-body-content-right a.acc-control img{
     position: absolute;
+    transition: 0;
     top: 50%;
     left: 50%;
     height: 100%;

@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: radial-gradient(circle farthest-corner at 30% 20%, rgba(0, 144, 217, .8) 0, #735f87 90%);
+    background-image: radial-gradient(circle farthest-corner at 10% 30%, rgba(0, 119, 217, 0.8) 0, #ebb8f8 90%);
 }
 
 .form-body {
@@ -45,7 +45,7 @@
 .form-body form  .form-input input.error-input{
     border: 2px solid #f35958;
     color: #f35958;
-}
+} 
 .form-input label {
     font-size: 16px;
     color: white;

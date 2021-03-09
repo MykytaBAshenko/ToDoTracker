@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {Switch, Route} from 'react-router-dom'
 import Login from './auth/Login'
 import Register from './auth/Register'
@@ -19,7 +19,13 @@ const NotFound =() => <div>posoi</div>
 
 function Body(props) {
     const auth = useSelector(state => state.auth)
+    const token = useSelector(state => state.token)
     const {isLogged, isAdmin} = auth
+    
+    useEffect(() => {
+        
+    }, [token, auth])
+    
     return (<>
                 <Switch>
                     <Route path="/" component={ Header } exact />
@@ -28,6 +34,7 @@ function Body(props) {
                     <Route path="/login" component={Header} exact />
                     <Route path="/register" component={Header} exact />
                     <Route path="/forgot_password" component={Header} exact />
+                    <Route path="/project/:uniqueLink" component={isLogged ? null : Header}/>
                     <Route path="/user/reset/:token" component={Header} exact />
                     <Route path="/user/activate/:activation_token" component={Header} exact />
                 </Switch>

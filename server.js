@@ -14,7 +14,7 @@ const io = require("socket.io")(server, {
       origin: "*",
     },
   });
-
+ 
 app.use(express.json())
 app.use(cors())
 app.use(cookieParser())
@@ -31,7 +31,7 @@ app.use('/uploads', express.static('uploads'));
 
 const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
 
-
+ 
 
 io.on("connection", (socket) => {
 
@@ -51,7 +51,7 @@ io.on("connection", (socket) => {
     console.log(`Client ${socket.id} diconnected`);
     socket.leave(roomId);
   });
-});
+}); 
 
 
 // Connect to mongodb

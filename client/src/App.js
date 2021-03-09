@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { dispatchLogin, fetchUser, dispatchGetUser } from './redux/actions/authAction'
+import {fetchAllProjects, dispatchGetAllProjects} from './redux/actions/projectAction'
 
 import Header from './components/header/Header'
 import Body from './components/body/Body'
@@ -23,7 +24,7 @@ function App() {
       }
       getToken()
     }
-  }, [auth.isLogged, dispatch])
+  }, [auth?.isLogged, dispatch])
 
   useEffect(() => {
     if (token) {
@@ -35,9 +36,12 @@ function App() {
         })
       }
       getUser()
-
-    
     }
+      if(auth?.isLogged){
+          fetchAllProjects(token).then(res =>{
+              dispatch(dispatchGetAllProjects(res))
+          })
+      }
   }, [token, dispatch])
 
 

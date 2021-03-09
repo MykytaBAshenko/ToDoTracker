@@ -11,8 +11,8 @@ import Newtask from './newtask/Newtask'
 import Header from '../../header/Header'
 
 import Chat from './chat/Chat'
-import { RiTaskFill, RiListSettingsFill } from 'react-icons/ri';
-
+import { RiTaskFill } from 'react-icons/ri';
+import {AiFillProject} from 'react-icons/ai';
 import { MdDashboard } from 'react-icons/md';
 import {FaUsers} from 'react-icons/fa'
 
@@ -57,7 +57,7 @@ function Project(props) {
             <Link to={"/project/"+uniqueLink+"/users"} className="left-control-link"> <FaUsers/> { showleft ? <div className="left-control-link-text">Users</div>:null}</Link>
             <Link to={"/project/"+uniqueLink+"/tasks"} className="left-control-link"> <RiTaskFill /> { showleft ? <div className="left-control-link-text">Tasks</div>:null}</Link>
             <Link to={"/project/"+uniqueLink+"/updates"} className="left-control-link"> <MdUpdate/> { showleft ? <div className="left-control-link-text">Updates</div>:null}</Link>
-            <Link to={"/project/"+uniqueLink+"/settings"} className="left-control-link"> <RiListSettingsFill /> { showleft ? <div className="left-control-link-text">Settings</div>:null}</Link>
+            <Link to={"/project/"+uniqueLink+"/settings"} className="left-control-link"> <AiFillProject /> { showleft ? <div className="left-control-link-text">Settings</div>:null}</Link>
           </div>
         </div>
         <div>
