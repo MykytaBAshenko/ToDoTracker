@@ -52,6 +52,9 @@
   color: white;
   text-transform: capitalize;
 }
+.dashboard_project-card-header a:hover{
+  text-decoration: underline;
+}
 
 .dashboard_project-card-header-img img {
   position: absolute;
