@@ -52,7 +52,7 @@ function Header(props) {
 
 
     return (
-        <>
+        <div className="header-chat-container">
         <header className="header">
             {isLogged ? 
             <div>
@@ -71,7 +71,7 @@ function Header(props) {
             }
             </header>
             <Chat isshow={ isLogged && showchat} />
-        </>
+        </div>
     )
 }
 

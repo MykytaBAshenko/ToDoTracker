@@ -60,19 +60,18 @@ function Project(props) {
             <Link to={"/project/"+uniqueLink+"/settings"} className="left-control-link"> <AiFillProject /> { showleft ? <div className="left-control-link-text">Settings</div>:null}</Link>
           </div>
         </div>
-        <div>
+        <div className="right-content">
           <Header showleftcontrol={true} changeVisibilityMenu={changeVisibilityMenu}></Header>
-          <Switch>
-              <Route path="/project/:projectLink" component={ProjectDashboard} exact/>
-              <Route path="/project/:projectLink/tasks" component={ProjectDashboard} exact/>
-              <Route path="/project/:projectLink/users" component={Users} exact/>
-              <Route path="/project/:projectLink/newtask" component={Newtask} exact/>
-              <Route path="/project/:projectLink/chat" component={Chat} exact/>
-              <Route path="/project/:projectLink/news" component={ProjectDashboard} exact/>
-
-
-
-          </Switch>
+          <div className="right-content-exact">
+            <Switch>
+                <Route path="/project/:projectLink" component={ProjectDashboard} exact/>
+                <Route path="/project/:projectLink/tasks" component={ProjectDashboard} exact/>
+                <Route path="/project/:projectLink/users" component={Users} exact/>
+                <Route path="/project/:projectLink/newtask" component={Newtask} exact/>
+                {/* <Route path="/project/:projectLink/chat" component={Chat} exact/> */}
+                <Route path="/project/:projectLink/news" component={ProjectDashboard} exact/>
+            </Switch>
+          </div>
         </div>
 
       </div>

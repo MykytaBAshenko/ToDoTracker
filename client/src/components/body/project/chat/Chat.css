@@ -1,0 +1,21 @@
+.chat-window {
+    position: absolute;
+    height: calc(100vh - 60px);
+    background-color: white;
+    width: 100%;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+.chat-chooser{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    flex-direction: column;
+}
+
+.chat-chooser img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}

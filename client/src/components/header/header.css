@@ -122,3 +122,7 @@
 .header-menu-btn:hover svg{
     fill: #0aa699;
 }
+
+.header-chat-container{
+    position: relative;
+}

@@ -44,6 +44,7 @@ io.on("connection", (socket) => {
   // Listen for new messages
   socket.on(NEW_CHAT_MESSAGE_EVENT, (data) => {
     io.in(roomId).emit(NEW_CHAT_MESSAGE_EVENT, data);
+    console.log(data)
   });
 
   // Leave the room if the user closes the socket
