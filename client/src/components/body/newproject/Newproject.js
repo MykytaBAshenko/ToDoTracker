@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
-
+import Dropzone from 'react-dropzone';
 import './Newproject.css'
 
 function Home(props) {
@@ -27,9 +27,7 @@ function Home(props) {
 
     const [howManyInputs,sethowManyInputs] = useState(1)
 
-    useEffect(() => {
-      
-    }, [])
+
 
 
 
@@ -56,10 +54,9 @@ function Home(props) {
             setLink5("")
         }
     }
-    const uploadLogo = async (e) => {
-        e.preventDefault()
+    const uploadLogo = async (files) => {
         try {
-          const file = e.target.files[0]
+          const file = files[0]
     
           if (!file) console.log({ err: "No files were uploaded.", success: '' })
     
@@ -79,11 +76,13 @@ function Home(props) {
           setlogo( "/" + res.data.url)
     
         } catch (err) {
-          console.log({ err: err.response.data.msg, success: '' })
+            console.log(err)
+          console.log({ err: err.response?.data?.msg, success: '' })
         }
       }
 
-    const createNewProject = async () =>{
+    const createNewProject = async (e) =>{
+        e.preventDefault()
         const sendobj = {}
         sendobj.name  = name
         sendobj.description = description
@@ -124,11 +123,27 @@ function Home(props) {
     }
 
     return (
-        <div className="dashboard_page">
-            <img src={logo}/>
-            <input type="file" name="file" id="file_up" onChange={uploadLogo} />
+        <div className="form-container">
+            <div className="form-body">
+                <form onSubmit={(e) => createNewProject(e)}>
+           <Dropzone
+                onDrop={uploadLogo}
+                multiple={false}
+                maxSize={800000000}
+            >
+                {({ getRootProps, getInputProps }) => (
+                  <div className="dropzone"
+                      {...getRootProps()}
+                  >
+                      <input {...getInputProps()} />
+                      <img src={logo}/>
 
-            <input type="text" value={imageinput} onChange={e => setimageinput(e.target.value)}/>
+
+                  </div>
+              )}
+
+            </Dropzone>
+            <input  type="text" value={imageinput} onChange={e => setimageinput(e.target.value)}/>
             <button onClick={
                 () => {
                     setlogo(imageinput)
@@ -192,10 +207,49 @@ function Home(props) {
                 </div>
             }
 
-            <button onClick={() => createNewProject()}>Create new project</button>
-
+            <button onClick={(e) => createNewProject()}>Create new project</button>
+            </form>
             </div>
+            </div>
+
     )
 }
 
 export default Home
+{/* <div className="form-container">
+<div className="form-body">
+    <form onSubmit={handleSubmit}>
+        <div className="title">Login</div>
+        <div className="form-input">
+            <label className={ isEmail ?  "error-text" : "" } htmlFor="email">Email Address</label>
+            <input type="text"  className={ isEmail ?  "error-input" : "" } placeholder="Enter email address" id="email"
+                value={email} name="email" onChange={handleChangeInput} />
+            {isEmail ? <label className="error-text">{isEmail}</label > : null}
+        </div>
+    
+        <div className="form-input">
+            <label className={ isPassword ?  "error-text" : "" } htmlFor="password">Password</label>
+            <input type="password"  className={ isPassword ?  "error-input" : "" } placeholder="Enter password" id="password"
+                value={password} name="password" onChange={handleChangeInput} />
+            {isPassword ? <label className="error-text">{isPassword}</label > : null}
+        </div>
+
+        <div className="form-actions">
+            <button className="form-actions-btn" type="submit">Login</button>
+            <div className="form-actions-links">
+            <Link to="/register">Register</Link>
+
+                <Link to="/forgot_password">Forgot your password?</Link>
+            </div>
+        </div>
+        <GoogleLogin
+            className="google-btn"
+            clientId="762813067815-bqjtm7cqg2m3h831oclbef4kgqmau2b6.apps.googleusercontent.com"
+            buttonText="Login with google"
+            onSuccess={responseGoogle}
+            cookiePolicy={'single_host_origin'}
+        />
+    </form>
+
+</div>
+</div> */}

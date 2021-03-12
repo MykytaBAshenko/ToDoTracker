@@ -8,15 +8,15 @@
 }
 
 .dashboard_projects {
-  display: flex;
+
   width: 100%;
+  display: flex;
   flex-wrap: wrap;
   position: relative;
 }
 
 .dashboard_project-card {
   display: flex;
-  max-width: calc(20% - 10px);
   padding: 10px;
   margin:10px;
   width: 100%;
@@ -77,29 +77,3 @@
   border: 2px solid #1B1E24;
 }
 
-@media screen and (max-width: 1850px) {
-  .dashboard_project-card {
-    max-width: calc(25% - 12px);
-
-
-  }
-}
-@media screen and (max-width: 1360px) {
-  .dashboard_project-card {
-    max-width: calc(32.5% - 12px);
-
-
-  }
-}
-@media screen and (max-width: 1030px) {
-  .dashboard_project-card {
-    max-width: calc(50% - 20px);
-
-  }
-}
-@media screen and (max-width: 650px) {
-  .dashboard_project-card {
-    max-width: calc(100% - 12px);
-
-  }
-}

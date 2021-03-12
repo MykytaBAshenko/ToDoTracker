@@ -3,19 +3,28 @@
 * {
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   list-style: none;
   outline: none !important;
 }
-
+body{
+  font-family: 'Roboto', sans-serif;
+  overflow: hidden;
+} 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.overflow-auto{
+  overflow:auto;
+  height: calc(100vh - 60px);
+}
+.overflow-hidden{
+  overflow:hidden;
 
+}
 a{
   text-decoration: none;
 }
@@ -32,8 +41,9 @@ button{
 }
 
 @import url("./components/body/project/Project.css");
+@import url("./components/body/newproject/Newproject.css");
 @import url("./components/body/dashboard/Dashboard.css");
-@import url("./components/body/project/chat/Chat.css");
+@import url("./components/chat/Chat.css");
 @import url("./components/header/header.css");
 @import url("./components/body/auth/auth.css");
 @import url("./css/item.css");

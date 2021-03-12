@@ -92,8 +92,10 @@ const userCtrl = {
     getAccessToken: (req, res) => {
         try {
             const rf_token = req.cookies.refreshtoken
-            if (!rf_token) return res.status(400).json({ msg: "Please login now!" })
+            console.log( req.cookies)
 
+            if (!rf_token) return res.status(400).json({ msg: "Please login now!" })
+            console.log(rf_token)
             jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
                 if (err) return res.status(400).json({ msg: "Please login now!" })
 

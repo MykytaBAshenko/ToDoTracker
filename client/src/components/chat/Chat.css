@@ -1,5 +1,6 @@
 .chat-window {
     position: absolute;
+    top:60px;
     height: calc(100vh - 60px);
     background-color: white;
     width: 100%;
@@ -12,6 +13,8 @@
     display: flex;
     border-right: 2px solid #1B1E24;
     flex-direction: column;
+    height: calc(100vh -60px);
+    overflow-y: auto;
 }
 
 .chat-chooser{
@@ -35,8 +38,13 @@
 .chat-chooser:hover{
     background-color: white;
     cursor: pointer;
+    color: #0aa699;
 }
 
+.chat-chooser:hover img{
+    border: 2px solid #0aa699;
+
+}
 .chat-chooser img{
     border: 2px solid #1B1E24;
     width: 40px;

@@ -10,7 +10,6 @@ import Newtask from './newtask/Newtask'
 
 import Header from '../../header/Header'
 
-import Chat from './chat/Chat'
 import { RiTaskFill } from 'react-icons/ri';
 import {AiFillProject} from 'react-icons/ai';
 import { MdDashboard } from 'react-icons/md';

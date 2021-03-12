@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import {dispatchSetChatAction} from '../../redux/actions/chatAction'
+
 import axios from 'axios'
 import { BiMenu} from 'react-icons/bi';
 import { RiMessage2Fill } from 'react-icons/ri';
-import Chat from "../body/project/chat/Chat"
+// import Chat from "../body/project/chat/Chat"
 
 function Header(props) {
+    const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
+    const chat_active = useSelector(state => state.chat_active.chat_active)
     const notifications = useSelector(state => state?.notifications?.notifications)
     const { user, isLogged } = auth
-    const [showchat, setshowchat] = useState(false)
+    // const [showchat, setshowchat] = useState(false)
     const handleLogout = async () => {
         try {
             await axios.get('/api/auth/logout')
@@ -20,9 +24,12 @@ function Header(props) {
             window.location.href = "/";
         }
     }
-
+    useEffect(() => {
+      }, [chat_active]);
     const setOpenChat = () => {
-        setshowchat(!showchat)
+        // setshowchat(!showchat)
+        console.log(chat_active)
+        dispatch(dispatchSetChatAction(!chat_active))
     }
 
     const Logged = () => {
@@ -70,7 +77,7 @@ function Header(props) {
                 <button className="open-chat-btn" onClick={() => setOpenChat()}><RiMessage2Fill/></button > :null
             }
             </header>
-            <Chat isshow={ isLogged && showchat} />
+            {/* <Chat isshow={ isLogged && showchat} /> */}
         </div>
     )
 }

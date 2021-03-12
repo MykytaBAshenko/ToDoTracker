@@ -6,6 +6,8 @@ import {fetchAllProjects, dispatchGetAllProjects} from './redux/actions/projectA
 
 import Header from './components/header/Header'
 import Body from './components/body/Body'
+import Chat from './components/chat/Chat'
+ 
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
@@ -14,6 +16,10 @@ function App() {
   const dispatch = useDispatch()
   const token = useSelector(state => state.token)
   const auth = useSelector(state => state.auth)
+
+  const chat_active = useSelector(state => state.chat_active.chat_active)
+  
+  const { user, isLogged } = auth
 
   useEffect(() => {
     const firstLogin = localStorage.getItem('firstLogin')
@@ -30,7 +36,6 @@ function App() {
     if (token) {
       const getUser = () => {
         dispatch(dispatchLogin())
-
         return fetchUser(token).then(res => {
           dispatch(dispatchGetUser(res))
         })
@@ -50,6 +55,7 @@ function App() {
         <div className="App">
           <Body />
           <ToastContainer />
+          <Chat isshow={ isLogged && chat_active} />
         </div>
       </Router>
   );

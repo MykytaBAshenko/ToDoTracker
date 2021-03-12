@@ -21,7 +21,7 @@ app.use(cookieParser())
 app.use(fileUpload({
     useTempFiles: true
 })) 
-
+ 
 app.use('/api/auth', require('./routes/authRouter'))
 app.use('/api/task', require('./routes/taskRouter'))
 app.use('/api/project', require('./routes/projectRouter'))
@@ -29,7 +29,7 @@ app.use('/api/project', require('./routes/projectRouter'))
 
 app.use('/uploads', express.static('uploads'));
 
-const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
+const NEW_CHAT_MESSAGE_EVENT = "newChatMessage"; 
 
  
 
