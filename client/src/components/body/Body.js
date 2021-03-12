@@ -29,6 +29,7 @@ function Body(props) {
     }, [token, auth])
     
     return (<>
+
                 <Switch>
                     <Route path="/" component={ Header } exact />
                     <Route path="/dashboard" component={Header} exact />
@@ -40,7 +41,7 @@ function Body(props) {
                     <Route path="/user/reset/:token" component={Header} exact />
                     <Route path="/user/activate/:activation_token" component={Header} exact />
                 </Switch>
-                <div className={chat_active ? "overflow-hidden" : "overflow-auto"}>
+                <div className={(props.history.location.pathname.indexOf("/project/") == -1 ?  (chat_active ? "overflow-hidden" : "overflow-auto") : "")}>
                     <Switch>
                         <Route path="/" component={isLogged ? Dashboard : Login} exact />
                         <Route path="/dashboard" component={isLogged ? Dashboard : Login} exact />

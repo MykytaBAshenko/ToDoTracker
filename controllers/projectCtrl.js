@@ -106,12 +106,12 @@ const projectCtrl = {
                                 project: mongoose.Types.ObjectId(project[0]._id),
                                 status: "Member",
                                 nickname: invate_user[0].nickname,
-                                whatDo: "Project owner",
+                                whatDo: "User",
                                 about: ""
                             })
                             await UserInProj.save()
                             const UsersInProj = await UsersInProject.find({project:mongoose.Types.ObjectId(project[0]._id)})
-                            return res.json({success:true, msg: UsersInProj })
+                            return res.json({success:true, UsersInProject: UsersInProj })
                         }
                         return res.json({success:false, msg: "User with such mail already exists in the project."  })
                     }
@@ -129,9 +129,7 @@ const projectCtrl = {
     },
     getProject: async (req,res) => {
         try {
-            // console.log(req.user,req.params.projectLink)
             const project = await Project.find({ "uniqueLink": req.params.projectLink })
-            console.log(project)
             if(project.length) {
                 const UsersIn = await UsersInProject
                     .find({project: project[0]._id})
@@ -142,34 +140,24 @@ const projectCtrl = {
             else {
                 return res.json({success: false, msg: "Project does not exist"})
             }
-            // if (req.body.name && req.body.description && req.body.logo) {
-            //     const project = await Project.find({ uniqueLink: req.body.uniqueLink })
-            //     if(!project.length) {
-            //         const newProject = new Project({
-            //             name: req.body.name,
-            //             description: req.body.description,
-            //             logo: req.body.logo,
-            //             uniqueLink: req.body.uniqueLink,
-            //             arrayOfLinks: req.body.arrayOfLinks,
-            //         })
-            //         const createdProject = await newProject.save()
-            //         const user = await Users.find({ "_id": req.user.id })
-            //         const UserInProj = new UsersInProject({
-            //             user: mongoose.Types.ObjectId(req.user.id),
-            //             project: mongoose.Types.ObjectId(createdProject._id),
-            //             status: "Owner",
-            //             nickname: user[0].nickname,
-            //             whatDo: "Project owner",
-            //             about: ""
-            //         })
-            //         const userInProject = await UserInProj.save()
-            //         return res.json({success:true, msg: "The project was created", userInProject, createdProject})
-            //     }
-            //     return res.json({success: false, msg: "Project with same link exist"})
-            // }
-            // return res.json({success: false, msg: "Something is not set"})
-
-
+        } catch (err) {
+            console.log(err)
+            res.json({success: false, msg: err})
+        }
+    },
+    getUsers: async (req,res) => {
+        try {
+            const project = await Project.find({ "uniqueLink": req.params.projectLink })
+            if(project.length) {
+                const UsersIn = await UsersInProject
+                    .find({project: project[0]._id})
+                    .populate("user")
+                    .select('-password')
+                return res.json({success: true, UsersInProject: UsersIn})
+            } 
+            else {
+                return res.json({success: false, msg: "Project does not exist"})
+            }
         } catch (err) {
             console.log(err)
             res.json({success: false, msg: err})

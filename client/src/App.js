@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router,Switch, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { dispatchLogin, fetchUser, dispatchGetUser } from './redux/actions/authAction'
 import {fetchAllProjects, dispatchGetAllProjects} from './redux/actions/projectAction'
@@ -53,7 +53,9 @@ function App() {
   return (
       <Router>
         <div className="App">
-          <Body />
+          <Switch>
+              <Route path="/" component={ Body }/>
+          </Switch>
           <ToastContainer />
           <Chat isshow={ isLogged && chat_active} />
         </div>

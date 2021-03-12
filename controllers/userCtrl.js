@@ -92,10 +92,7 @@ const userCtrl = {
     getAccessToken: (req, res) => {
         try {
             const rf_token = req.cookies.refreshtoken
-            console.log( req.cookies)
-
             if (!rf_token) return res.status(400).json({ msg: "Please login now!" })
-            console.log(rf_token)
             jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
                 if (err) return res.status(400).json({ msg: "Please login now!" })
 
@@ -200,7 +197,6 @@ const userCtrl = {
             const { email_verified, email, picture, name } = verify.payload
             const password = email+Math.random()
             const passwordHash = await bcrypt.hash(password, 12)
-            console.log(verify)
             if (!email_verified) return res.status(400).json({ msg: "Email verification failed." })
 
             const user = await Users.findOne({ email })
