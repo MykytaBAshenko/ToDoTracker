@@ -100,3 +100,27 @@
     height: 45px;
 }
 
+
+.image-form-conroler{
+    width: 100%;
+    display: grid;
+    justify-items: center;
+    position: relative;
+}
+.image-form-conroler .dropzone{
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    width: 200px;
+    border-radius: 50%;
+
+}
+.image-form-conroler .dropzone img{
+height: 100%;
+position: absolute;
+top:50%;
+left: 50%;
+transform: translate(-50%,-50%);
+
+}
+

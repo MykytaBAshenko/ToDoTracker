@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { dispatchLogin } from '../../../redux/actions/authAction'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import validateEmail  from '../../../functions/validateEmail'
@@ -15,14 +15,21 @@ const initialState = {
     password: ''
 }
 
-function Login() {
+function Login(props) {
     const [user, setUser] = useState(initialState)
     const dispatch = useDispatch()
     const history = useHistory()
     const [isEmail, setisEmail] = useState(false)
     const [isPassword, setisPassword] = useState(false)
+    const auth = useSelector(state => state.auth)
+    const token = useSelector(state => state.token)
+
     
     const { email, password} = user
+    useEffect(() => {
+        if(auth.isLogged)
+            props.history.push("/")
+    }, [auth.isLogged])
 
     const handleChangeEmail = e => {
         if(validateEmail(e.target.value)) {
@@ -44,7 +51,7 @@ function Login() {
         setUser({ ...user, password: e.target.value })
     }
 
-
+    
     const handleSubmit = async e => {
         e.preventDefault()
         if(isEmail || isPassword){

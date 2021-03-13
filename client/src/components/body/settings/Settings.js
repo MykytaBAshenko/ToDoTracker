@@ -1,35 +1,37 @@
 import React, { useState,useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import { useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import validatePassword from '../../../functions/validatePassword'
-import validateEmail from '../../../functions/validateEmail'
+import { dispatchLogin, fetchUser, dispatchGetUser } from '../../../redux/actions/authAction'
 import validateNickname from '../../../functions/validateNickname'
 import Dropzone from 'react-dropzone';
 import { toast } from 'react-toastify';
 
 
-function Register(props) {
+function Settings(props) {
     const auth = useSelector(state => state.auth)
+    const token = useSelector(state => state.token)
+  const dispatch = useDispatch()
 
-    const [nickname, setnickname] = useState("")
     const [isNickname, setisNickname] = useState(false)
-    const [email, setemail] = useState("")
-    const [isEmail, setisEmail] = useState(false)
+    const [doSomething, setdoSomething] = useState(false)
     const [password, setpassword] = useState("")
     const [confpassword, setconfpassword] = useState("")
     const [isPass, setisPass] = useState(false)
     const [isConfPass, setisConfPass] = useState(false)
-    const [avatar, setavatar] = useState("/images/defaultUser.jpg")
-
+    const [avatar, setavatar] = useState(auth?.user?.avatar ? auth?.user?.avatar : "/images/defaultUser.jpg")
+    const [nickname, setnickname] = useState(auth?.user?.nickname ? auth?.user?.nickname : "")
     useEffect(() => {
-        if(auth.isLogged)
-            props.history.push("/")
-    }, [auth.isLogged])
+        setdoSomething(!doSomething)
+        setnickname(auth?.user?.nickname ? auth?.user?.nickname : "")
+        setavatar(auth?.user?.avatar ? auth?.user?.avatar : "/images/defaultUser.jpg")
 
-    const handleSubmit = async e => {
+    }, [auth,token])
+
+    const handleSubmitPassword = async e => {
         e.preventDefault()
-        if(confpassword !== password || isEmail || isNickname || isPass || isConfPass || !confpassword.length)
+        if(confpassword !== password ||  isPass || isConfPass || !validatePassword(confpassword))
             return toast.error("Bad input.", {
                 position: "bottom-center",
                 autoClose: 5000,
@@ -39,8 +41,10 @@ function Register(props) {
                 draggable: true,
                 progress: undefined,
                 });
-        const res = await axios.post('/api/auth/register', {
-            nickname, password, email, avatar
+        const res = await axios.post('/api/auth/reset', {
+            password
+        },{
+            headers: { Authorization: token }
         })
         if(res.data.success){
             toast.success(res.data.msg, {
@@ -52,7 +56,54 @@ function Register(props) {
                 draggable: true,
                 progress: undefined,
                 });
-            props.history.push("/login")
+        } else {
+            return toast.error(res.data.msg, {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+        }
+    }
+    const handleSubmitInfo = async e => {
+        e.preventDefault()
+        if(isNickname && !nickname.length)
+            return toast.error("Bad nickname input.", {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+        const res = await axios.patch('/api/auth/changeinfo', {
+            nickname,  avatar
+        },{
+            headers: { Authorization: token }
+        })
+        if(res.data.success){
+            toast.success(res.data.msg, {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+                if (token) {
+                    const getUser = () => {
+                      dispatch(dispatchLogin())
+                      return fetchUser(token).then(res => {
+                        dispatch(dispatchGetUser(res))
+                      })
+                    }
+                    getUser()
+                  }
         } else {
             return toast.error(res.data.msg, {
                 position: "bottom-center",
@@ -76,15 +127,6 @@ function Register(props) {
         setnickname(e.target.value)
     }
 
-    const handleChangeEmail = e => {
-        if (validateEmail(e.target.value)) {
-            setisEmail(false)
-        }
-        else {
-            setisEmail("Bad email")
-        }
-        setemail(e.target.value)
-    }
 
     const handleChangePass = e => {
         if (validatePassword(e.target.value)) {
@@ -114,17 +156,8 @@ function Register(props) {
     const uploadLogo = async (files) => {
         try {
             const file = files[0]
-
-            if (!file) 
-                return toast.error("Bad file.", {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    });
+            console.log(1)
+            if (!file) console.log({ err: "No files were uploaded.", success: '' })
 
             if (file.size > 8 * 1024 * 1024)
                 return toast.error("Size too large.", {
@@ -136,6 +169,7 @@ function Register(props) {
                     draggable: true,
                     progress: undefined,
                     });
+
             if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.mimetype !== 'image/jpg')
                 return toast.error("File format is incorrect.", {
                     position: "bottom-center",
@@ -148,12 +182,12 @@ function Register(props) {
                     });
             let formData = new FormData()
             formData.append('file', file)
-            
+
             const res = await axios.post('/api/auth/uploadimage', formData, {
                 headers: { 'content-type': 'multipart/form-data' }
             })
             if(res.data.success)
-            setavatar("/" + res.data.url)
+                setavatar("/" + res.data.url)
             else 
                 return toast.error(res.data.msg, {
                     position: "bottom-center",
@@ -173,8 +207,8 @@ function Register(props) {
     return (
         <div className="form-container">
             <div className="form-body">
-                <form onSubmit={(e) => handleSubmit(e)}>
-                    <div className="title text-center">Register</div>
+                <form onSubmit={(e) => handleSubmitInfo(e)}>
+                    <div className="title text-center">Settings</div>
                     <div className="image-form-conroler">
                         <Dropzone
                             onDrop={uploadLogo}
@@ -200,12 +234,12 @@ function Register(props) {
                             value={nickname} onChange={(e) => handleNickname(e)} />
                         {isNickname ? <label className="error-text">{isNickname}</label > : null}
                     </div>
-                    <div className="form-input">
-                        <label className={isEmail ? "error-text" : ""} htmlFor="mail">Email Address</label>
-                        <input type="text" autoComplete="off" className={isEmail ? "error-input" : ""} placeholder="Enter email address" id="mail"
-                            value={email} onChange={(e) => handleChangeEmail(e)} />
-                        {isEmail ? <label className="error-text">{isEmail}</label > : null}
+                    <div className="form-actions">
+                        <button className="form-actions-btn" type="submit">Change account info</button>
                     </div>
+                </form>
+                    <form onSubmit={(e) => handleSubmitPassword(e)}>
+                
                     <div className="form-input">
                         <label className={isPass ? "error-text" : ""} htmlFor="pass">New Password</label>
                         <input type="password" className={isPass ? "error-input" : ""} placeholder="Enter new password" id="pass"
@@ -219,10 +253,7 @@ function Register(props) {
                         {isConfPass ? <label className="error-text">{isConfPass}</label > : null}
                     </div>
                     <div className="form-actions">
-                        <button className="form-actions-btn" type="submit">Register</button>
-                        <div className="form-actions-links">
-                            <span className="span">Already have an account? <Link to="/login">Login</Link></span>
-                        </div>
+                        <button className="form-actions-btn" type="submit">Change password</button>
                     </div>
                 </form>
             </div>
@@ -231,6 +262,6 @@ function Register(props) {
     )
 }
 
-export default Register
+export default Settings
 
 

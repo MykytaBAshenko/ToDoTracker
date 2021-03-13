@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import validatePassword  from '../../../functions/validatePassword'
 import { toast } from 'react-toastify';
+import { useSelector} from 'react-redux'
 
 
 
@@ -11,11 +12,15 @@ function ResetPassword(props) {
     const [confpassword, setconfpassword] = useState("")
     const [isPass, setisPass] = useState(false)
     const [isConfPass, setisConfPass] = useState(false)
+    const auth = useSelector(state => state.auth)
 
 
     const { token } = useParams()
 
-
+    useEffect(() => {
+        if(auth.isLogged)
+            props.history.push("/")
+    }, [auth.isLogged])
     const handleChangePass = e => {
         if(validatePassword(e.target.value)) {
             setisPass(false)

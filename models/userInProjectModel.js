@@ -16,10 +16,6 @@ const userInProjectSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-    nickname: {
-        type: String,
-        trim: true,
-    },
     whatDo: {
         type: String,
         trim: true,

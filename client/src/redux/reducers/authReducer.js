@@ -2,8 +2,7 @@ import ACTIONS from '../actions/'
 
 const initialState = {
     user: [],
-    isLogged: false,
-    isAdmin: false
+    isLogged: false
 }
 
 const authReducer = (state = initialState, action) => {

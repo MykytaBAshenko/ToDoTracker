@@ -10,6 +10,8 @@ import ResetPass from '../body/auth/ResetPassword'
 
 import Home from '../body/home/Home'
 import Dashboard from '../body/dashboard/Dashboard'
+import Settings from '../body/settings/Settings'
+
 import Newproject from '../body/newproject/Newproject'
 import Project from '../body/project/Project'
 import Header from '../../components/header/Header'
@@ -31,15 +33,9 @@ function Body(props) {
     return (<>
 
                 <Switch>
-                    <Route path="/" component={ Header } exact />
-                    <Route path="/dashboard" component={Header} exact />
-                    <Route path="/new" component={Header } exact />
-                    <Route path="/login" component={Header} exact />
-                    <Route path="/register" component={Header} exact />
-                    <Route path="/forgot_password" component={Header} exact />
+                    
                     <Route path="/project/:uniqueLink" component={isLogged ? null : Header}/>
-                    <Route path="/user/reset/:token" component={Header} exact />
-                    <Route path="/user/activate/:activation_token" component={Header} exact />
+                    <Route path="*" component={Header} />
                 </Switch>
                 <div className={(props.history.location.pathname.indexOf("/project/") == -1 ?  (chat_active ? "overflow-hidden" : "overflow-auto") : "")}>
                     <Switch>
@@ -47,10 +43,11 @@ function Body(props) {
                         <Route path="/dashboard" component={isLogged ? Dashboard : Login} exact />
                         <Route path="/new" component={isLogged ? Newproject : Login} exact />
                         <Route path="/project/:uniqueLink" component={isLogged ? Project : Login}/>
-                        <Route path="/login" component={isLogged ? NotFound : Login} exact />
-                        <Route path="/register" component={isLogged ? NotFound : Register} exact />
-                        <Route path="/forgot_password" component={isLogged ? NotFound : ForgotPass} exact />
-                        <Route path="/user/reset/:token" component={isLogged ? NotFound : ResetPass} exact />
+                        <Route path="/login" component={ Login} exact />
+                        <Route path="/register" component={Register} exact />
+                        <Route path="/settings" component={Settings} exact />
+                        <Route path="/forgot_password" component={ForgotPass} exact />
+                        <Route path="/user/reset/:token" component={ResetPass} exact />
                         <Route path="/user/activate/:activation_token" component={ActivationEmail} exact />
                     </Switch>
                 </div>

@@ -28,9 +28,6 @@ function Home(props) {
     const [howManyInputs,sethowManyInputs] = useState(1)
 
 
-
-
-
     const removeField = () => {
         sethowManyInputs(howManyInputs - 1)
         if(howManyInputs == 1) {
@@ -60,7 +57,7 @@ function Home(props) {
     
           if (!file) console.log({ err: "No files were uploaded.", success: '' })
     
-          if (file.size > 1024 * 1024)
+          if (file.size > 8 * 1024 * 1024)
             alert("Size too large.")
     
           if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.mimetype !== 'image/jpg')
@@ -126,23 +123,25 @@ function Home(props) {
         <div className="form-container">
             <div className="form-body">
                 <form onSubmit={(e) => createNewProject(e)}>
-           <Dropzone
-                onDrop={uploadLogo}
-                multiple={false}
-                maxSize={800000000}
-            >
-                {({ getRootProps, getInputProps }) => (
-                  <div className="dropzone"
-                      {...getRootProps()}
-                  >
-                      <input {...getInputProps()} />
-                      <img src={logo}/>
+                <div className="title text-center">Create new project</div>
+                <div className="image-form-conroler">
 
+                    <Dropzone
+                            onDrop={uploadLogo}
+                            multiple={false}
+                            maxSize={800000000}
+                        >
+                            {({ getRootProps, getInputProps }) => (
+                            <div className="dropzone"
+                                {...getRootProps()}
+                            >
+                                <input {...getInputProps()} />
+                                <img src={logo}/>
+                            </div>
+                        )}
 
-                  </div>
-              )}
-
-            </Dropzone>
+                        </Dropzone>
+                    </div>
             <input  type="text" value={imageinput} onChange={e => setimageinput(e.target.value)}/>
             <button onClick={
                 () => {

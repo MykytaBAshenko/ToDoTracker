@@ -20,7 +20,10 @@ router.get('/logout', userCtrl.logout)
 
 router.post('/googlelogin', userCtrl.googleLogin)
 
-// router.post('/facebook_login', userCtrl.facebookLogin)
+router.post('/uploadimage', userCtrl.uploadImage)
+
+router.patch('/changeinfo',auth, userCtrl.changeUser)
+
 
 
 module.exports = router

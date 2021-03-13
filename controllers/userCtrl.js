@@ -1,11 +1,12 @@
 const Users = require('../models/userModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const sendMail = require('./sendMail')
+const {sendEmail} = require('./sendMail')
 
 const { google } = require('googleapis')
 const { OAuth2 } = google.auth
 const fetch = require('node-fetch')
+const fs = require('fs');
 
 const client = new OAuth2(process.env.MAILING_SERVICE_CLIENT_ID)
 
@@ -14,58 +15,54 @@ const { CLIENT_URL } = process.env
 const userCtrl = {
     register: async (req, res) => {
         try {
-            const { name, email, password, fullname } = req.body
+            const { avatar, email, password, nickname } = req.body
 
-            if (!name || !email || !password || !fullname)
-                return res.status(400).json({ msg: "Please fill in all fields." })
+            if (!avatar || !email || !password || !nickname)
+                return res.json({success: false, msg: "Please fill in all fields." })
 
             if (!validateEmail(email))
-                return res.status(400).json({ msg: "Invalid emails." })
+                return res.json({success: false, msg: "Invalid emails." })
 
             const user = await Users.findOne({ email })
-            if (user) return res.status(400).json({ msg: "This email already exists." })
+            if (user) return res.json({success: false, msg: "This email already exists." })
 
-            if (password.length < 6)
-                return res.status(400).json({ msg: "Password must be at least 6 characters." })
+            if (password.length < 8)
+                return res.json({success: false, msg: "Password must be at least 8 characters." })
 
             const passwordHash = await bcrypt.hash(password, 12)
 
             const newUser = {
-                name, fullname, email, password: passwordHash
+                avatar, nickname, email, password: passwordHash
             }
-
             const activation_token = createActivationToken(newUser)
-
             const url = `${CLIENT_URL}/user/activate/${activation_token}`
-            sendMail(email, url, "Verify your email address")
+            await sendEmail(email, url, "Verify your email address")
+            
+            res.json({success: true, msg: "Submit your email!"})
 
-
-            res.json({ msg: "Register Success! Please activate your email to start." })
         } catch (err) {
-            return res.status(500).json({ msg: err.message })
+            console.log(err)
+            return res.json({ success:false, msg: "Something broke!" })
         }
     },
     activateEmail: async (req, res) => {
         try {
             const { activation_token } = req.body
             const user = jwt.verify(activation_token, process.env.ACTIVATION_TOKEN_SECRET)
-            const { name, email, password, fullname } = user
+            const { avatar, email, password, nickname } = user
             
             const check = await Users.findOne({ email })
             if (check) return res.status(400).json({ msg: "This email already exists." })
 
             const newUser = new Users({
-                name, email, password, fullname
+                avatar, email, password, nickname
             })
 
             let u = newUser.save()
-
-            res.json({ success:true , u })
-
-            
-
+            res.json({ success:true})
         } catch (err) {
-            return res.status(500).json({ msg: err.message })
+            console.log(err)
+            return res.json({success:false, msg: "Something broke!" })
         }
     },
     login: async (req, res) => {
@@ -86,21 +83,21 @@ const userCtrl = {
 
             res.json({success:true, msg: "Login success!" })
         } catch (err) {
-            return res.status(500).json({ success:false, msg: "Something broke!" })
+            return res.json({ success:false, msg: "Something broke!" })
         }
     },
     getAccessToken: (req, res) => {
         try {
             const rf_token = req.cookies.refreshtoken
-            if (!rf_token) return res.status(400).json({ msg: "Please login now!" })
+            if (!rf_token) return res.json({ msg: "Please login now!" })
             jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-                if (err) return res.status(400).json({ msg: "Please login now!" })
+                if (err) return res.json({ msg: "Please login now!" })
 
                 const access_token = createAccessToken({ id: user.id })
                 res.json({ access_token })
             })
         } catch (err) {
-            return res.status(500).json({ msg: err.message })
+            return res.json({ success:false, msg: "Something broke!" })
         }
     },
     forgotPassword: async (req, res) => {
@@ -112,10 +109,10 @@ const userCtrl = {
             const access_token = createAccessToken({ id: user._id })
             const url = `${CLIENT_URL}/user/reset/${access_token}`
 
-            sendMail(email, url, "Reset your password")
+            sendEmail(email, url, "Reset your password")
             res.json({success: true, msg: "Check your email." })
         } catch (err) {
-            return res.status(500).json({success: false, msg: "Something broke!" })
+            return res.json({success: false, msg: "Something broke!" })
         }
     },
     resetPassword: async (req, res) => {
@@ -123,10 +120,10 @@ const userCtrl = {
             const { password } = req.body
             const passwordHash = await bcrypt.hash(password, 12)
 
-            let res = await Users.findOneAndUpdate({ _id: req.user.id }, {
+            let user = await Users.findOneAndUpdate({ _id: req.user.id }, {
                 password: passwordHash
             })
-            if(res.length)
+            if(user)
                 return res.json({success: true, msg: "Password successfully changed!" })
             return res.json({success: false,  msg: "Something broke!" })
         } catch (err) {
@@ -227,9 +224,54 @@ const userCtrl = {
             }
         } catch (err) {
             console.log(err)
-            return res.status(500).json({ msg: err.message })
+            return res.status(500).json({success:false, msg: err.message })
         }
     },
+    uploadImage: async function (req, res, next) {
+        try {
+            if (!req.files || Object.keys(req.files).length === 0)
+                return res.json({success: false, msg: "No files were uploaded." })
+
+            const file = req.files.file;
+
+            if (file.size > 8 * 1024 * 1024) {
+                removeTmp(file.tempFilePath)
+                return res.json({ msg: "Size too large." })
+            }
+            if (file.mimetype !== 'image/jpeg' && file.mimetype !== 'image/png' && file.mimetype !== 'image/jpg') {
+                removeTmp(file.tempFilePath)
+                return res.json({success: false, msg: "File format is incorrect." })
+            }
+
+            let new_image_name = `uploads/users/${Date.now()}_${file.name}`
+            fs.rename(file.tempFilePath, new_image_name, (err) => {
+
+                if (err) {
+                    return res.json({success: false, msg: "Something broke." })
+                }
+                return res.json({success: true, url: new_image_name })
+            });
+        } catch (err) {
+            console.log(err)
+            return res.json({success: false, msg: "Something broke." })
+        }
+    },
+    changeUser: async (req, res) => {
+        try {
+            console.log(req)
+            const { nickname, avatar } = req.body
+
+            let user = await Users.findOneAndUpdate({ _id: req.user.id }, {
+                avatar, nickname
+            })
+            if(user)
+                return res.json({success: true, msg: "Information has been changed!" })
+            return res.json({success: false,  msg: "Something broke!" })
+        } catch (err) {
+            console.log(err)
+            return res.status(500).json({success: false, msg: "Something broke!" })
+        }
+    }
     // facebookLogin: async (req, res) => {
     //     try {
     //         const { accessToken, userID } = req.body

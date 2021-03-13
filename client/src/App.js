@@ -30,7 +30,7 @@ function App() {
       }
       getToken()
     }
-  }, [auth?.isLogged, dispatch])
+  }, [auth, dispatch])
 
   useEffect(() => {
     if (token) {
