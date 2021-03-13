@@ -13,6 +13,7 @@
     flex-direction: column;
     color: white;
     width: 100%;
+    justify-content: space-between;
     max-width: 300px;
     font-weight: bold;
     align-items: center;
@@ -42,7 +43,7 @@
     transition: .5s;
 }
 .user-card-content a{
-    font-size: 20px;
+    font-size: 17px;
     color: #0aa699; 
 }
 .user-card-content a:hover{

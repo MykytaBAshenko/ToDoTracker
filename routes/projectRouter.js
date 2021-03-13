@@ -8,6 +8,7 @@ router.post('/:projectLink/adduser',auth, projectCtrl.addUser)
 router.get('/:projectLink/users',auth, projectCtrl.getUsers)
 router.post('/new',auth, projectCtrl.createProject)
 router.post('/uploadlogo',auth, projectCtrl.uploadLogo)
+router.delete('/:projectLink/user/:userId',auth, projectCtrl.deleteUser)
 
 
  

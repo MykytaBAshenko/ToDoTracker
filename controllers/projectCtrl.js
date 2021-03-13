@@ -110,8 +110,8 @@ const projectCtrl = {
                                 about: ""
                             })
                             await UserInProj.save()
-                            const UsersInProj = await UsersInProject.find({project:mongoose.Types.ObjectId(project[0]._id)})
-                            return res.json({success:true, UsersInProject: UsersInProj })
+                            const UsersInProj = await UsersInProject.find({project:mongoose.Types.ObjectId(project[0]._id)}).populate("user")
+                            return res.json({success:true,msg: "User added to the project", UsersInProject: UsersInProj })
                         }
                         return res.json({success:false, msg: "User with such mail already exists in the project."  })
                     }
@@ -160,7 +160,32 @@ const projectCtrl = {
             }
         } catch (err) {
             console.log(err)
-            res.json({success: false, msg: err})
+            res.json({success: false, msg:"Something broke!"})
+        }
+    },
+    deleteUser: async (req, res) => {
+        try {
+            const project = await Project.find({ "uniqueLink": req.params.projectLink })
+            if(project.length) {
+                const UsersIn = await UsersInProject
+                    .find({project: project[0]._id})
+                    .populate("user")
+                for(let o = 0; o < UsersIn.length; o++){
+                    if(UsersIn[o]._id.toString() == req.params.userId.toString() ) {
+                        UsersIn[o].remove()
+                        UsersIn.splice(o, 1)
+                        return res.json({success: true, msg: "User has been deleted!", UsersInProject: UsersIn})
+                    }
+                }
+                return res.json({success: false, msg: "Something went wrong!"})
+                
+            } 
+            else {
+                return res.json({success: false, msg: "Project does not exist"})
+            }
+        } catch (err) {
+            console.log(err)
+            res.json({success: false, msg:"Something broke!"})
         }
     }
 }

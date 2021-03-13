@@ -4,7 +4,7 @@ import {Switch, Route} from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
-import { FaUserShield } from 'react-icons/fa'
+import { toast } from 'react-toastify';
 
 
 
@@ -13,7 +13,7 @@ function Users(props) {
     const [usersIN, setusersIN] = useState([])
     const projectLink = props.match.params.projectLink;
     const [isAdminInPr, setisAdminInPr] = useState(false)
-    
+    const [usersearch, setusersearch] = useState("")
     const auth = useSelector(state => state.auth)
     const token = useSelector(state => state.token)
     const {isLogged, isAdmin} = auth
@@ -44,19 +44,64 @@ function Users(props) {
             if(d.data.success) {
                 setusersIN(d.data.UsersInProject)
                 let isAdmin = false
+                toast.success(d.data?.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
                 for(let y = 0; y < d.data.UsersInProject.length; y++) {
-                    if(d.data.UsersInProject[y].status == "Owner" && d.data.UsersInProject[y].user._id.toString() == auth.user._id)
+                    if(d.data.UsersInProject[y].status == "Owner" && d.data.UsersInProject[y]?.user?._id?.toString() == auth?.user?._id)
                     isAdmin = true
                 }
                 setisAdminInPr(isAdmin)
             } else {
-                console.log(d.data.msg)
+ 
+                toast.error(d.data?.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
         })
     }
 
-    const dropUser = () => {
+    const dropUser = (id) => {
+        axios.delete(`/api/project/${projectLink}/user/${id}`, {
+            headers: { Authorization: token }
+          }).then(d => {
+              if(d.data.success){
+                toast.success(d.data?.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setusersIN(d.data?.UsersInProject)
 
+              }
+              else {
+                 toast.error(d.data?.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+              }
+          })
     }
 
     return (
@@ -64,26 +109,30 @@ function Users(props) {
             <div className="dashboard_page-control">
             <input value={AddUserInput} placeholder="User email" onChange={e => setAddUserInput(e.target.value)}></input>
             <button className="black-btn" onClick={() => AddUserToProject()}>Add user in project</button>
+            <input value={usersearch} placeholder="Search user" onChange={e => setusersearch(e.target.value)}></input>
+            
             </div>
             <div className="users-map">
-                {usersIN.map((u,i) => u.user._id.toString() != auth.user._id ? <div key={i} className="user-card">
+                {usersIN.map((u,i) => u.user?._id?.toString() != auth?.user?._id ? (
+                (u?.user?.nickname?.indexOf(usersearch) != -1 || u?.user?.email?.indexOf(usersearch) != -1  ) &&
+                <div key={i} className="user-card">
                     <div className="img-user-container">
                         <img src={u.user.avatar} />
                     </div>
                     <div className="user-card-content">
                         <Link to={"/user/"+u?.user?._id?.toString()} className="user-card-content-row">
-                            {u.user.nickname}
+                            {u.user.email}
                         </Link>
                         <div className="user-card-content-row">
-                            {u.user.email}
+                            {u.user.nickname}
                         </div>
                         <div className="user-card-content-row">
                             {u.status}
                         </div>
                         { isAdminInPr &&
-                        <button className="user-card-drop-user" onClick={() => dropUser(u.user._id)}>Drop user</button>                        
+                        <button className="user-card-drop-user" onClick={() => dropUser(u._id)}>Drop user</button>                        
                         }</div>
-                    </div> : null)}
+                    </div>) : null)}
             </div>
         </div>
     )

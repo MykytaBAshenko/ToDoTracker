@@ -74,7 +74,7 @@ function Chat(props) {
     return (
         <div className={"chat-window "+(props.isshow ? "" : "display-none")}>
           <div className="chat-window-chooser">
-            {chats.map((c, i) => <ChatChooser key={i} setWhereSend={setWhereSend}  setWhatMesShow={setWhatMesShow} roomId={c.project.uniqueLink} projectInfo={c.project}/>)}
+            {chats?.map((c, i) => <ChatChooser key={i} setWhereSend={setWhereSend}  setWhatMesShow={setWhatMesShow} roomId={c.project.uniqueLink} projectInfo={c.project}/>)}
           </div>
           <ChatOutput WhatMesShow={WhatMesShow} WhereSend={WhereSend} />
         </div>
