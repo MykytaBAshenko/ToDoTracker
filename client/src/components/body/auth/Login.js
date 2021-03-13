@@ -59,7 +59,6 @@ function Login() {
                 });
         }
             const res = await axios.post('/api/auth/login', { email, password })
-            // alert(res?.data?.msg)
 
             if(res?.data?.success) {
                 localStorage.setItem('firstLogin', true)
@@ -117,7 +116,7 @@ function Login() {
                     <div className="form-actions">
                         <button className="form-actions-btn" type="submit">Login</button>
                         <div className="form-actions-links">
-                        <Link to="/register">Register</Link>
+                            <Link to="/register">Register</Link>
 
                             <Link to="/forgot_password">Forgot your password?</Link>
                         </div>

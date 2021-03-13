@@ -11,10 +11,10 @@ import { RiMessage2Fill } from 'react-icons/ri';
 function Header(props) {
     const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
-    const chat_active = useSelector(state => state.chat_active.chat_active)
     const notifications = useSelector(state => state?.notifications?.notifications)
     const { user, isLogged } = auth
-    // const [showchat, setshowchat] = useState(false)
+        const chat_active = useSelector(state => state.chat_active.chat_active)
+
     const handleLogout = async () => {
         try {
             await axios.get('/api/auth/logout')
@@ -27,8 +27,6 @@ function Header(props) {
     useEffect(() => {
       }, [chat_active]);
     const setOpenChat = () => {
-        // setshowchat(!showchat)
-        console.log(chat_active)
         dispatch(dispatchSetChatAction(!chat_active))
     }
 
@@ -64,7 +62,7 @@ function Header(props) {
             {isLogged ? 
             <div>
                 {
-                    props?.showleftcontrol ? 
+                    props?.showleftcontrol && !chat_active ? 
                 <button className="header-menu-btn" onClick={() => props?.changeVisibilityMenu()}><BiMenu/></button>
                 : <Link className="header-logo" to="/">ToDoTracker</Link>
                 }

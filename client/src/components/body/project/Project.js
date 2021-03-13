@@ -23,6 +23,7 @@ function Project(props) {
     const token = useSelector(state => state.token)
     const {isLogged, isAdmin} = auth
     const [showleft, setshowleft] = useState(false)
+    const chat_active = useSelector(state => state.chat_active.chat_active)
     
     const changeVisibilityMenu =  () => {
       setshowleft(!showleft)
@@ -49,16 +50,16 @@ function Project(props) {
 
     return (
       <div className="dashboard-body">
-        <div className="left-control">
-          {/* <button>asds</button> */}
-          <div>
+         {!chat_active ? <div className="left-control">
+         <div>
             <Link to={"/dashboard"} className="left-control-link"> <MdDashboard/> { showleft ? <div className="left-control-link-text">Main</div>:null}</Link>
             <Link to={"/project/"+uniqueLink+"/users"} className="left-control-link"> <FaUsers/> { showleft ? <div className="left-control-link-text">Users</div>:null}</Link>
             <Link to={"/project/"+uniqueLink+"/tasks"} className="left-control-link"> <RiTaskFill /> { showleft ? <div className="left-control-link-text">Tasks</div>:null}</Link>
             <Link to={"/project/"+uniqueLink+"/updates"} className="left-control-link"> <MdUpdate/> { showleft ? <div className="left-control-link-text">Updates</div>:null}</Link>
             <Link to={"/project/"+uniqueLink+"/settings"} className="left-control-link"> <AiFillProject /> { showleft ? <div className="left-control-link-text">Settings</div>:null}</Link>
-          </div>
+          </div> 
         </div>
+        : <div/>}
         <div className="right-content">
           <Header showleftcontrol={true} changeVisibilityMenu={changeVisibilityMenu}></Header>
           <div className="right-content-exact">

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import validateEmail  from '../../../functions/validateEmail'
 import { toast } from 'react-toastify';
+import { Link, useHistory } from 'react-router-dom'
 
 function ForgotPassword() {
     const [email, setemail] = useState("")
@@ -64,6 +65,11 @@ function ForgotPassword() {
                 </div>
                 <div className="form-actions">
                     <button className="form-actions-btn" type="submit">Reset password</button>
+                    <div className="form-actions-links">
+                        <Link to="/register">Register</Link>
+
+                            <Link to="/login">Login</Link>
+                        </div>
                 </div>
             </form>
         </div>
