@@ -86,7 +86,7 @@ const userCtrl = {
 
             res.json({success:true, msg: "Login success!" })
         } catch (err) {
-            return res.status(500).json({ msg: err.message })
+            return res.status(500).json({ success:false, msg: "Something broke!" })
         }
     },
     getAccessToken: (req, res) => {
@@ -107,15 +107,15 @@ const userCtrl = {
         try {
             const { email } = req.body
             const user = await Users.findOne({ email })
-            if (!user) return res.status(400).json({ msg: "This email does not exist." })
+            if (!user) return res.json({success: false, msg: "This email does not exist." })
 
             const access_token = createAccessToken({ id: user._id })
             const url = `${CLIENT_URL}/user/reset/${access_token}`
 
             sendMail(email, url, "Reset your password")
-            res.json({ msg: "Check your email." })
+            res.json({success: true, msg: "Check your email." })
         } catch (err) {
-            return res.status(500).json({ msg: err.message })
+            return res.status(500).json({success: false, msg: "Something broke!" })
         }
     },
     resetPassword: async (req, res) => {
@@ -123,13 +123,14 @@ const userCtrl = {
             const { password } = req.body
             const passwordHash = await bcrypt.hash(password, 12)
 
-            await Users.findOneAndUpdate({ _id: req.user.id }, {
+            let res = await Users.findOneAndUpdate({ _id: req.user.id }, {
                 password: passwordHash
             })
-
-            res.json({success: true, msg: "Password successfully changed!" })
+            if(res.length)
+                return res.json({success: true, msg: "Password successfully changed!" })
+            return res.json({success: false,  msg: "Something broke!" })
         } catch (err) {
-            return res.status(500).json({ msg: err.message })
+            return res.json({success: false,  msg: "Something broke!" })
         }
     },
     getUserInfor: async (req, res) => {

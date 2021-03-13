@@ -52,3 +52,13 @@
         background-color: white;
         color: #1B1E24;
     }
+
+
+
+
+    .Toastify__toast--error{
+        background-color: #f35958 !important;
+    }
+    .Toastify__toast--success{
+        background-color: #0aa699 !important;
+    }

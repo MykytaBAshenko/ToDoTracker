@@ -7,6 +7,7 @@ import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import validateEmail  from '../../../functions/validateEmail'
 import validatePassword  from '../../../functions/validatePassword'
+import { toast } from 'react-toastify';
 
 
 const initialState = {
@@ -20,64 +21,84 @@ function Login() {
     const history = useHistory()
     const [isEmail, setisEmail] = useState(false)
     const [isPassword, setisPassword] = useState(false)
-
     
     const { email, password} = user
 
-    const handleChangeInput = e => {
-        const { name, value } = e.target
-        if(e.target.name == "email") {
-            if(validateEmail(value)) {
-                setisEmail(false)
-            }
-            else {
-                setisEmail("Bad email")
-            }
+    const handleChangeEmail = e => {
+        if(validateEmail(e.target.value)) {
+            setisEmail(false)
         }
-        if(e.target.name == "password") {
-            if(validatePassword(value)) {
+        else {
+            setisEmail("Bad email")
+        }
+        setUser({ ...user, email: e.target.value })
+    }
+
+    const handleChangePassword = e => {
+            if(validatePassword(e.target.value)) {
                 setisPassword(false)
             }
             else {
                 setisPassword("Bad password")
             }
-        }
-        setUser({ ...user, [name]: value })
+        setUser({ ...user, password: e.target.value })
     }
 
 
     const handleSubmit = async e => {
         e.preventDefault()
+        if(isEmail || isPassword){
+           return toast.error("Bad input!", {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+        }
             const res = await axios.post('/api/auth/login', { email, password })
-            alert(res?.data?.msg)
+            // alert(res?.data?.msg)
+
             if(res?.data?.success) {
                 localStorage.setItem('firstLogin', true)
                 dispatch(dispatchLogin())
                 history.push("/")
+            } else {
+                return toast.error(res?.data?.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
             }
         
     }
 
     const responseGoogle = async (response) => {
+            
             const res = await axios.post('/api/auth/googlelogin', { tokenId: response.tokenId })
             setUser({ ...user, error: '', success: res.data.msg })
             localStorage.setItem('firstLogin', true)
 
             dispatch(dispatchLogin())
             history.push('/')
-       
     }
 
 
     return (
         <div className="form-container">
             <div className="form-body">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} autoComplete="off">
                     <div className="title">Login</div>
                     <div className="form-input">
-                        <label className={ isEmail ?  "error-text" : "" } htmlFor="email">Email Address</label>
-                        <input type="text"  className={ isEmail ?  "error-input" : "" } placeholder="Enter email address" id="email"
-                            value={email} name="email" onChange={handleChangeInput} />
+                        <label className={ isEmail ?  "error-text" : "" } htmlFor="mail">Email Address</label>
+                        <input type="text" autoComplete="off"   className={ isEmail ?  "error-input" : "" } placeholder="Enter email address" id="mail"
+                            value={email} onChange={(e) => handleChangeEmail(e)} />
                         {isEmail ? <label className="error-text">{isEmail}</label > : null}
                     </div>
 
@@ -87,9 +108,9 @@ function Login() {
                             value={password} name="password" onChange={handleChangeInput} />
                     </div> */}
                     <div className="form-input">
-                        <label className={ isPassword ?  "error-text" : "" } htmlFor="password">Password</label>
-                        <input type="password"  className={ isPassword ?  "error-input" : "" } placeholder="Enter password" id="password"
-                            value={password} name="password" onChange={handleChangeInput} />
+                        <label className={ isPassword ?  "error-text" : "" } htmlFor="pass">Password</label>
+                        <input type="password" autoComplete="new-password"  className={ isPassword ?  "error-input" : "" } placeholder="Enter password" id="pass"
+                            value={password} onChange={(e) => handleChangePassword(e)} />
                         {isPassword ? <label className="error-text">{isPassword}</label > : null}
                     </div>
 

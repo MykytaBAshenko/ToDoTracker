@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 
-function ProjectDashboard() {
+function ProjectDashboard(props) {
 
     useEffect(() => {
       
@@ -12,13 +12,12 @@ function ProjectDashboard() {
 
     return (
         <div className="dashboard_page">
+            {console.log(  props.match.params.projectLink)}
             
-            
-            <Link to={window.location.pathname+"/users"}>Users</Link>
-            <Link to={window.location.pathname+"/newtask"}>New Task</Link>
+            <Link to={"/project/"+props.match.params.projectLink+"/newtask"}>New Task</Link>
             {/* <Link to={window.location.pathname+"/chat"}>New Task</Link> */}
 
-               
+                
         </div>
     )
 }

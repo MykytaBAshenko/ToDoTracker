@@ -71,7 +71,7 @@ function Users(props) {
                         <img src={u.user.avatar} />
                     </div>
                     <div className="user-card-content">
-                        <Link to={"/user/"+u.user._id.toString()} className="user-card-content-row">
+                        <Link to={"/user/"+u?.user?._id?.toString()} className="user-card-content-row">
                             {u.user.nickname}
                         </Link>
                         <div className="user-card-content-row">

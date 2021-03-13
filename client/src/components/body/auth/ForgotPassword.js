@@ -1,42 +1,73 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-// import { isEmail } from '../../utils/validation/Validation'
-
-const initialState = {
-    email: '',
-    err: '',
-    success: ''
-}
+import validateEmail  from '../../../functions/validateEmail'
+import { toast } from 'react-toastify';
 
 function ForgotPassword() {
-    const [data, setData] = useState(initialState)
+    const [email, setemail] = useState("")
+    const [isEmail, setisEmail] = useState(false)
 
-    const { email, err, success } = data
 
+    
     const handleChangeInput = e => {
         const { name, value } = e.target
-        setData({ ...data, [name]: value, err: '', success: '' })
+        if(name == "email") {
+            if(validateEmail(value)) {
+                setisEmail(false)
+            }
+            else {
+                setisEmail("Bad email")
+            }
+        }
+        setemail(value)
     }
 
-    const forgotPassword = async () => {
-        // if (!isEmail(email))
-        //     alert("Email")
+    const forgotPassword = async (e) => {
+        e.preventDefault()
             const res = await axios.post('/api/auth/forgot', { email })
-            alert(res.data.msg)
+            // alert(res.data.msg)
+            if(res.data.success)
+            toast.success(res.data.msg, {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+
+            else if(!res.data.success)
+            toast.error(res.data.msg, {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
         
     }
 
     return (
-        <div className="fg_pass">
-            <h2>Forgot Your Password?</h2>
 
-            <div className="row">
-                <label htmlFor="email">Enter your email address</label>
-                <input type="email" name="email" id="email" value={email}
-                    onChange={handleChangeInput} />
-                <button onClick={forgotPassword}>Verify your email</button>
-            </div>
+        <div className="form-container">
+        <div className="form-body">
+            <form onSubmit={(e) => forgotPassword(e)}>
+                <div className="title">Forgot Your Password?</div>
+                <div className="form-input">
+                    <label className={ isEmail ?  "error-text" : "" } htmlFor="email">Email Address</label>
+                    <input type="text"  className={ isEmail ?  "error-input" : "" } placeholder="Enter email address" id="email"
+                        value={email} name="email" onChange={handleChangeInput} />
+                    {isEmail ? <label className="error-text">{isEmail}</label > : null}
+                </div>
+                <div className="form-actions">
+                    <button className="form-actions-btn" type="submit">Reset password</button>
+                </div>
+            </form>
         </div>
+    </div>
     )
 }
 
