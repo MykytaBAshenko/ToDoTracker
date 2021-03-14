@@ -4,7 +4,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: radial-gradient(circle farthest-corner at 10% 30%, rgba(0, 119, 217, 0.8) 0, #ebb8f8 90%);
 }
 
 .form-body {
@@ -36,6 +35,19 @@
 .form-body form  .form-input input{
     font-size: 18px;
     padding: 10px ;
+    transition: .5s;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
+    border: 2px solid white;
+    background-color: white;
+}
+
+.form-body form  .form-input textarea{
+    font-size: 18px;
+    padding: 10px ;
+    resize: none;
+    height: 120px;
+  font-family: 'Roboto', sans-serif;
+
     transition: .5s;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
     border: 2px solid white;
@@ -104,6 +116,7 @@
 .image-form-conroler{
     width: 100%;
     display: grid;
+    margin: 5px;
     justify-items: center;
     position: relative;
 }

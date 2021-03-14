@@ -50,21 +50,10 @@ function Chat(props) {
     const token = useSelector(state => state.token)
     const chats = useSelector(state => state.projects.projects)
 
-  //   const roomId = "dasdasdasdasd" ;
-  // const { messages, sendMessage } = useChat(roomId);
   const [newMessage, setNewMessage] = React.useState("");
-  // const [WhichRoomShow, setWhichRoomShow] = useState(false)
   const [WhatMesShow, setWhatMesShow] = useState([])
   const [WhereSend, setWhereSend] = useState()
 
-  // const handleNewMessageChange = (event) => {
-  //   setNewMessage(event.target.value);
-  // };
-
-  // const handleSendMessage = () => {
-  //   sendMessage(newMessage);
-  //   setNewMessage("");
-  // };
   useEffect(() => {
     console.log(WhereSend)
   

@@ -49,10 +49,10 @@ function App() {
       }
   }, [token, dispatch])
 
-
+  // circle farthest-corner at 10% 30%, rgba(70, 168, 255, 0.8) 0, #e88eff 90%
   return (
-      <Router>
-        <div className="App">
+      <Router> 
+        <div id="App" className="App">
           <Switch>
               <Route path="/" component={ Body }/>
           </Switch>

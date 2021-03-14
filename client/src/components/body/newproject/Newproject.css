@@ -1,0 +1,44 @@
+.form-body form .form-input.with-btn{
+    grid-template-columns: 1fr auto;
+}
+.form-body form .form-input.with-btn input{
+    font-size: 14px;
+}
+.form-body form .form-input.with-btn button{
+    padding: 5px;
+    background-color: #1B1E24;
+    border: 2px solid #1B1E24;
+    transition: .5s;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.form-body form .form-input.with-btn button:hover{
+    color: #1B1E24;
+    background-color: white;
+}
+.links-input{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.links-input-control{
+    display: grid;
+    margin-top:5px ;
+    gap: 10px;
+}
+.links-input-control button{
+    padding: 5px;
+    background-color: #1B1E24;
+    border: 2px solid #1B1E24;
+    transition: .5s;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.links-input-control button:hover{
+    color: #1B1E24;
+    background-color: white;
+}

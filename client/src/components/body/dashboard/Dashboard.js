@@ -19,11 +19,8 @@ function Dashboard(props) {
             headers: {  Authorization: token }
           }).then(d => {
               if(d?.data?.success){
-                console.log(d)
                 setprojects(d?.data?.projects)
-              } else {
-                  props.history.push("/dashboard")
-              }
+              } 
           })
     }, [token])
 
@@ -46,7 +43,7 @@ function Dashboard(props) {
             </div>
             <div className="dashboard_projects">
                 {console.log(projects)}
-            {projects.map((p, i) =>   (p.project.name.indexOf(search) != -1 || p.project.description.indexOf(search) != -1) ?
+            {projects.map((p, i) =>   (p.project?.name.indexOf(search) != -1 || p.project.description.indexOf(search) != -1) ?
                 <div key={i} className="dashboard_project-card">
                     <div className="dashboard_project-card-header">
                         <div className="dashboard_project-card-header-img">
