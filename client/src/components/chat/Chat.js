@@ -10,30 +10,43 @@ require('dotenv').config()
 const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
 const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_SERVER_URL;
 
-const useChat = (roomId) => {
+const useChat = (roomId, projectInfo) => {
   const [messages, setMessages] = useState([]);
   const socketRef = useRef();
-
+  const auth = useSelector(state => state.auth)
+  const token = useSelector(state => state.token)
+  const senderId = auth.user._id
   useEffect(() => {
     socketRef.current = socketIOClient(SOCKET_SERVER_URL, {
-      query: { roomId },
+      query: { roomId, senderId },
     });
 
+    
     socketRef.current.on(NEW_CHAT_MESSAGE_EVENT, (message) => {
       const incomingMessage = {
         ...message,
-        ownedByCurrentUser: message.senderId === socketRef.current.id,
+        // ownedByCurrentUser: message.senderId === socketRef.current.id,
       };
+
       setMessages((messages) => [...messages, incomingMessage]);
     });
+    socketRef.current.on("connect", () => {
+      // console.log(1); // x8WIv7-mJelg7on_ALbx
+      axios.get(`/api/msg/${roomId}`,{
+        headers: {  Authorization: token }
+    }).then(d => {
+      console.log(d)
+      setMessages(d.data.msgs)
+    })
 
-
+    });
   }, []);
 
   const sendMessage = (messageBody) => {
     socketRef.current.emit(NEW_CHAT_MESSAGE_EVENT, {
       body: messageBody,
-      senderId: socketRef.current.id,
+      projectId: projectInfo._id,
+      senderId: auth.user._id
     });
   };
 
@@ -50,7 +63,6 @@ function Chat(props) {
     const token = useSelector(state => state.token)
     const chats = useSelector(state => state.projects.projects)
 
-  const [newMessage, setNewMessage] = React.useState("");
   const [WhatMesShow, setWhatMesShow] = useState([])
   const [WhereSend, setWhereSend] = useState()
 
@@ -101,7 +113,7 @@ function ChatOutput(props) {
 
 function ChatChooser(props) {
   
-  const { messages, sendMessage } = useChat(props.roomId);
+  const { messages, sendMessage } = useChat(props.roomId, props.projectInfo);
   useEffect(() => {
     props.setWhatMesShow(messages)
   }, [ messages.length])

@@ -5,7 +5,7 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const fileUpload = require('express-fileupload')
 const path = require('path')
-
+const main_socket = require("./sockets/main_socket")
 
 const app = express()
 const server = require("http").createServer(app);
@@ -25,34 +25,17 @@ app.use(fileUpload({
 app.use('/api/auth', require('./routes/authRouter'))
 app.use('/api/task', require('./routes/taskRouter'))
 app.use('/api/project', require('./routes/projectRouter'))
+app.use('/api/msg', require('./routes/msgRouter'))
+
 
 
 app.use('/uploads', express.static('uploads'));
 
-const NEW_CHAT_MESSAGE_EVENT = "newChatMessage"; 
 
- 
 
-io.on("connection", (socket) => {
 
-  console.log(`Client ${socket.id} connected`);
 
-  // Join a conversation
-  const { roomId } = socket.handshake.query;
-  socket.join(roomId);
-
-  // Listen for new messages
-  socket.on(NEW_CHAT_MESSAGE_EVENT, (data) => {
-    io.in(roomId).emit(NEW_CHAT_MESSAGE_EVENT, data);
-    console.log(data)
-  });
-
-  // Leave the room if the user closes the socket
-  socket.on("disconnect", () => {
-    console.log(`Client ${socket.id} diconnected`);
-    socket.leave(roomId);
-  });
-}); 
+io.on("connection", (socket) => main_socket(socket, io)); 
 
 
 // Connect to mongodb
