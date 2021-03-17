@@ -72,8 +72,6 @@ const useChat = (roomId, projectInfo) => {
         unread?.unread?.push(roomId)
       chats.find((o, i) => {
           if (o.project.uniqueLink == roomId && !chats[i].project.lastMsg && d[d.length-1]?.createdAt != chats[i].project.lastMsg) {
-            chats[i].project.lastMsg = d[d.length-1].createdAt
-            dispatch(dispatchSetLastUpdateInMsg(chats))
 
           }
       });
@@ -168,7 +166,7 @@ function ChatChooser(props) {
   
   const { messages, sendMessage } = useChat(props.roomId, props.projectInfo);
   useEffect(() => {
-    if(props.WhereSend)
+    if(props.WhereSend && props.WhatMesShow[0].body == messages[0].body && props.WhatMesShow[0].project == messages[0]?.project)
     props.setWhatMesShow(messages)
   }, [ messages.length])
   return(
