@@ -14,3 +14,11 @@ export const dispatchGetAllProjects = (res) => {
         payload: res.data
     }
 }
+
+export const dispatchSetLastUpdateInMsg = (res) => {
+    console.log(res)
+    return {
+        type: ACTIONS.SET_LAST_MSG,
+        payload: res
+    }
+}

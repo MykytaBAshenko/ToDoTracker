@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router,Switch, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { dispatchLogin, fetchUser, dispatchGetUser } from './redux/actions/authAction'
@@ -18,7 +18,8 @@ function App() {
   const auth = useSelector(state => state.auth)
 
   const chat_active = useSelector(state => state.chat_active.chat_active)
-  
+  const [callback, setCallback] = useState(false)
+   
   const { user, isLogged } = auth
 
   useEffect(() => {
@@ -31,7 +32,13 @@ function App() {
       getToken()
     }
   }, [auth, dispatch])
-
+  useEffect(() => {
+    if(isLogged){
+        fetchAllProjects(token).then(res =>{
+            dispatch(dispatchGetAllProjects(res))
+        })
+    }
+},[token, isLogged])
   useEffect(() => {
     if (token) {
       const getUser = () => {
@@ -42,12 +49,7 @@ function App() {
       }
       getUser()
     }
-      if(auth?.isLogged){
-          fetchAllProjects(token).then(res =>{
-              dispatch(dispatchGetAllProjects(res))
-          })
-      }
-  }, [token, dispatch])
+  }, [token])
 
   // circle farthest-corner at 10% 30%, rgba(70, 168, 255, 0.8) 0, #e88eff 90%
   return (

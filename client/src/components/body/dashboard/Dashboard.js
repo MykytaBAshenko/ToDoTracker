@@ -24,17 +24,9 @@ function Dashboard(props) {
           })
     }, [token])
 
-    const [callback, setCallback] = useState(false)
 
-    const dispatch = useDispatch()
 
-    useEffect(() => {
-        if(isLogged){
-            fetchAllProjects(token).then(res =>{
-                dispatch(dispatchGetAllProjects(res))
-            })
-        }
-    },[token, isLogged, dispatch, callback])
+    
     return (
         <div className="dashboard_page">
             <div className="dashboard_page-control">
@@ -42,7 +34,6 @@ function Dashboard(props) {
                 <input type="text" value={search} onChange={e=> setsearch(e.target.value)} />
             </div>
             <div className="dashboard_projects">
-                {console.log(projects)}
             {projects.map((p, i) =>   (p.project?.name.indexOf(search) != -1 || p.project.description.indexOf(search) != -1) ?
                 <div key={i} className="dashboard_project-card">
                     <div className="dashboard_project-card-header">

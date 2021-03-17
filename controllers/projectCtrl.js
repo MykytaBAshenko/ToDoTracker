@@ -42,7 +42,7 @@ const projectCtrl = {
     },
     createProject: async (req,res) => {
         try {
-            if (req.body.name && req.body.description && req.body.logo) {
+            if (req.body.name && req.body.logo) {
                 const project = await Project.find({ uniqueLink: req.body.uniqueLink })
                 if(!project.length) {
                     const newProject = new Project({

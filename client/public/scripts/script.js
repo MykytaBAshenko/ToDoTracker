@@ -35,7 +35,8 @@ window.onload = function(e){
       var color2 = "rgb("+r2+","+g2+","+b2+")";
        document.getElementById("App").style = (
          `background: linear-gradient(-${deg}deg, ${color1}, ${color2});`)
-        
+         document.getElementById("msgs_body").style = (
+          `background: linear-gradient(-${deg}deg, ${color1}, ${color2});`)
         step += gradientSpeed;
         if ( step >= 1 )
         {
