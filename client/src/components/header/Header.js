@@ -11,6 +11,8 @@ import { RiMessage2Fill } from 'react-icons/ri';
 function Header(props) {
     const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
+    const unread = useSelector(state => state.unread)
+
     const notifications = useSelector(state => state?.notifications?.notifications)
     const { user, isLogged } = auth
         const chat_active = useSelector(state => state.chat_active.chat_active)
@@ -25,7 +27,7 @@ function Header(props) {
         }
     }
     useEffect(() => {
-      }, [chat_active]);
+      }, [chat_active,unread.unread.length]);
     const setOpenChat = () => {
         dispatch(dispatchSetChatAction(!chat_active))
     }
@@ -72,7 +74,7 @@ function Header(props) {
                 Logged() : 
                 notLogged()}
             { isLogged ?
-                <button className="open-chat-btn" onClick={() => setOpenChat()}><RiMessage2Fill/></button > :null
+                <button className={"open-chat-btn "+ (unread.unread.length ? "unread-animation-btn" : "")} onClick={() => setOpenChat()}><RiMessage2Fill/></button > :null
             }
             </header>
             {/* <Chat isshow={ isLogged && showchat} /> */}

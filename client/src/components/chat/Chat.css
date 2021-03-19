@@ -56,8 +56,146 @@
 .msgsforrender{
     display: grid;
     grid-template-rows: 1fr auto;
+    max-height: calc(100vh - 60px);
 }
 
 .msgsrenderexact{
     overflow-y: auto;
+}
+
+.chat-unread-animation{
+    background-color: #f35958;
+
+}
+
+
+
+.active-chat{
+    background-color: #0aa699 !important;
+    color: #1B1E24;
+}
+
+.RenderMsg{
+    margin: 5px ;
+    display: grid;
+    justify-items: start;
+}
+.msg{
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+.msg a{
+    width: 40px;
+    height: 40px;
+    overflow:hidden;
+    border-radius: 50%;
+    position: relative;
+}
+.msg a img{
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 100%;
+    position: absolute;
+}
+.msg-body{
+    background-color: #1B1E24;
+    margin-left: 4px;
+    color: white;
+    padding: 6px;
+    border-radius: 4px;
+}
+.msg-body a{
+    color: white;
+    font-weight: bold;
+}
+.msg-body-text{
+    padding-top: 4px;
+    white-space: pre-line;
+}
+.my-msg{
+    white-space: pre-line;
+    background-color: #1B1E24;
+    justify-self: end;
+    color: white;
+    border-radius: 4px;
+    align-items: center;
+    padding: 6px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+.my-msg-control{
+    margin-left: 10px;
+    gap: 5px;
+    align-items: center;
+    display: grid;
+    grid-template-columns: auto auto;
+}
+.my-msg-control button{
+    padding: 4px;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    border-radius: 4px;
+}
+.my-msg-control button.edit:hover{
+    background-color: #0aa699;
+
+}
+
+.my-msg-control button.drop:hover{
+    background-color: #f35958;
+}
+
+.choose-chat-room{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.chat-msg-control{
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+.chat-msg-control textarea{
+    width: 100%;
+    display: block;
+    height: 50px;
+}
+.chat-msg-control textarea {
+    background-color: white;
+    padding: 4px;
+    resize: none;
+    border: 2px solid #1B1E24;
+    font-family: 'Roboto', sans-serif;
+
+}
+.chat-msg-control textarea:focus {
+    border-color: #0aa699;
+}
+
+.send-message-button{
+    padding: 0 10px;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    transition: .5s;
+    background-color: #1B1E24;
+}
+.send-message-button:hover{
+    background-color: #0aa699;
+}
+
+.send-message-button svg{
+    width: 30px;
+    height: 30px;
+    display: block;
+    fill: white;
+}
+.send-message-button:hover svg{
+    fill: #1B1E24;
 }

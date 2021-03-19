@@ -1,30 +1,44 @@
 import React, { useState, useRef, useEffect } from 'react'
-import {Switch, Route} from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import socketIOClient from "socket.io-client";
 import { useDispatch, useSelector } from 'react-redux'
-import {dispatchSetUnreadAction} from '../../redux/actions/unreadAction'
-import {dispatchSetLastUpdateInMsg} from '../../redux/actions/projectAction'
-
+import { dispatchSetUnreadAction } from '../../redux/actions/unreadAction'
+import { dispatchSetLastUpdateInMsg } from '../../redux/actions/projectAction'
+import { FaTrash, FaEdit } from 'react-icons/fa'
+import {IoSendSharp} from 'react-icons/io5'
 
 
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 require('dotenv').config()
 
-const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
+const NEW_CHAT_MESSAGE_EVENT = "NEW_CHAT_MESSAGE_EVENT";
+const MESSAGE_WAS_READ = "MESSAGE_WAS_READ";
+const DROP_MSG = "DROP_MSG";
+const FIRST_CONN = "FIRST_CONN";
+const REMOVE_FROM_FE = "REMOVE_FROM_FE"
+
+
 const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_SERVER_URL;
 
-const check_if_exist_unread = (data,id) => {
-  if(!id || !data)
+const check_if_exist_unread = (data, id) => {
+  if (!id || !data)
     return false
-    console.log(data, id)
-  for(let y = 0; y < data.length; y++){
-    if(data[y].whosee.indexOf(id) == -1)
+  // console.log(data, id)
+  for (let y = 0; y < data.length; y++) {
+    if (data[y]?.whosee?.indexOf(id) == -1)
       return true
   }
   return false
 }
 
+// const check_on_unread_1_msg = (data, id) => {
+//   if (!id || !data)
+//     return false
+//   if (data.whosee.indexOf(id) == -1)
+//     return true
+//   return false
+// }
 
 const useChat = (roomId, projectInfo) => {
   const [messages, setMessages] = useState([]);
@@ -42,52 +56,112 @@ const useChat = (roomId, projectInfo) => {
       query: { roomId, senderId },
     });
 
-    
+
     socketRef.current.on(NEW_CHAT_MESSAGE_EVENT, (message) => {
-      const incomingMessage = {
-        ...message,
-        // ownedByCurrentUser: message.senderId === socketRef.current.id,
-      };
-      if(unread?.unread?.indexOf(roomId) != -1)
-        unread?.unread?.splice(unread?.unread?.indexOf(roomId),1)
-      if(check_if_exist_unread(incomingMessage, auth?.user?._id))
-        unread?.unread?.push(roomId)
-      chats.find((o, i) => {
-          if (o.project.uniqueLink == roomId && !chats[i].project.lastMsg && incomingMessage.createdAt != chats[i].project.lastMsg) {
-            chats[i].project.lastMsg = incomingMessage.createdAt
-            dispatch(dispatchSetLastUpdateInMsg(chats))
+      // if (unread?.unread?.indexOf(roomId) != -1)
+      //   unread?.unread?.splice(unread?.unread?.indexOf(roomId), 1)
+      // if (check_on_unread_1_msg(message, auth?.user?._id))
+      //   unread?.unread?.push(roomId)
+      // dispatch(dispatchSetUnreadAction({ unread: unread.unread }))
 
-          }
-      });
-      dispatch(dispatchSetUnreadAction({unread:unread.unread}))
-
-      setMessages((messages) => [...messages, incomingMessage]);
+      setMessages((messages) => [...messages, message]);
     });
-    socketRef.current.on("conn", (d) => {
-      // console.log(1)
+
+    socketRef.current.on(FIRST_CONN, (d) => {
+      console.log(1)
       setMessages(d)
-      if(unread?.unread?.indexOf(roomId) != -1)
-        unread?.unread?.splice(unread?.unread?.indexOf(roomId),1)
-      if(check_if_exist_unread(d, auth?.user?._id))
-        unread?.unread?.push(roomId)
-      chats.find((o, i) => {
-          if (o.project.uniqueLink == roomId && !chats[i].project.lastMsg && d[d.length-1]?.createdAt != chats[i].project.lastMsg) {
-
-          }
-      });
-      dispatch(dispatchSetUnreadAction({unread:unread.unread}))
     });
+
+    socketRef.current.on(REMOVE_FROM_FE, (d) => {
+      // console.log(messages)
+      // let new_messages = messages.filter(function(mes) {
+      //   return mes._id != d.messageId
+      // });
+      // console.log(new_messages)
+
+      // setMessages(new_messages)
+      setMessages((messages) => messages.filter(function(mes) {
+        return mes._id != d.messageId
+      }));
+
+      
+    });
+
   }, []);
 
   const sendMessage = (messageBody) => {
-    socketRef.current.emit(NEW_CHAT_MESSAGE_EVENT, {
-      body: messageBody,
-      projectId: projectInfo._id,
-      senderId: auth.user._id
-    });
+    if (messageBody)
+      socketRef.current.emit(NEW_CHAT_MESSAGE_EVENT, {
+        body: messageBody,
+        projectId: projectInfo._id,
+        senderId: auth.user._id
+      });
   };
 
-  return { messages, sendMessage };
+  const sendMessageWasRead = (id, last_msg) => {
+    if (id && auth.user._id) {
+      socketRef.current.emit(MESSAGE_WAS_READ, {
+        messageId: id,
+        senderId: auth.user._id
+      })
+    // let new_messages = []
+    // for (let i = 0; i < messages.length; i++) {
+    //   let push_obj = messages[i]
+    //   if (push_obj._id == id)
+    //     push_obj.whosee.push(auth.user._id)
+    //   new_messages.push(push_obj)
+    // }
+    // console.log(new_messages)
+    setMessages((messages) => {
+      let new_messages = []
+      for (let i = 0; i < messages.length; i++) {
+        let push_obj = messages[i]
+        if (push_obj._id == id)
+          push_obj.whosee.push(auth.user._id)
+        new_messages.push(push_obj)
+      }
+      return new_messages
+    })
+  }
+    // if (unread?.unread?.indexOf(roomId) != -1)
+    //   unread?.unread?.splice(unread?.unread?.indexOf(roomId), 1)
+    // if (check_if_exist_unread(new_messages, auth?.user?._id))
+    //   unread?.unread?.push(roomId)
+    // dispatch(dispatchSetUnreadAction({ unread: unread.unread }))
+  };
+
+  const dropMsg = (id) => {
+    if (id) {
+      socketRef.current.emit(DROP_MSG, {
+        messageId: id,
+      })
+
+    }
+    // console.log(id)
+    // if(id && auth.user._id)
+    //   socketRef.current.emit(MESSAGE_WAS_READ, {
+    //     messageId: id,
+    //     senderId: auth.user._id
+    //   })
+    // let new_messages = []
+    // for ( let i = 0; i < messages.length; i++) {
+    //   let push_obj = messages[i]
+    //   if(push_obj._id == id)
+    //     push_obj.whosee.push(auth.user._id)
+    //   new_messages.push(push_obj)
+
+    // }
+    // setMessages(new_messages)
+    // if(unread?.unread?.indexOf(roomId) != -1)
+    //     unread?.unread?.splice(unread?.unread?.indexOf(roomId),1)
+    //   if(check_if_exist_unread(new_messages, auth?.user?._id))
+    //     unread?.unread?.push(roomId)
+    //   dispatch(dispatchSetUnreadAction({unread:unread.unread}))
+  };
+
+
+
+  return { messages, sendMessage, sendMessageWasRead, dropMsg };
 };
 
 
@@ -96,32 +170,56 @@ const useChat = (roomId, projectInfo) => {
 
 
 function Chat(props) {
-    const auth = useSelector(state => state.auth)
-    const token = useSelector(state => state.token)
-    const chats = useSelector(state => state.projects.projects)
+  const auth = useSelector(state => state.auth)
+  const chats = useSelector(state => state.projects.projects)
 
   const [WhatMesShow, setWhatMesShow] = useState([])
   const [WhereSend, setWhereSend] = useState()
-
+  const [WhatMessageWasRead, setWhatMessageWasRead] = useState()
+  const [DeleteMsg, setDeleteMsg] = useState()
+  const [whatIsActive, setwhatIsActive] = useState("")
   useEffect(() => {
-  
-}, [WhereSend,chats])
+
+  }, [WhereSend, chats])
 
 
-    return (
-        <div className={"chat-window "+(props.isshow ? "" : "display-none")}>
-          <div className="chat-window-chooser">
-            {chats?.map((c, i) => <ChatChooser key={i} setWhereSend={setWhereSend} WhereSend={WhereSend} WhatMesShow={WhatMesShow}  setWhatMesShow={setWhatMesShow} roomId={c.project.uniqueLink} projectInfo={c.project}/>)}
-          </div>
-          <ChatOutput WhatMesShow={WhatMesShow} WhereSend={WhereSend} />
+  return (
+    <div className={"chat-window " + (props.isshow ? "" : "display-none")}>
+      <div className="chat-window-chooser">
+        {chats?.map((c, i) => <ChatChooser
+          key={i}
+          whatIsActive={whatIsActive}
+          setwhatIsActive={setwhatIsActive}
+          setWhereSend={setWhereSend}
+          setWhatMessageWasRead={setWhatMessageWasRead}
+          WhereSend={WhereSend} WhatMesShow={WhatMesShow}
+          setWhatMesShow={setWhatMesShow}
+          roomId={c.project.uniqueLink}
+          projectInfo={c.project}
+          setDeleteMsg={setDeleteMsg}
+        />)}
+      </div>
+      {console.log(WhatMesShow)}
+      {props.isshow && WhereSend ?
+        <ChatOutput
+          whatIsActive={whatIsActive}
+          auth={auth}
+          DeleteMsg={DeleteMsg}
+          WhatMessageWasRead={WhatMessageWasRead}
+          WhatMesShow={WhatMesShow}
+          WhereSend={WhereSend}
+        /> : 
+        <div id="msgs_body" className="choose-chat-room">
+          Select a room
         </div>
-    )
+      }</div>
+  )
 }
 
 // function one_msg_render(props) {
 //   useEffect(() => {
 //     // console.log(WhereSend)
-  
+
 // }, [])
 // return(
 
@@ -129,59 +227,133 @@ function Chat(props) {
 // }
 
 
+function RenderMsg(props) {
+  const divRef = useRef(null);
+
+  useEffect(() => {
+    if (props.WhatMesShow?.whosee?.indexOf(props?.auth?.user?._id) == -1)
+      props.WhatMessageWasRead(props.WhatMesShow._id, props.WhatMesShow)
+      divRef.current.scrollIntoView()
+    }, [props.WhatMesShow._id])
+
+  return (
+    <div ref={divRef}  className={"RenderMsg"}>
+      {
+        props.auth?.user?._id !== props.WhatMesShow?.user?._id ?
+          <div className="msg">
+            <Link to={"/user/" + props.WhatMesShow?.user?._id}>
+              <img src={props.WhatMesShow?.user?.avatar} />
+            </Link>
+            <div className="msg-body">
+              <Link to={"/user/" + props.WhatMesShow?.user?._id}>
+                {props.WhatMesShow?.user?.nickname ? props.WhatMesShow?.user?.nickname : props.WhatMesShow?.user?.email}
+              </Link>
+              <div className="msg-body-text">
+                {props.WhatMesShow.body}
+              </div>
+            </div>
+          </div> :
+          <div className="my-msg">
+            <div className="my-msg-text">{props.WhatMesShow.body}</div>
+            <div className="my-msg-control">
+              <button className="edit" onClick={() => console.log(props.WhatMesShow._id)}><FaEdit /></button>
+              <button className="drop" onClick={() => props.DeleteMsg(props.WhatMesShow._id)}><FaTrash /></button>
+            </div>
+          </div>
+      }
+    </div>
+  )
+}
+
 function ChatOutput(props) {
-  const [newMessage, setNewMessage] = React.useState("");
+  const [newMessage, setNewMessage] = useState("");
   const handleNewMessageChange = (event) => {
     setNewMessage(event.target.value);
   };
-
   const handleSendMessage = () => {
-    console.log(props.WhatMesShow)
     props.WhereSend(newMessage);
     setNewMessage("");
   };
   useEffect(() => {
-    
-  }, [props.WhatMesShow])
+    setNewMessage("");
+  }, [props.whatIsActive])
+  // useEffect(() => {
+  //   console.log(props.WhatMesShow.length)
+  //   // if(unread?.unread?.indexOf(roomId) != -1)
+  //   //     unread?.unread?.splice(unread?.unread?.indexOf(roomId),1)
+  //   //   if(check_if_exist_unread(new_messages, auth?.user?._id))
+  //   //     unread?.unread?.push(roomId)
+  //   //   dispatch(dispatchSetUnreadAction({unread:unread.unread}))
+  // }, [props.WhatMesShow.length])
 
-  return(
+  return (
     <div className="msgsforrender" id="msgs_body">
       <div className="msgsrenderexact">
-        {props.WhatMesShow.map((m,i) => <div key={i}>{m.body}</div>)}
+        {props.WhatMesShow.map((m, i) => <RenderMsg 
+                                          WhatMessageWasRead={props.WhatMessageWasRead} 
+                                          auth={props.auth} 
+                                          WhatMesShow={m} 
+                                          key={i+Math.random()}
+                                          DeleteMsg={props.DeleteMsg} />)}
       </div>
-      <textarea
-        value={newMessage}
-        onChange={handleNewMessageChange}
-        placeholder="Write message..."
-        className="new-message-input-field"
-      />
-       <button onClick={handleSendMessage} className="send-message-button">
-        Send
-      </button>
+      <div className="chat-msg-control">
+        <div className="chat-msg-control-input">
+          <div className="msg">
+            
+          </div>
+          <textarea
+            value={newMessage}
+            onChange={(event) => setNewMessage(event.target.value)}
+            placeholder="Write message..."
+            className="new-message-input-field"
+          />
+        </div>
+        <button onClick={handleSendMessage} className="send-message-button">
+          <IoSendSharp/>
+        </button>
+      </div>
     </div>
   )
 }
 
 function ChatChooser(props) {
-  
-  const { messages, sendMessage } = useChat(props.roomId, props.projectInfo);
+  const { messages, sendMessage, sendMessageWasRead, dropMsg } = useChat(props.roomId, props.projectInfo);
+  const unread = useSelector(state => state.unread)
+  const auth = useSelector(state => state.auth)
+  const dispatch = useDispatch()
   useEffect(() => {
-    if(props.WhereSend && props.WhatMesShow[0].body == messages[0].body && props.WhatMesShow[0].project == messages[0]?.project)
-    props.setWhatMesShow(messages)
-  }, [ messages.length])
-  return(
-    <div className="chat-chooser" onClick={() => {props.setWhatMesShow(messages);props.setWhereSend(()=>sendMessage)}}>
-      <img src={props.projectInfo.logo} onError={(e)=>{e.target.onerror = null; e.target.src="/images/company-placeholder.png"}}/>
+    if (props.WhereSend && props.WhatMesShow[0]?.project == messages[0]?.project)
+      props.setWhatMesShow(messages)
+    if (unread?.unread?.indexOf(props.projectInfo.uniqueLink) != -1)
+      unread?.unread?.splice(unread?.unread?.indexOf(props.projectInfo.uniqueLink), 1)
+    if (check_if_exist_unread(messages, auth?.user?._id))
+      unread?.unread?.push(props.projectInfo.uniqueLink)
+    dispatch(dispatchSetUnreadAction({ unread: unread.unread }))
+  }, [ messages, props.whatIsActive])
+  return (
+    <div
+      className={"chat-chooser " 
+        + (unread.unread.indexOf(props.projectInfo.uniqueLink) != -1 ? "chat-unread-animation " : "")
+        + (props.whatIsActive == props.projectInfo.uniqueLink ? "active-chat " : "") 
+      }
+      onClick={() => {
+        props.setWhatMesShow(messages);
+        props.setWhereSend(() => sendMessage);
+        props.setWhatMessageWasRead(() => sendMessageWasRead);
+        props.setDeleteMsg(() => dropMsg);
+        props.setwhatIsActive(props.projectInfo.uniqueLink)
+      }}>
+      <img src={props.projectInfo.logo} onError={(e) => { e.target.onerror = null; e.target.src = "/images/company-placeholder.png" }} />
       <div className="chat-chooser-body">
         <div className="chat-chooser-title">
           {
-            props.projectInfo.name.length > 20 ? 
-            props.projectInfo.name.substring(0,20)+"...":
-            props.projectInfo.name
-          }
+            props.projectInfo.name.length > 20 ?
+              props.projectInfo.name.substring(0, 20) + "..." :
+              props.projectInfo.name
+          } 
         </div>
         <div className="chat-chooser-last-msg">
-          {messages[messages.length-1]?.body}
+          {messages[messages.length - 1]?.body}
         </div>
       </div>
     </div>

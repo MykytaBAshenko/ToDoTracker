@@ -66,3 +66,41 @@ span.span{
     .Toastify__toast--success{
         background-color: #0aa699 !important;
     }
+
+   
+        @keyframes msg-btn {
+            0%   { 
+                background-color: #f35958;
+                border-color: #f35958;
+            }
+  50% { 
+      background-color: white;
+      border-color: white; 
+    }
+  100% { 
+      background-color: #f35958; 
+      border-color: #f35958;
+}
+
+          }
+          .unread-animation-btn {
+            animation-iteration-count: infinite;
+            animation-name: msg-btn;
+            animation-duration: 2s;
+        }
+        /* @keyframes msg-body {
+            0%   { 
+                background-color: #2c2f37;
+
+            }
+  50% { 
+      background-color: #f35958;
+
+    }
+  100% { 
+      background-color: #2c2f37; 
+
+}
+        } */
+
+       
