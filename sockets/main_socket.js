@@ -3,6 +3,9 @@ const MESSAGE_WAS_READ = "MESSAGE_WAS_READ";
 const DROP_MSG = "DROP_MSG";
 const FIRST_CONN = "FIRST_CONN";
 const REMOVE_FROM_FE = "REMOVE_FROM_FE"
+const EDIT_CHAT_MESSAGE_EVENT = "EDIT_CHAT_MESSAGE_EVENT"
+
+
 const Messages = require('../models/messageModel')
 const UsersInProject = require('../models/userInProjectModel')
 const Project = require('../models/projectModel')
@@ -41,6 +44,18 @@ socket.on(NEW_CHAT_MESSAGE_EVENT, async (data) => {
     msg = await Messages.find({_id: msg._id}).populate("user")
     io.in(roomId).emit(NEW_CHAT_MESSAGE_EVENT, msg[0]);
 });
+
+socket.on(EDIT_CHAT_MESSAGE_EVENT, async (data) => {
+    const {editBody, edit_id} = data
+    let mess = await Messages.find({_id: mongoose.Types.ObjectId(edit_id)})
+    if (mess.length) {
+        mess[0].body = editBody
+        await mess[0].save()
+        let msg = await Messages.find({_id: mongoose.Types.ObjectId(mess[0]._id)}).populate("user")
+        io.in(roomId).emit(EDIT_CHAT_MESSAGE_EVENT, msg[0]);
+    }
+    console.log(editBody, edit_id)
+})
 
 socket.on(MESSAGE_WAS_READ, async (data) => {
     let mess = await Messages.find({_id: mongoose.Types.ObjectId(data.messageId)})

@@ -6,7 +6,7 @@ import { dispatchSetUnreadAction } from '../../redux/actions/unreadAction'
 import { dispatchSetLastUpdateInMsg } from '../../redux/actions/projectAction'
 import { FaTrash, FaEdit } from 'react-icons/fa'
 import {IoSendSharp} from 'react-icons/io5'
-
+import {GrFormClose} from 'react-icons/gr'
 
 import { Link } from 'react-router-dom'
 import axios from 'axios'
@@ -17,6 +17,8 @@ const MESSAGE_WAS_READ = "MESSAGE_WAS_READ";
 const DROP_MSG = "DROP_MSG";
 const FIRST_CONN = "FIRST_CONN";
 const REMOVE_FROM_FE = "REMOVE_FROM_FE"
+const EDIT_CHAT_MESSAGE_EVENT = "EDIT_CHAT_MESSAGE_EVENT";
+
 
 
 const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_SERVER_URL;
@@ -58,11 +60,6 @@ const useChat = (roomId, projectInfo) => {
 
 
     socketRef.current.on(NEW_CHAT_MESSAGE_EVENT, (message) => {
-      // if (unread?.unread?.indexOf(roomId) != -1)
-      //   unread?.unread?.splice(unread?.unread?.indexOf(roomId), 1)
-      // if (check_on_unread_1_msg(message, auth?.user?._id))
-      //   unread?.unread?.push(roomId)
-      // dispatch(dispatchSetUnreadAction({ unread: unread.unread }))
 
       setMessages((messages) => [...messages, message]);
     });
@@ -73,20 +70,27 @@ const useChat = (roomId, projectInfo) => {
     });
 
     socketRef.current.on(REMOVE_FROM_FE, (d) => {
-      // console.log(messages)
-      // let new_messages = messages.filter(function(mes) {
-      //   return mes._id != d.messageId
-      // });
-      // console.log(new_messages)
-
-      // setMessages(new_messages)
-      setMessages((messages) => messages.filter(function(mes) {
+        setMessages((messages) => messages.filter(function(mes) {
         return mes._id != d.messageId
       }));
-
-      
     });
 
+
+    
+    socketRef.current.on(EDIT_CHAT_MESSAGE_EVENT, (d) => {
+        setMessages((messages) => {
+          let new_array = []
+          for (let y = 0 ; y < messages.length; y++) {
+            if (messages[y]._id != d._id) {
+              new_array.push(messages[y])
+            }
+            else {
+              new_array.push(d)
+            }
+          }
+          return new_array
+        });
+    });
   }, []);
 
   const sendMessage = (messageBody) => {
@@ -104,14 +108,6 @@ const useChat = (roomId, projectInfo) => {
         messageId: id,
         senderId: auth.user._id
       })
-    // let new_messages = []
-    // for (let i = 0; i < messages.length; i++) {
-    //   let push_obj = messages[i]
-    //   if (push_obj._id == id)
-    //     push_obj.whosee.push(auth.user._id)
-    //   new_messages.push(push_obj)
-    // }
-    // console.log(new_messages)
     setMessages((messages) => {
       let new_messages = []
       for (let i = 0; i < messages.length; i++) {
@@ -123,45 +119,26 @@ const useChat = (roomId, projectInfo) => {
       return new_messages
     })
   }
-    // if (unread?.unread?.indexOf(roomId) != -1)
-    //   unread?.unread?.splice(unread?.unread?.indexOf(roomId), 1)
-    // if (check_if_exist_unread(new_messages, auth?.user?._id))
-    //   unread?.unread?.push(roomId)
-    // dispatch(dispatchSetUnreadAction({ unread: unread.unread }))
   };
 
   const dropMsg = (id) => {
-    if (id) {
+    if (id) 
       socketRef.current.emit(DROP_MSG, {
         messageId: id,
       })
+  };
 
-    }
-    // console.log(id)
-    // if(id && auth.user._id)
-    //   socketRef.current.emit(MESSAGE_WAS_READ, {
-    //     messageId: id,
-    //     senderId: auth.user._id
-    //   })
-    // let new_messages = []
-    // for ( let i = 0; i < messages.length; i++) {
-    //   let push_obj = messages[i]
-    //   if(push_obj._id == id)
-    //     push_obj.whosee.push(auth.user._id)
-    //   new_messages.push(push_obj)
-
-    // }
-    // setMessages(new_messages)
-    // if(unread?.unread?.indexOf(roomId) != -1)
-    //     unread?.unread?.splice(unread?.unread?.indexOf(roomId),1)
-    //   if(check_if_exist_unread(new_messages, auth?.user?._id))
-    //     unread?.unread?.push(roomId)
-    //   dispatch(dispatchSetUnreadAction({unread:unread.unread}))
+  const editMessage = (editBody, edit_id) => {
+    if (editBody && edit_id)
+      socketRef.current.emit(EDIT_CHAT_MESSAGE_EVENT, {
+          editBody,
+          edit_id
+      });
   };
 
 
 
-  return { messages, sendMessage, sendMessageWasRead, dropMsg };
+  return { messages, sendMessage, sendMessageWasRead, dropMsg, editMessage };
 };
 
 
@@ -178,6 +155,8 @@ function Chat(props) {
   const [WhatMessageWasRead, setWhatMessageWasRead] = useState()
   const [DeleteMsg, setDeleteMsg] = useState()
   const [whatIsActive, setwhatIsActive] = useState("")
+  const [chatname, setchatname] = useState("")
+  const [WhereEdit,setWhereEdit] = useState()
   useEffect(() => {
 
   }, [WhereSend, chats])
@@ -186,8 +165,10 @@ function Chat(props) {
   return (
     <div className={"chat-window " + (props.isshow ? "" : "display-none")}>
       <div className="chat-window-chooser">
+        <input className="chat-window-input" value={chatname} onChange={e => setchatname(e.target.value)}/>
         {chats?.map((c, i) => <ChatChooser
           key={i}
+          chatname={chatname}
           whatIsActive={whatIsActive}
           setwhatIsActive={setwhatIsActive}
           setWhereSend={setWhereSend}
@@ -197,9 +178,9 @@ function Chat(props) {
           roomId={c.project.uniqueLink}
           projectInfo={c.project}
           setDeleteMsg={setDeleteMsg}
+          setWhereEdit={setWhereEdit}
         />)}
       </div>
-      {console.log(WhatMesShow)}
       {props.isshow && WhereSend ?
         <ChatOutput
           whatIsActive={whatIsActive}
@@ -208,6 +189,7 @@ function Chat(props) {
           WhatMessageWasRead={WhatMessageWasRead}
           WhatMesShow={WhatMesShow}
           WhereSend={WhereSend}
+          WhereEdit={WhereEdit}
         /> : 
         <div id="msgs_body" className="choose-chat-room">
           Select a room
@@ -256,7 +238,7 @@ function RenderMsg(props) {
           <div className="my-msg">
             <div className="my-msg-text">{props.WhatMesShow.body}</div>
             <div className="my-msg-control">
-              <button className="edit" onClick={() => console.log(props.WhatMesShow._id)}><FaEdit /></button>
+              <button className="edit" onClick={() => {props.seteditingId(props.WhatMesShow._id); props.seteditingInput(props.WhatMesShow.body)}}><FaEdit /></button>
               <button className="drop" onClick={() => props.DeleteMsg(props.WhatMesShow._id)}><FaTrash /></button>
             </div>
           </div>
@@ -265,26 +247,63 @@ function RenderMsg(props) {
   )
 }
 
-function ChatOutput(props) {
+function ChatInput(props) {
   const [newMessage, setNewMessage] = useState("");
-  const handleNewMessageChange = (event) => {
-    setNewMessage(event.target.value);
-  };
-  const handleSendMessage = () => {
-    props.WhereSend(newMessage);
-    setNewMessage("");
-  };
   useEffect(() => {
     setNewMessage("");
   }, [props.whatIsActive])
-  // useEffect(() => {
-  //   console.log(props.WhatMesShow.length)
-  //   // if(unread?.unread?.indexOf(roomId) != -1)
-  //   //     unread?.unread?.splice(unread?.unread?.indexOf(roomId),1)
-  //   //   if(check_if_exist_unread(new_messages, auth?.user?._id))
-  //   //     unread?.unread?.push(roomId)
-  //   //   dispatch(dispatchSetUnreadAction({unread:unread.unread}))
-  // }, [props.WhatMesShow.length])
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if(newMessage) {
+      if(!props.editingId)
+        props.WhereSend(newMessage);
+      else{
+        props.WhereEdit(newMessage, props.editingId)
+        props.seteditingId("")
+        props.seteditingInput("")
+      }
+      setNewMessage("");
+    }
+  };
+  const dropEditing = () => {
+    props.seteditingId("")
+    props.seteditingInput("")
+  }
+  useEffect(() => {
+    setNewMessage(props.editingInput)
+  }, [props.editingId, props.editingInput])
+  return (
+    <form onSubmit={(e) => handleSendMessage(e)} className="chat-msg-control">
+        <div className="chat-msg-control-input">
+          {props.editingId &&
+            <div className="editing-msg">
+              <div className="editing-msg-body">
+                {props.editingInput}
+              </div>
+              <GrFormClose onClick={ () => dropEditing()}/>
+            </div>
+          }
+          <textarea
+            value={newMessage}
+            onChange={(event) => setNewMessage(event.target.value)}
+            placeholder="Write message..."
+            className="new-message-input-field"
+          />
+        </div>
+        <button className="send-message-button">
+          <IoSendSharp/>
+        </button>
+      </form>
+  )
+}
+
+
+function ChatOutput(props) {
+  const [editingInput, seteditingInput] = useState("");
+  const [editingId, seteditingId] = useState("");
+
+  useEffect(() => {
+  }, [props.WhatMesShow.length])
 
   return (
     <div className="msgsforrender" id="msgs_body">
@@ -294,30 +313,26 @@ function ChatOutput(props) {
                                           auth={props.auth} 
                                           WhatMesShow={m} 
                                           key={i+Math.random()}
-                                          DeleteMsg={props.DeleteMsg} />)}
+                                          DeleteMsg={props.DeleteMsg} 
+                                          seteditingId={seteditingId}
+                                          seteditingInput={seteditingInput}
+                                          />)}
       </div>
-      <div className="chat-msg-control">
-        <div className="chat-msg-control-input">
-          <div className="msg">
-            
-          </div>
-          <textarea
-            value={newMessage}
-            onChange={(event) => setNewMessage(event.target.value)}
-            placeholder="Write message..."
-            className="new-message-input-field"
-          />
-        </div>
-        <button onClick={handleSendMessage} className="send-message-button">
-          <IoSendSharp/>
-        </button>
-      </div>
+      <ChatInput
+      WhereSend={props.WhereSend}
+      WhereEdit={props.WhereEdit}
+      whatIsActive={props.whatIsActive}
+      seteditingId={seteditingId}
+      seteditingInput={seteditingInput}
+      editingId={editingId}
+      editingInput={editingInput}
+ />
     </div>
   )
 }
 
 function ChatChooser(props) {
-  const { messages, sendMessage, sendMessageWasRead, dropMsg } = useChat(props.roomId, props.projectInfo);
+  const { messages, sendMessage, sendMessageWasRead, dropMsg, editMessage } = useChat(props.roomId, props.projectInfo);
   const unread = useSelector(state => state.unread)
   const auth = useSelector(state => state.auth)
   const dispatch = useDispatch()
@@ -330,15 +345,19 @@ function ChatChooser(props) {
       unread?.unread?.push(props.projectInfo.uniqueLink)
     dispatch(dispatchSetUnreadAction({ unread: unread.unread }))
   }, [ messages, props.whatIsActive])
+  useEffect(() => {
+  }, [props.chatname])
   return (
     <div
       className={"chat-chooser " 
         + (unread.unread.indexOf(props.projectInfo.uniqueLink) != -1 ? "chat-unread-animation " : "")
-        + (props.whatIsActive == props.projectInfo.uniqueLink ? "active-chat " : "") 
+        + (props.whatIsActive == props.projectInfo.uniqueLink ? "active-chat " : "" )
+        + (props.projectInfo.name.indexOf(props.chatname) == -1 ? "display-none " : "") 
       }
       onClick={() => {
         props.setWhatMesShow(messages);
         props.setWhereSend(() => sendMessage);
+        props.setWhereEdit(() => editMessage);
         props.setWhatMessageWasRead(() => sendMessageWasRead);
         props.setDeleteMsg(() => dropMsg);
         props.setwhatIsActive(props.projectInfo.uniqueLink)
