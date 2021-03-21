@@ -7,7 +7,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import ProjectDashboard from './dashboard/ProjectDashboard'
 import Users from './users/Users'
 import Newtask from './newtask/Newtask'
-import Call from './call/Call'
+import Settings from './settings/Settings'
+
 
 
 import Header from '../../header/Header'
@@ -59,7 +60,6 @@ function Project(props) {
             <Link to={"/project/"+uniqueLink+"/tasks"} className="left-control-link"> <RiTaskFill /> { showleft ? <div className="left-control-link-text">Tasks</div>:null}</Link>
             <Link to={"/project/"+uniqueLink+"/updates"} className="left-control-link"> <MdUpdate/> { showleft ? <div className="left-control-link-text">Updates</div>:null}</Link>
             <Link to={"/project/"+uniqueLink+"/settings"} className="left-control-link"> <AiFillProject /> { showleft ? <div className="left-control-link-text">Settings</div>:null}</Link>
-            <Link to={"/project/"+uniqueLink+"/call"} className="left-control-link"> <AiFillProject /> { showleft ? <div className="left-control-link-text">Call</div>:null}</Link>
           
           </div> 
         </div>
@@ -72,8 +72,9 @@ function Project(props) {
                 <Route path="/project/:projectLink/tasks" component={ProjectDashboard} exact/>
                 <Route path="/project/:projectLink/users" component={Users} exact/>
                 <Route path="/project/:projectLink/newtask" component={Newtask} exact/>
-                <Route path="/project/:projectLink/call" component={Call} exact/>
                 <Route path="/project/:projectLink/news" component={ProjectDashboard} exact/>
+                <Route path="/project/:projectLink/settings" component={Settings} exact/>
+
             </Switch>
           </div>
         </div>

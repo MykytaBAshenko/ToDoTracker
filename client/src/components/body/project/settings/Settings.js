@@ -6,15 +6,17 @@ import Dropzone from 'react-dropzone';
 // import './Newproject.css'
 import { toast } from 'react-toastify';
 
-function Newproject(props) {
+function Settings(props) {
     const [name, setname] = useState("")
     const [isname, setisname] = useState(false)
+    const [projectId, setprojectId] = useState("")
 
     const [description, setdescription] = useState("")
     const [logo, setlogo] = useState("/images/company-placeholder.png")
     const [imageinput, setimageinput] = useState("")
     const [uniqueLink, setuniqueLink] = useState("")
     const [isuniqueLink, setisuniqueLink] = useState(false)
+    const projectLink = props.match.params.projectLink;
 
     const auth = useSelector(state => state.auth)
     const token = useSelector(state => state.token)
@@ -25,10 +27,51 @@ function Newproject(props) {
     const [onWhatLink3, setonWhatLink3] = useState("")
     const [Link3, setLink3] = useState("")
 
+    const [UserStatus, setUserStatus] = useState("")
+    const [UserAbout, setUserAbout] = useState("")
+    const [UserWhatDo, setUserWhatDo] = useState("")
+
 
 
     const [howManyInputs, sethowManyInputs] = useState(1)
+    useEffect(() => {
+        axios.get(`/api/project/get/${projectLink}`, {
+            headers: {  Authorization: token }
+        }).then(d => {
+            console.log(d)
 
+            if(d.data.success) {
+                setprojectId(d.data.Project._id)
+                setname(d.data.Project.name)
+                setdescription(d.data.Project.description)
+                setlogo(d.data.Project.logo)
+                setuniqueLink(d.data.Project.uniqueLink)
+                sethowManyInputs(d.data.Project.arrayOfLinks.length)
+                if(d.data.Project.arrayOfLinks.length > 0) {
+                    setonWhatLink1(d.data.Project.arrayOfLinks[0].onwhat)
+                    setLink1(d.data.Project.arrayOfLinks[0].link)
+                }if(d.data.Project.arrayOfLinks.length > 1) {
+                    setonWhatLink2(d.data.Project.arrayOfLinks[1].onwhat)
+                    setLink2(d.data.Project.arrayOfLinks[1].link)
+                }if(d.data.Project.arrayOfLinks.length > 2) {
+                    setonWhatLink3(d.data.Project.arrayOfLinks[2].onwhat)
+                    setLink3(d.data.Project.arrayOfLinks[2].link)
+                }
+                if(auth.user._id)
+                axios.get(`/api/project/${d.data.Project._id}/users/${auth.user._id}`, { 
+                    headers: {  Authorization: token }
+                }).then(d => {
+                    // console.log(d)
+                    setUserAbout(d.data.UsersIn[0].about)
+                    setUserStatus(d.data.UsersIn[0].status)
+                    setUserWhatDo(d.data.UsersIn[0].whatDo)
+                })          
+            }
+            else {
+                props.history.push(`/project/${projectLink}`)
+            }
+        })
+    }, [projectLink, auth.user._id])
 
     const handleChangeName = (e) => {
         if (e.target.value.length > 8 && e.target.value.indexOf(" ") == -1) {
@@ -100,7 +143,7 @@ function Newproject(props) {
         }
     }
 
-    const createNewProject = async (e) => {
+    const UpdateProject = async (e) => {
         e.preventDefault()
         const sendobj = {}
         sendobj.name = name
@@ -129,22 +172,46 @@ function Newproject(props) {
             if (d.data.success)
                 props.history.push(`/project/${d.data.createdProject.uniqueLink}`)
             else 
-            return toast.error(d.data.msg, {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                });
+                return toast.error(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
         })
+    }
+
+    const deleteProject = () =>  {
+        console.log(projectId)
+        // axios.delete(`/api/project/${projectId}`, {
+        //     headers: { Authorization: token }
+        // }).then(d => {
+        //     if (d.data.success)
+        //         props.history.push(`/project/${d.data.createdProject.uniqueLink}`)
+        //     else 
+        //         return toast.error(d.data.msg, {
+        //             position: "bottom-center",
+        //             autoClose: 5000,
+        //             hideProgressBar: false,
+        //             closeOnClick: true,
+        //             pauseOnHover: true,
+        //             draggable: true,
+        //             progress: undefined,
+        //             });
+        // })
+    }
+    const leaveProject = () => {
+        console.log(projectId)
+
     }
 
     return (
         <div className="form-container">
             <div className="form-body">
-                <form onSubmit={(e) => createNewProject(e)}>
+                <form onSubmit={(e) => UpdateProject(e)}>
                     <div className="title text-center">Create new project</div>
                     <div className="image-form-conroler">
 
@@ -237,7 +304,31 @@ function Newproject(props) {
                     </div>
 
 
-                    <button className="black-btn" onClick={(e) => createNewProject(e)}>Create new project</button>
+                    <button className="black-btn" type="submit">Update Project</button>
+                    { console.log(UserStatus) }
+                    {UserStatus == "Owner" ?
+                        <button onClick={() => deleteProject()} className="black-btn" type="button">Delete Project</button>
+                        : <></>
+                    }
+                </form>
+
+                <form >
+                    <div className="title text-center">Account settings in project</div>
+                    <div className="form-input">
+                        <label htmlFor="whatdo">What do in project</label>
+                        <input type="text" autoComplete="off" placeholder="Enter what you do in project" id="whatdo"
+                            value={UserWhatDo} onChange={(e) => setUserWhatDo(e.target.value)} />
+                    </div>
+                    <div className="form-input">
+                        <label htmlFor="whatdo">Useful info</label>
+                        <textarea type="text" autoComplete="off" placeholder="Enter what you do in project" id="whatdo"
+                            value={UserAbout} onChange={(e) => setUserAbout(e.target.value)} />
+                    </div>
+                    <button className="black-btn" type="submit">Update user info in project</button>
+                    {UserStatus != "Owner" ?
+                        <button onClick={() => leaveProject()} className="black-btn" type="button">Leave Project</button>
+                        : <></>
+                    }
                 </form>
             </div>
         </div>
@@ -245,4 +336,4 @@ function Newproject(props) {
     )
 }
 
-export default Newproject
+export default Settings

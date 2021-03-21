@@ -187,6 +187,26 @@ const projectCtrl = {
             console.log(err)
             res.json({success: false, msg:"Something broke!"})
         }
+    },
+    getUserInfo: async (req, res) => {
+        try {
+            const project = await Project.find({ "_id": req.params.projectId })
+            if(project.length && req.params.userId) {
+
+               const UsersIn = await UsersInProject
+                    .find({ $and: [ { project: mongoose.Types.ObjectId(project[0]._id) }, { user: mongoose.Types.ObjectId(req.params.userId) } ] })
+                    .populate("user")
+                if(UsersIn.length)
+                    return res.json({success: true, UsersIn}) 
+                return res.json({success: false, msg: "Something went wrong!"})
+            } 
+            else {
+                return res.json({success: false, msg: "Project does not exist"})
+            }
+        } catch (err) {
+            console.log(err)
+            res.json({success: false, msg:"Something broke!"})
+        }
     }
 }
 

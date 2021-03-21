@@ -44,4 +44,8 @@
     color: #0aa699;
 }
 
-.right-content-exact{position: relative;}
+.right-content-exact{position: relative;
+max-height: calc(100vh - 60px);
+overflow-y: auto;
+}
+

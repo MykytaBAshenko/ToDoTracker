@@ -165,8 +165,15 @@ function Register(props) {
                     progress: undefined,
                     });
         } catch (err) {
-            console.log(err)
-            console.log({ err: err.response?.data?.msg, success: '' })
+            return toast.error("Something broke.", {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
         }
     }
 

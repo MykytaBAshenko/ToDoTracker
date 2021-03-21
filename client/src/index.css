@@ -46,6 +46,7 @@ button{
 
 @import url("./components/body/project/users/Users.css");
 @import url("./components/body/project/Project.css");
+@import url("./components/body/project/newtask/Newtask.css");
 @import url("./components/body/newproject/Newproject.css");
 @import url("./components/body/dashboard/Dashboard.css");
 @import url("./components/chat/Chat.css");
