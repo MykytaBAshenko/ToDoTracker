@@ -71,8 +71,8 @@ socket.on(DROP_MSG, async (data) => {
 
 // Leave the room if the user closes the socket
 socket.on("disconnect", () => {
-    console.log(`Client ${socket.id} diconnected`);
-    socket.leave(roomId);
+    // console.log(`Client ${socket.id} diconnected`);
+    // socket.leave(roomId);
 
 });
 }

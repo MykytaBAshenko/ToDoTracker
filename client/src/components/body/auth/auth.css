@@ -22,7 +22,7 @@
 .form-body form {
     display: grid;
     padding: 20px;
-    max-width: 500px;
+    max-width:600px;
     gap: 10px;
     width: 100%;
 }

@@ -65,8 +65,12 @@ const useChat = (roomId, projectInfo) => {
     });
 
     socketRef.current.on(FIRST_CONN, (d) => {
-      console.log(1)
-      setMessages(d)
+      console.log(d)
+      if(d)
+        setMessages(d)
+      else
+        setMessages([])
+
     });
 
     socketRef.current.on(REMOVE_FROM_FE, (d) => {
@@ -303,6 +307,7 @@ function ChatOutput(props) {
   const [editingId, seteditingId] = useState("");
 
   useEffect(() => {
+    console.log(props.WhatMesShow)
   }, [props.WhatMesShow.length])
 
   return (
@@ -313,6 +318,7 @@ function ChatOutput(props) {
                                           auth={props.auth} 
                                           WhatMesShow={m} 
                                           key={i+Math.random()}
+                                          how_meny_msg={props.WhatMesShow}
                                           DeleteMsg={props.DeleteMsg} 
                                           seteditingId={seteditingId}
                                           seteditingInput={seteditingInput}
@@ -335,16 +341,19 @@ function ChatChooser(props) {
   const { messages, sendMessage, sendMessageWasRead, dropMsg, editMessage } = useChat(props.roomId, props.projectInfo);
   const unread = useSelector(state => state.unread)
   const auth = useSelector(state => state.auth)
+  const chats = useSelector(state => state.projects.projects)
+
   const dispatch = useDispatch()
   useEffect(() => {
-    if (props.WhereSend && props.WhatMesShow[0]?.project == messages[0]?.project)
+    if (props.WhereSend &&  props.roomId == props.whatIsActive)
       props.setWhatMesShow(messages)
     if (unread?.unread?.indexOf(props.projectInfo.uniqueLink) != -1)
       unread?.unread?.splice(unread?.unread?.indexOf(props.projectInfo.uniqueLink), 1)
     if (check_if_exist_unread(messages, auth?.user?._id))
       unread?.unread?.push(props.projectInfo.uniqueLink)
     dispatch(dispatchSetUnreadAction({ unread: unread.unread }))
-  }, [ messages, props.whatIsActive])
+    console.log(props.whatIsActive)
+  }, [ messages.length, props.whatIsActive])
   useEffect(() => {
   }, [props.chatname])
   return (

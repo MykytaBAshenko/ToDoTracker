@@ -14,6 +14,7 @@ function Users(props) {
     const projectLink = props.match.params.projectLink;
     const [isAdminInPr, setisAdminInPr] = useState(false)
     const [usersearch, setusersearch] = useState("")
+    const [usersShow, setusersShow] = useState([])
     const auth = useSelector(state => state.auth)
     const token = useSelector(state => state.token)
     const {isLogged, isAdmin} = auth
@@ -23,6 +24,7 @@ function Users(props) {
         }).then(d => {
             if(d?.data?.success){
                 setusersIN(d.data.UsersInProject)
+                setusersShow(d.data.UsersInProject)
                 let isAdmin = false
                 for(let y = 0; y < d.data.UsersInProject.length; y++) {
                     if(d.data.UsersInProject[y].status == "Owner" && d.data.UsersInProject[y].user._id.toString() === auth.user._id)
@@ -34,6 +36,16 @@ function Users(props) {
             }
         })
     }, [projectLink, auth])
+
+
+    useEffect(() => {
+        let users = []
+        for (let y = 0; y < usersIN.length; y++) {
+            if (usersIN[y]?.user?.email?.indexOf(usersearch) != -1 || usersIN[y]?.user?.nickname?.indexOf(usersearch) != -1)
+            users.push(usersIN[y])
+        }
+        setusersShow(users)
+    }, [usersearch])
 
     const [AddUserInput,setAddUserInput] = useState("")
 
@@ -113,21 +125,29 @@ function Users(props) {
             
             </div>
             <div className="users-map">
-                {usersIN.map((u,i) => u.user?._id?.toString() != auth?.user?._id ? (
+                {usersShow.map((u,i) => u.user?._id?.toString() != auth?.user?._id ? (
                 (u?.user?.nickname?.indexOf(usersearch) != -1 || u?.user?.email?.indexOf(usersearch) != -1  ) &&
                 <div key={i} className="user-card">
                     <div className="img-user-container">
                         <img src={u.user.avatar} />
                     </div>
                     <div className="user-card-content">
-                        <Link to={"/user/"+u?.user?._id?.toString()} className="user-card-content-row">
+                        {/* <Link to={"/user/"+u?.user?._id?.toString()} className="user-card-content-row">
                             {u.user.email}
-                        </Link>
+                        </Link> */}
+                        <div className="user-card-content-row">
+                            {u.user.email}
+                        </div>
                         <div className="user-card-content-row">
                             {u.user.nickname}
                         </div>
+                        {u.about &&
+                            <div className="user-card-content-row">
+                                {u.about}
+                            </div>
+                        }
                         <div className="user-card-content-row">
-                            {u.status}
+                            {u.whatDo}
                         </div>
                         { isAdminInPr &&
                         <button className="user-card-drop-user" onClick={() => dropUser(u._id)}>Drop user</button>                        

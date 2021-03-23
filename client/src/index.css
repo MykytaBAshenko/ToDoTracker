@@ -12,7 +12,13 @@
 body{
   font-family: 'Roboto', sans-serif;
   overflow: hidden;
+  max-width: 100%;
+
 } 
+#root{
+  max-width: 100%;
+
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -27,8 +33,9 @@ code {
 }
 .App{
   /* background-image: radial-gradient(circle farthest-corner at 10% 30%, rgba(70, 168, 255, 0.8) 0, #e88eff 90%); */
-
+  max-width: 100%;
 }
+
 a{
   text-decoration: none;
 }
@@ -46,6 +53,7 @@ button{
 
 @import url("./components/body/project/users/Users.css");
 @import url("./components/body/project/Project.css");
+@import url("./components/body/project/settings/Settings.css");
 @import url("./components/body/project/newtask/Newtask.css");
 @import url("./components/body/newproject/Newproject.css");
 @import url("./components/body/dashboard/Dashboard.css");

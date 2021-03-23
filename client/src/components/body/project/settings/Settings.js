@@ -4,9 +4,11 @@ import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import Dropzone from 'react-dropzone';
 // import './Newproject.css'
+import {fetchAllProjects, dispatchGetAllProjects} from '../../../../redux/actions/projectAction'
 import { toast } from 'react-toastify';
 
 function Settings(props) {
+    const dispatch = useDispatch()
     const [name, setname] = useState("")
     const [isname, setisname] = useState(false)
     const [projectId, setprojectId] = useState("")
@@ -25,11 +27,15 @@ function Settings(props) {
     const [onWhatLink2, setonWhatLink2] = useState("")
     const [Link2, setLink2] = useState("")
     const [onWhatLink3, setonWhatLink3] = useState("")
+    const [deletebtnsProject, setdeletebtnsProject] = useState(false)
+
     const [Link3, setLink3] = useState("")
 
     const [UserStatus, setUserStatus] = useState("")
     const [UserAbout, setUserAbout] = useState("")
     const [UserWhatDo, setUserWhatDo] = useState("")
+    const [UserProjectId, setUserProjectId] = useState("")
+
 
 
 
@@ -62,6 +68,7 @@ function Settings(props) {
                     headers: {  Authorization: token }
                 }).then(d => {
                     // console.log(d)
+                    setUserProjectId(d.data.UsersIn[0]._id)
                     setUserAbout(d.data.UsersIn[0].about)
                     setUserStatus(d.data.UsersIn[0].status)
                     setUserWhatDo(d.data.UsersIn[0].whatDo)
@@ -166,11 +173,58 @@ function Settings(props) {
                 onwhat: onWhatLink3,
                 link: Link3
             })
-        axios.post("/api/project/new", sendobj, {
+        axios.patch(`/api/project/${projectId}`, sendobj, {
             headers: { Authorization: token }
         }).then(d => {
-            if (d.data.success)
-                props.history.push(`/project/${d.data.createdProject.uniqueLink}`)
+            if (d.data.success) {
+                fetchAllProjects(token).then(res =>{
+                    dispatch(dispatchGetAllProjects(res))
+                })
+                    return toast.success(d.data.msg, {
+                        position: "bottom-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    
+                }
+            else 
+                return toast.error(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+        })
+    }
+
+    const deleteProject = () =>  {
+        console.log(projectId)
+        axios.delete(`/api/project/${projectId}`, {
+            headers: { Authorization: token }
+        }).then(d => {
+            console.log(d)
+            if (d.data.success) {
+                fetchAllProjects(token).then(res =>{
+                    dispatch(dispatchGetAllProjects(res))
+                })
+                props.history.push("/")
+                return toast.success(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+            }
             else 
                 return toast.error(d.data.msg, {
                     position: "bottom-center",
@@ -183,28 +237,44 @@ function Settings(props) {
                     });
         })
     }
-
-    const deleteProject = () =>  {
-        console.log(projectId)
-        // axios.delete(`/api/project/${projectId}`, {
-        //     headers: { Authorization: token }
-        // }).then(d => {
-        //     if (d.data.success)
-        //         props.history.push(`/project/${d.data.createdProject.uniqueLink}`)
-        //     else 
-        //         return toast.error(d.data.msg, {
-        //             position: "bottom-center",
-        //             autoClose: 5000,
-        //             hideProgressBar: false,
-        //             closeOnClick: true,
-        //             pauseOnHover: true,
-        //             draggable: true,
-        //             progress: undefined,
-        //             });
-        // })
-    }
+    const [ShowLeaveProject, setShowLeaveProject] = useState(false)
     const leaveProject = () => {
-        console.log(projectId)
+        console.log(projectId,UserProjectId)
+
+    }
+    const updateUserInfoInProject = (e) => {
+        e.preventDefault()
+        console.log(projectId,UserProjectId, UserAbout, UserWhatDo)
+        axios.patch(`/api/project/${projectId}/user/${UserProjectId}`, {UserAbout, UserWhatDo}, {
+            headers: { Authorization: token }
+        }).then(d => {
+            console.log(d)
+            if (d.data.success) {
+            //     fetchAllProjects(token).then(res =>{
+            //         dispatch(dispatchGetAllProjects(res))
+            //     })
+                // props.history.push("/")
+                return toast.success(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+            }
+            else 
+                return toast.error(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+        })
 
     }
 
@@ -307,12 +377,25 @@ function Settings(props) {
                     <button className="black-btn" type="submit">Update Project</button>
                     { console.log(UserStatus) }
                     {UserStatus == "Owner" ?
-                        <button onClick={() => deleteProject()} className="black-btn" type="button">Delete Project</button>
+                        <button onClick={() => setdeletebtnsProject(true)} className="black-btn" type="button">Delete Project</button>
                         : <></>
+                    }
+                    {
+                        deletebtnsProject ? 
+                        <div className="delete-btns-container">
+                            <button className="black-btn"  type="button" onClick={() => deleteProject()}>
+                                Delete project
+                            </button>
+                            <button className="black-btn"  type="button" onClick={() => setdeletebtnsProject(false)}>
+                                Cancel
+                            </button>
+                        </div>
+                        :
+                        <></>
                     }
                 </form>
 
-                <form >
+                <form onSubmit={(e) => updateUserInfoInProject(e)}>
                     <div className="title text-center">Account settings in project</div>
                     <div className="form-input">
                         <label htmlFor="whatdo">What do in project</label>
@@ -326,8 +409,21 @@ function Settings(props) {
                     </div>
                     <button className="black-btn" type="submit">Update user info in project</button>
                     {UserStatus != "Owner" ?
-                        <button onClick={() => leaveProject()} className="black-btn" type="button">Leave Project</button>
+                        <button onClick={() => setShowLeaveProject(true)} className="black-btn" type="button">Leave Project</button>
                         : <></>
+                    }
+                    {
+                        ShowLeaveProject && UserStatus != "Owner" ? 
+                        <div className="delete-btns-container">
+                            <button className="black-btn"  type="button" onClick={() =>  leaveProject()}>
+                                Leave project
+                            </button>
+                            <button className="black-btn"  type="button" onClick={() => setShowLeaveProject(false)}>
+                                Cancel
+                            </button>
+                        </div>
+                        :
+                        <></>
                     }
                 </form>
             </div>

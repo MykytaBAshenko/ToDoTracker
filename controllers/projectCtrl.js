@@ -2,6 +2,8 @@ const Project = require('../models/projectModel')
 const Users = require('../models/userModel')
 const UsersInProject = require('../models/userInProjectModel')
 const mongoose = require('mongoose')
+const Messages = require('../models/messageModel')
+const Task = require('../models/taskModel')
 
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -207,6 +209,74 @@ const projectCtrl = {
             console.log(err)
             res.json({success: false, msg:"Something broke!"})
         }
+    },
+    deleteProject: async (req, res) => {
+        try {
+            const project = await Project.find({ "_id": req.params.projectId })
+            if(project.length){
+                await UsersInProject.find({project: mongoose.Types.ObjectId(req.params.projectId)}).remove()
+                await Messages.find({project: mongoose.Types.ObjectId(req.params.projectId)}).remove()
+                await Task.find({project: mongoose.Types.ObjectId(req.params.projectId)}).remove()
+                project[0].remove()
+                return res.json({success: true, msg: "Project has been deleted"})
+            } 
+            return res.json({success: false, msg: "Project does not exist"})
+        } catch (err) {
+            console.log(err)
+            res.json({success: false, msg:"Something broke!"})
+        }    
+    },
+    upadteProject: async (req, res) => {
+        try {
+            const project = await Project.find({ "_id": req.params.projectId })
+            const projectwithlink = await Project.find({ "uniqueLink": req.body.uniqueLink })
+            if (projectwithlink[0]._id.toString() != project[0]._id.toString())
+                return res.json({success: false, msg: "Project with same link exist"})
+            if(project.length){
+                project[0].name = req.body.name
+                project[0].description = req.body.description
+                project[0].logo = req.body.logo
+                project[0].uniqueLink = req.body.uniqueLink
+                project[0].arrayOfLinks = req.body.arrayOfLinks
+                await project[0].save()
+                return res.json({success: true, msg: "Project has been updated!"})
+            } 
+            return res.json({success: false, msg: "Project does not exist!"})
+        } catch (err) {
+            console.log(err)
+            res.json({success: false, msg:"Something broke!"})
+        }
+    },
+    patchUserInProject: async (req, res) => {
+        try {
+            const project = await Project.find({ "_id": req.params.projectId })
+            let user = await UsersInProject.find({"_id": req.params.userIdInPr })
+            if (user.length) {
+                user[0].about = req.body.UserAbout
+                user[0].whatDo = req.body.UserWhatDo
+                await user[0].save()
+
+                return res.json({success: true, msg: "User has been updated!"})
+            }
+            return res.json({success: false, msg: "Error with user!"})
+
+                // const projectwithlink = await Project.find({ "uniqueLink": req.body.uniqueLink })
+            // if (projectwithlink[0]._id.toString() != project[0]._id.toString())
+            //     return res.json({success: false, msg: "Project with same link exist"})
+            // if(project.length){
+            //     project[0].name = req.body.name
+            //     project[0].description = req.body.description
+            //     project[0].logo = req.body.logo
+            //     project[0].uniqueLink = req.body.uniqueLink
+            //     project[0].arrayOfLinks = req.body.arrayOfLinks
+            //     await project[0].save()
+            //     return res.json({success: true, msg: "Project has been updated!"})
+            // } 
+            // return res.json({success: false, msg: "Project does not exist!"})
+        } catch (err) {
+            console.log(err)
+            res.json({success: false, msg:"Something broke!"})
+        }    
     }
 }
 
