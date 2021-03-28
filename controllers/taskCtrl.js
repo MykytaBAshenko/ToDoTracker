@@ -65,7 +65,7 @@ const taskCtrl = {
                         })
                         await newTask.save()
                         const tasks = await Task.find({project: project[0]._id})
-                        return res.json({success: true, tasks})
+                        return res.json({success: true,msg: "Task added.", tasks})
                     }
                     return res.json({success: false, msg: "Some field is empty."})
                 }

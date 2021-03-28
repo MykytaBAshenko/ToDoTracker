@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
+import Select from 'react-select';
+import types_of_task from "../../../global_vars/types_of_task"
+import how_task_is_needed from "../../../global_vars/how_task_is_needed"
 
 function ProjectDashboard(props) {
     const [search, setsearch] = useState("")
@@ -25,7 +28,10 @@ function ProjectDashboard(props) {
                 <Link className="black-btn" to={"/project/"+props.match.params.projectLink+"/newtask"}>New Task</Link>
                 <input type="text" value={search} onChange={e => setsearch(e.target.value)} />
             </div>            
-            {tasks?.map((t, i ) => <div className="dashboard_page">{t.title}</div>)}
+            {tasks?.map((t, i ) => <div className="dashboard_page"> 
+                <Link to={`/project/${projectLink}/task/${t._id}`} >{t._id}</Link>
+                {t.title}
+                </div>)}
         </div>
     )
 }

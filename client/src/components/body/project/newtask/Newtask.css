@@ -45,9 +45,7 @@
     display: block;
     fill: white;
 }
-.editor-body{
-    background-color: rgb(229, 229, 229);
-}
+
 
 .task-form-title{
     font-weight: bold;
@@ -65,17 +63,26 @@
 .task-form-row input:focus {
     border: 2px solid #1B1E24;
 }
-.task-btn{
+/* .task-btn{
     background-color: white;
     font-size: 16px;
     padding: 5px;
     color: #1B1E24;
     border: 2px solid white;
     transition: .5s;
-}
+} */
 
 .task-btn:hover{
 
     border: 2px solid #1B1E24;
 
+}
+
+.task-form-row textarea{
+    width: 100%;
+    border: 0;
+    height: 200px;
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
+    resize: none;
 }

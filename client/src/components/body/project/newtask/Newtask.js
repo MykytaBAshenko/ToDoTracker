@@ -121,8 +121,19 @@ function Newtask(props) {
         axios.post(`/api/task/create/${projectLink}`, sendObj, {
             headers: { Authorization: token }
         }).then(d => {
-            if(d.data.success)
-                props.history.push(`/project/${d?.data?.createdProject?.uniqueLink}`)
+            if(d.data.success) {
+                props.history.push(`/project/${projectLink}`)
+                return toast.success(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+        
+            }
             else 
                 return toast.error(d.data.msg, {
                     position: "bottom-center",
@@ -153,9 +164,7 @@ function Newtask(props) {
             </div>
             <div className="task-form-row">
                 <div className="task-form-row-title">Content</div>
-                <div className="editor-body">
                    <textarea value={body} onChange={e => setbody(e.target.value)}/>
-                </div>
             </div>
 
             <div className="task-form-row">
@@ -202,7 +211,10 @@ function Newtask(props) {
                             primary75: '#0aa699',
                             primary50: '#0aa699',
                             primary25: '#0aa69981',
-                            neutral0: 'white'
+                            neutral0: 'white',
+                            neutral5: 'white',
+                            neutral10: 'white',
+                            neutral20: 'white'
                         },
                     })}
                 />
@@ -231,7 +243,7 @@ function Newtask(props) {
             </div>
             </div>
 
-            <button className="task-btn" onClick={() => createTask()}>Create new task</button>
+            <button className="task-btn black-btn" onClick={() => createTask()}>Create new task</button>
         </div>
     )
 }
