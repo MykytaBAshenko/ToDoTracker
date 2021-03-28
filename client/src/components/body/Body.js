@@ -34,7 +34,7 @@ function Body(props) {
 
                 <Switch>
                     
-                    <Route path="/project/:uniqueLink" component={isLogged ? null : Header}/>
+                    <Route path="/project/:projectLink" component={isLogged ? null : Header}/>
                     <Route path="*" component={Header} />
                 </Switch>
                 <div className={(props.history.location.pathname.indexOf("/project/") == -1 ?  (chat_active ? "overflow-hidden" : "overflow-auto") : "")}>
@@ -42,7 +42,7 @@ function Body(props) {
                         <Route path="/" component={isLogged ? Dashboard : Login} exact />
                         <Route path="/dashboard" component={isLogged ? Dashboard : Login} exact />
                         <Route path="/new" component={isLogged ? Newproject : Login} exact />
-                        <Route path="/project/:uniqueLink" component={isLogged ? Project : Login}/>
+                        <Route path="/project/:projectLink" component={isLogged ? Project : Login}/>
                         <Route path="/login" component={ Login} exact />
                         <Route path="/register" component={Register} exact />
                         <Route path="/settings" component={Settings} exact />

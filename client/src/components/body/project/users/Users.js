@@ -17,7 +17,7 @@ function Users(props) {
     const [usersShow, setusersShow] = useState([])
     const auth = useSelector(state => state.auth)
     const token = useSelector(state => state.token)
-    const {isLogged, isAdmin} = auth
+
     useEffect(() => {
         axios.get(`/api/project/${projectLink}/users`, {
             headers: {  Authorization: token }

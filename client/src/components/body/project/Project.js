@@ -22,7 +22,7 @@ import {FaUsers} from 'react-icons/fa'
 import {MdUpdate} from 'react-icons/md'
 
 function Project(props) {
-    const uniqueLink = props.match.params.uniqueLink;
+    const projectLink = props.match.params.projectLink;
     const auth = useSelector(state => state.auth)
     const token = useSelector(state => state.token)
     const {isLogged, isAdmin} = auth
@@ -33,8 +33,8 @@ function Project(props) {
       setshowleft(!showleft)
     }
     useEffect(() => {
-        console.log(uniqueLink)
-          axios.get(`/api/project/get/${uniqueLink}`, {
+        console.log(projectLink)
+          axios.get(`/api/project/get/${projectLink}`, {
         headers: {  Authorization: token }
       }).then(d => {
         console.log(d)
@@ -45,23 +45,23 @@ function Project(props) {
               props.history.push("/dashboard")
           }
       })
-    }, [uniqueLink])
+    }, [projectLink])
 
     useEffect(() => {
-      console.log(uniqueLink)
+      console.log(projectLink)
     
-  }, [uniqueLink])
+  }, [projectLink])
 
     return (
       <div className="dashboard-body">
          {!chat_active ? <div className="left-control">
          <div>
+            <Link to={"/project/"+projectLink+"/tasks"} className="left-control-link"> <RiTaskFill /> { showleft ? <div className="left-control-link-text">Tasks</div>:null}</Link>
+            <Link to={"/project/"+projectLink+"/users"} className="left-control-link"> <FaUsers/> { showleft ? <div className="left-control-link-text">Users</div>:null}</Link>
+            {/* <Link to={"/project/"+projectLink+"/updates"} className="left-control-link"> <MdUpdate/> { showleft ? <div className="left-control-link-text">Updates</div>:null}</Link> */}
+            <Link to={"/project/"+projectLink+"/settings"} className="left-control-link"> <AiFillProject /> { showleft ? <div className="left-control-link-text">Settings</div>:null}</Link>
             <Link to={"/dashboard"} className="left-control-link"> <MdDashboard/> { showleft ? <div className="left-control-link-text">Main</div>:null}</Link>
-            <Link to={"/project/"+uniqueLink+"/users"} className="left-control-link"> <FaUsers/> { showleft ? <div className="left-control-link-text">Users</div>:null}</Link>
-            <Link to={"/project/"+uniqueLink+"/tasks"} className="left-control-link"> <RiTaskFill /> { showleft ? <div className="left-control-link-text">Tasks</div>:null}</Link>
-            {/* <Link to={"/project/"+uniqueLink+"/updates"} className="left-control-link"> <MdUpdate/> { showleft ? <div className="left-control-link-text">Updates</div>:null}</Link> */}
-            <Link to={"/project/"+uniqueLink+"/settings"} className="left-control-link"> <AiFillProject /> { showleft ? <div className="left-control-link-text">Settings</div>:null}</Link>
-          
+
           </div> 
         </div>
         : <div/>}

@@ -7,6 +7,11 @@ const projectSchema = new mongoose.Schema({
         ref: 'projects',
         required: true
     },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+        default: null
+    },
     title: {
         type: String,
         trim: true,

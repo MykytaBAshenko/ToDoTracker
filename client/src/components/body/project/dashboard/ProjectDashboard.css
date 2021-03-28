@@ -1,0 +1,49 @@
+.select-fromdashboard{
+    width: 200px;
+    
+}
+
+.tasks-list{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px;
+    gap:10px
+}
+.task_cell{
+    width: 235px;
+    background: #1B1E24;
+    color: white;
+    padding: 5px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 5px;
+    flex-direction: column;
+    border: 2px solid #1B1E24;
+}
+
+
+.task_cell:hover .task_cell-title{
+    color: #0aa699;
+}
+.task_cell *{
+    word-wrap: break-word;
+    width: 220px;
+
+}
+
+.task_cell-title{
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+.task_cell-description{
+    padding-bottom: 15px;
+}
+.task_cell-meta *{
+    font-size: 14px !important;
+
+}
+.update-info{
+    padding-top: 5px;
+    font-size: 14px !important;
+}

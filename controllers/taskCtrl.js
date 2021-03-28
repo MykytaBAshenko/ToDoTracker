@@ -46,7 +46,6 @@ const taskCtrl = {
         try {
             let project = await Project.find({uniqueLink: req.params.projectLink}) 
             if (project.length) {
-                console.log(req.body)
                 let users_in_project = await UsersInProject.find({project: project[0]._id })
                 let user_exist_in_proj = false
                 for (let o = 0; o < users_in_project.length; o++) 
@@ -80,13 +79,56 @@ const taskCtrl = {
     getTasks: async(req,res) => {
         try {
             let project = await Project.find({uniqueLink: req.params.projectLink}) 
+            console.log( req.query)
             if (project.length) {
-                let tasks_in_project = await Task.find({project: project[0]._id })
+                let search_obj = {}
+                search_obj.project = project[0]._id
+                if(req.query.type != 'blank')
+                search_obj.type = req.query.type
+                if(req.query.state != 'blank')
+                search_obj.state = req.query.state
+                if(req.query.priority != 'blank')
+                search_obj.priority = req.query.priority
+                if(req.query.search){
+
+                }
                 
+                let tasks_in_project = await Task.find(search_obj)
+                console.log(tasks_in_project)
                 return res.json({success: true, tasks_in_project})
 
             }
             return res.json({success: false, msg: "Project does not exist."})
+        } catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        }
+    },
+    getTask :async(req,res) => {
+        try {
+            let task = await Task.find({_id: mongoose.Types.ObjectId(req.params.taskId)}).populate('user')
+            if (task.length) {
+                return res.json({success: true, task:task[0]})
+            }
+            return res.json({success: false, msg: "Task does not exist."})
+        } catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        }
+    },
+    putWorkerTask: async(req, res) => {
+        try {
+            let task = await Task.find({_id: mongoose.Types.ObjectId(req.params.taskId)}) 
+            if (task.length) {
+                if(req.body.setworker)
+                    task[0].user = mongoose.Types.ObjectId(req.user.id)
+                else
+                    task[0].user = null
+                await task[0].save()
+                task = await Task.find({_id: mongoose.Types.ObjectId(req.params.taskId)}).populate('user')
+                return res.json({success: true, task:task[0]})
+            }
+            return res.json({success: false, msg: "Task does not exist."})
         } catch (err) {
             console.log(err)
             return res.json({ success: false, msg: "Something broke." })

@@ -33,7 +33,7 @@
     cursor: pointer;
 }
 .new-task-photo-control div.dropzone  {
-
+cursor: pointer;
 }
 .public-DraftStyleDefault-block{
     padding: 0 15px;
@@ -44,6 +44,9 @@
     height: 50px;
     display: block;
     fill: white;
+}
+.new-task-photo-control div.dropzone:hover svg {
+    fill:#0aa699;
 }
 
 

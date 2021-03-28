@@ -22,7 +22,6 @@ function Newtask(props) {
     const [body, setbody] = useState("");
     const [photos, setphotos] = useState([])
     const [type, settype] = useState()
-    const uniqueLink = props.match.params.uniqueLink;
 
     const [priorityOption, setpriorityOption] = useState(how_task_is_needed[3])
     const [typesOption, settypesOption] = useState(types_of_task[1])

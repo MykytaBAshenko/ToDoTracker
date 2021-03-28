@@ -1,0 +1,113 @@
+.new-task-photo-control-shell.select-photo {}
+
+.new-task-photo-control-shell.select-photo:hover {
+    border-color: #1B1E24;
+}
+
+.task-body-photo-container {
+    display: grid;
+    min-height: calc(100vh - 60px);
+    background: rgba(27, 30, 36, .5);
+    justify-items: center;
+    align-items: center;
+    position: relative;
+    padding: 10px;
+}
+
+.task-body-photo-container img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.task-body-photo-container svg {
+    fill: white;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+
+}
+
+.task-body-photo-container svg:hover {
+    fill: #f35958;
+}
+
+.task-body {
+    padding: 10px 5px;
+    display: grid;
+    align-items: center;
+    justify-items: left;
+}
+
+.task-body-title {
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.task-body-description {
+    white-space: pre-wrap;
+    font-size: 20px;
+    padding-bottom: 10px;
+}
+
+.task-body-meta .select-text {
+    font-size: 20px;
+}
+
+.task-body-meta .select-element svg {
+    height: 25px;
+    width: 25px;
+}
+.new-task-photo-control {
+    padding-bottom: 5px;
+}
+
+.task-body-update-info {
+    font-size: 22px;
+}
+
+.task-body-meta {
+    display: flex;
+    gap: 10px;
+}
+.task-body-control{
+    gap: 10px;
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.task-body-worker{
+    padding-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 20px;
+}
+.task-body-worker-img-body{
+    height: 50px;
+    width: 50px;
+    padding: 0;
+    transition: 0s;
+    border: 1px solid #1B1E24;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.task-body-worker-img-body img{
+    height: 100%;
+}
+.task-body-meta-body{
+    display: grid;
+    gap: 10px;
+    align-items: center;
+    grid-template-columns: auto auto;
+}
+.task-body-meta-body-left{
+    height: 55px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
