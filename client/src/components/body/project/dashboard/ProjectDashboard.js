@@ -13,16 +13,17 @@ function ProjectDashboard(props) {
     const token = useSelector(state => state.token)
     const projectLink = props.match.params.projectLink;
     const [tasks, settasks] = useState([])
-    const [priorityOption, setpriorityOption] = useState(how_task_is_needed[3]) 
+    const [priorityOption, setpriorityOption] = useState(how_task_is_needed[3])
     const [typesOption, settypesOption] = useState(types_of_task[4])
     const [stateOption, setstateOption] = useState(task_state[0])
+    const [whichShow, setwhichShow] = useState(0)
     useEffect(() => {
-        axios.get(`/api/task/${projectLink}?type=${typesOption.value}&state=${stateOption.value}&priority=${priorityOption.value}&search=${search}`, {
-            headers: {  Authorization: token }
+        axios.get(`/api/task/${projectLink}?type=${typesOption.value}&state=${stateOption.value}&priority=${priorityOption.value}&search=${search}&whichShow=${whichShow}`, {
+            headers: { Authorization: token }
         }).then(d => {
             settasks(d.data.tasks_in_project)
         })
-    }, [priorityOption, typesOption, stateOption])
+    }, [priorityOption, typesOption, stateOption, search, whichShow])
     const priorityChange = priorityOption => {
         setpriorityOption(priorityOption);
     };
@@ -37,7 +38,7 @@ function ProjectDashboard(props) {
     return (
         <div className="dashboard_page">
             <div className="dashboard_page-control">
-                <Link className="black-btn" to={"/project/"+props.match.params.projectLink+"/newtask"}>New Task</Link>
+                <Link className="black-btn" to={"/project/" + props.match.params.projectLink + "/newtask"}>New Task</Link>
                 <input type="text" value={search} onChange={e => setsearch(e.target.value)} />
                 <Select
                     className="select-fromdashboard"
@@ -108,40 +109,61 @@ function ProjectDashboard(props) {
                         },
                     })}
                 />
-            </div>    
-            <div className="tasks-list">        
-            {tasks?.map((t, i ) => <div key={i} className="task_cell"> 
-                <Link className="task_cell-title" to={`/project/${projectLink}/task/${t._id}`} >
-                {t.title.length > 15 ? 
-                        t.title.substring(0,15)+"...":
-                        t.title
-                       }
-                       {console.log(t.title.length)}
-                </Link>
-                <div className="task_cell-description">{t.description.length > 125 ? 
-                        t.description.substring(0,125)+"...":
-                        t.description
-                       }</div>
-                {/* {console.log(t)} */}
-                <div className="task_cell-meta">
-                    {t.priority != 'blank' && how_task_is_needed.map(prior => {
-                         if(prior.value == t.priority)
-                            return <div key={i+Math.random()}>{prior.label} </div> 
-                    })}
-                    {t.type != 'blank' && types_of_task.map(type => {
-                         if(type.value == t.type)
-                            return <div key={i+Math.random()}>{type.label}</div> 
-                    })}
-                    {task_state.map(state => {
-                         if(state.value == t.state)
-                            return <div key={i+Math.random()}>{state.label}</div> 
-                    })}
-                    <div className="update-info">
-                        Last update: {
-                           t.updatedAt.replace('-', '.').replace('-', '.').substring(0,10)
+                {
+                    // !showMine ?
+                    //     <button onClick={() => whichShow(true)} className="green-btn">
+                    //         Show all
+                    //     </button> :
+                    //     <button onClick={() => setshowMine(false)} className="green-btn">
+                    //         Show my tasks
+
+                    //     </button>
+                    whichShow == 0 ? 
+                    <button onClick={() => setwhichShow(1)} className="green-btn">
+                             Show my tasks
+                    </button> :
+                    whichShow == 1 ? 
+                    <button onClick={() => setwhichShow(2)} className="green-btn">
+                             Show tasks without worker
+                    </button> :
+                    <button onClick={() => setwhichShow(0)} className="green-btn">
+                    Show all
+                    </button>
+                }
+            </div>
+            <div className="tasks-list">
+                {tasks?.map((t, i) => <div key={i} className="task_cell">
+                    <Link className="task_cell-title" to={`/project/${projectLink}/task/${t._id}`} >
+                        {t.title.length > 15 ?
+                            t.title.substring(0, 15) + "..." :
+                            t.title
                         }
+                        {console.log(t.title.length)}
+                    </Link>
+                    <div className="task_cell-description">{t.description.length > 125 ?
+                        t.description.substring(0, 125) + "..." :
+                        t.description
+                    }</div>
+                    {/* {console.log(t)} */}
+                    <div className="task_cell-meta">
+                        {t.priority != 'blank' && how_task_is_needed.map(prior => {
+                            if (prior.value == t.priority)
+                                return <div key={i + Math.random()}>{prior.label} </div>
+                        })}
+                        {t.type != 'blank' && types_of_task.map(type => {
+                            if (type.value == t.type)
+                                return <div key={i + Math.random()}>{type.label}</div>
+                        })}
+                        {task_state.map(state => {
+                            if (state.value == t.state)
+                                return <div key={i + Math.random()}>{state.label}</div>
+                        })}
+                        <div className="update-info">
+                            Last update: {
+                                t.updatedAt.replace('-', '.').replace('-', '.').substring(0, 10)
+                            }
+                        </div>
                     </div>
-                </div>
                 </div>)}
             </div>
         </div>

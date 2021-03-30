@@ -7,6 +7,7 @@ import types_of_task from "../../../global_vars/types_of_task"
 import how_task_is_needed from "../../../global_vars/how_task_is_needed"
 import task_state from "../../../global_vars/task_state"
 import { MdClose } from 'react-icons/md'
+import Comments from './Comments'
 function Task(props) {
     const projectLink = props.match.params.projectLink
     const taskId = props.match.params.taskId
@@ -59,7 +60,27 @@ function Task(props) {
         axios.delete(`/api/task/${taskId}`, {
             headers: { Authorization: token }
         }).then(d => {
-            console.log(d)
+            if(d.data.success) {
+                props.history.push(`/project/${projectLink}`)
+                return toast.success(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+            return toast.error(d.data.msg, {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         })
     }
 
@@ -157,6 +178,7 @@ function Task(props) {
                 <MdClose onClick={() => setShowPhoto(false)} />
                 <img src={ShowPhoto} />
             </div>}
+            <Comments taskId={taskId}/>
     </>
     )
 }

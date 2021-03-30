@@ -74,7 +74,7 @@ const projectCtrl = {
 
         } catch (err) {
             console.log(err)
-            res.json({success: false, msg: err})
+            res.json({success: false, msg:"Something broke!"})
         }
     },
     getProjects: async (req,res) => {
@@ -82,7 +82,7 @@ const projectCtrl = {
             let rolesInProjects = await UsersInProject.find({"user": mongoose.Types.ObjectId(req.user.id)}).populate("project")
             res.json({success:true, projects: rolesInProjects})
         } catch (err) {
-            res.json({success: false, msg: err})
+            res.json({success: false, msg:"Something broke!"})
         }
     },
     addUser: async (req,res) => {
@@ -123,10 +123,9 @@ const projectCtrl = {
             } else {
                 return res.json({success:false, msg: "Current user not in project."  })
             }
-
         } catch (err) {
             console.log(err)
-            res.json({success: false, msg: err})
+            res.json({success: false, msg:"Something broke!"})
         }
     },
     getProject: async (req,res) => {
@@ -144,7 +143,7 @@ const projectCtrl = {
             }
         } catch (err) {
             console.log(err)
-            res.json({success: false, msg: err})
+            res.json({success: false, msg:"Something broke!"})
         }
     },
     getUsers: async (req,res) => {

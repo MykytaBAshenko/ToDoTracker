@@ -1,14 +1,12 @@
 window.onload = function(e){ 
     var colors = new Array(
-        [255, 163, 163],
+        [255, 159, 110],
         [255, 197, 163],
         [230, 171, 255],
         [255, 171, 248],
         [255, 171, 205],
-        [171, 174, 255]);
-      
+        [255, 80, 255]);
       var step = 0;
-
       var colorIndices = [0,1,2,3];
       let deg = 0;
       //transition speed
@@ -44,15 +42,13 @@ window.onload = function(e){
           colorIndices[0] = colorIndices[1];
           colorIndices[2] = colorIndices[3];
           deg+=Math.random()*10
-          //pick two new target color indices
-          //do not pick the same as the current one
           colorIndices[1] = ( colorIndices[1] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
           colorIndices[3] = ( colorIndices[3] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
           
         }
       }
       
-      setInterval(updateGradient,1/100);
+      setInterval(updateGradient,1/30);
 
     }
     

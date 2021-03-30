@@ -27,7 +27,7 @@ function App() {
     if (firstLogin) {
       const getToken = async () => {
         const res = await axios.post('/api/auth/refresh_token', null)
-        dispatch({ type: 'GET_TOKEN', payload: res.data.access_token })
+        dispatch({ type: 'GET_TOKEN', payload: (res.data.access_token ?? null) })
       }
       getToken()
     }

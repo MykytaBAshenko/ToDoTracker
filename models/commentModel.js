@@ -4,12 +4,7 @@ const mongoose = require('mongoose')
 const commentSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'usersinproject',
-        required: true
-    },
-    project: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'projects',
+        ref: 'users',
         required: true
     },
     task: {
@@ -26,4 +21,4 @@ const commentSchema = new mongoose.Schema({
     timestamps: true
 })
 
-module.exports = mongoose.model("Projects", commentSchema)
+module.exports = mongoose.model("Comments", commentSchema)

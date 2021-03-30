@@ -8,6 +8,7 @@ router.post('/create/:projectLink',auth, taskCtrl.createTask)
 router.get('/:projectLink',auth, taskCtrl.getTasks)
 router.get('/one/:taskId',auth, taskCtrl.getTask)
 router.put('/:taskId',auth, taskCtrl.putWorkerTask)
+router.delete('/:taskId',auth, taskCtrl.deleteTask)
 
 
 
