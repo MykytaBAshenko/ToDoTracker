@@ -97,6 +97,7 @@ function Comments(props) {
         setchangeinput(edittext)
       }
       const dropComment = (id) => {
+        dropEditing()
         axios.delete(`/api/comments/${props.taskId}/comment/${id}`, {
             headers: {  Authorization: token }
         }).then(d => {
