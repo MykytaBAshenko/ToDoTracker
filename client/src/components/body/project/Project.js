@@ -9,6 +9,8 @@ import Users from './users/Users'
 import Newtask from './newtask/Newtask'
 import Settings from './settings/Settings'
 import Task from './task/Task'
+import EditTask from './task/EditTask'
+
 
 
 
@@ -76,6 +78,8 @@ function Project(props) {
                 <Route path="/project/:projectLink/news" component={ProjectDashboard} exact/>
                 <Route path="/project/:projectLink/settings" component={Settings} exact/>
                 <Route path="/project/:projectLink/task/:taskId" component={Task} exact/>
+                <Route path="/project/:projectLink/task/:taskId/edit" component={EditTask} exact/>
+
             </Switch>
           </div>
         </div>

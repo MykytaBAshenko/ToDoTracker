@@ -26,7 +26,6 @@ const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_SERVER_URL;
 const check_if_exist_unread = (data, id) => {
   if (!id || !data)
     return false
-  // console.log(data, id)
   for (let y = 0; y < data.length; y++) {
     if (data[y]?.whosee?.indexOf(id) == -1)
       return true
@@ -65,7 +64,6 @@ const useChat = (roomId, projectInfo) => {
     });
 
     socketRef.current.on(FIRST_CONN, (d) => {
-      console.log(d)
       if(d)
         setMessages(d)
       else
@@ -243,7 +241,7 @@ function RenderMsg(props) {
             <div className="my-msg-text">{props.WhatMesShow.body}</div>
             <div className="my-msg-control">
               <button className="edit" onClick={() => {props.seteditingId(props.WhatMesShow._id); props.seteditingInput(props.WhatMesShow.body)}}><FaEdit /></button>
-              <button className="drop" onClick={() => props.DeleteMsg(props.WhatMesShow._id)}><FaTrash /></button>
+              <button className="drop" onClick={() => {props.DeleteMsg(props.WhatMesShow._id); props.setrmediting(!props.rmediting)}}><FaTrash /></button>
             </div>
           </div>
       }
@@ -269,6 +267,9 @@ function ChatInput(props) {
       setNewMessage("");
     }
   };
+  useEffect(()=> {
+    dropEditing()
+  },[props.rmediting])
   const dropEditing = () => {
     props.seteditingId("")
     props.seteditingInput("")
@@ -305,19 +306,21 @@ function ChatInput(props) {
 function ChatOutput(props) {
   const [editingInput, seteditingInput] = useState("");
   const [editingId, seteditingId] = useState("");
-
+  const [rmediting, setrmediting] = useState(false)
   useEffect(() => {
-    console.log(props.WhatMesShow)
-  }, [props.WhatMesShow.length])
+    setrmediting(!rmediting)
+  }, [props.WhatMesShow])
 
   return (
     <div className="msgsforrender" id="msgs_body">
       <div className="msgsrenderexact">
         {props.WhatMesShow.map((m, i) => <RenderMsg 
+                                          setrmediting={setrmediting}
+                                          rmediting={rmediting}
                                           WhatMessageWasRead={props.WhatMessageWasRead} 
                                           auth={props.auth} 
                                           WhatMesShow={m} 
-                                          key={i+Math.random()}
+                                          key={i}
                                           how_meny_msg={props.WhatMesShow}
                                           DeleteMsg={props.DeleteMsg} 
                                           seteditingId={seteditingId}
@@ -325,6 +328,7 @@ function ChatOutput(props) {
                                           />)}
       </div>
       <ChatInput
+      rmediting={rmediting}
       WhereSend={props.WhereSend}
       WhereEdit={props.WhereEdit}
       whatIsActive={props.whatIsActive}
@@ -352,10 +356,8 @@ function ChatChooser(props) {
     if (check_if_exist_unread(messages, auth?.user?._id))
       unread?.unread?.push(props.projectInfo.uniqueLink)
     dispatch(dispatchSetUnreadAction({ unread: unread.unread }))
-    console.log(props.whatIsActive)
-  }, [ messages.length, props.whatIsActive])
-  useEffect(() => {
-  }, [props.chatname])
+  }, [messages, messages.length, props.whatIsActive])
+
   return (
     <div
       className={"chat-chooser " 

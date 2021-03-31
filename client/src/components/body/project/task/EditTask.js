@@ -6,18 +6,21 @@ import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import types_of_task from "../../../global_vars/types_of_task"
 import how_task_is_needed from "../../../global_vars/how_task_is_needed"
+import task_state from "../../../global_vars/task_state"
+
 import { toast } from 'react-toastify';
 import Select from 'react-select';
 import { Editor } from 'react-draft-wysiwyg';
 import Dropzone from 'react-dropzone';
-import { FaPlus, FaArrowLeft  } from 'react-icons/fa'
-import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
+import { FaPlus, FaArrowLeft } from 'react-icons/fa'
 
-function Newtask(props) {
+function EditTask(props) {
     const auth = useSelector(state => state.auth)
     const projectLink = props.match.params.projectLink;
     const token = useSelector(state => state.token)
     const { isLogged, isAdmin } = auth
+    const taskId = props.match.params.taskId
+
     const [title, settitle] = useState("")
     const [body, setbody] = useState("");
     const [photos, setphotos] = useState([])
@@ -25,9 +28,12 @@ function Newtask(props) {
 
     const [priorityOption, setpriorityOption] = useState(how_task_is_needed[3])
     const [typesOption, settypesOption] = useState(types_of_task[1])
-
+    const [stateOption,setstateOption] = useState(task_state[3])
     const [typesoftask, settypesoftask] = useState({})
     
+    const stateChange = stateOption => {
+        setstateOption(stateOption);
+    };
 
     const priorityChange = priorityOption => {
         setpriorityOption(priorityOption);
@@ -105,23 +111,59 @@ function Newtask(props) {
     useEffect(() => {
 
     }, [])
+    const set_vals = (task) => {
+        settitle(task.title)
+        setbody(task.description)
+        task_state.map(s => {
+            if(s.value == task.state)
+                setstateOption(s)
+        })
+        how_task_is_needed.map(n => {
+            if(n.value == task.priority)
+                setpriorityOption(n)
+        })
+        types_of_task.map((t,i) => {
+            if(t.value == task.type)
+                settypesOption(t)
+        })
+        setphotos(task.images)
+    }
+    useEffect(() => {
+        axios.get(`/api/task/one/${taskId}`, {
+            headers: { Authorization: token }
+        }).then(d => {
+            if (d.data.success) {
+                set_vals(d.data.task)
+            }
+            else {
+                props.history.push(`/project/${projectLink}`)
+                return toast.error(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        })
+    }, [taskId])
 
-    const [AddUserInput, setAddUserInput] = useState("")
 
-    const createTask = () => {
+    const updateTask = () => {
         let sendObj = {}
         sendObj.title = title
         sendObj.description = body
-        sendObj.state = "progress"
+        sendObj.state = stateOption.value
         sendObj.priority = priorityOption.value
         sendObj.type = typesOption.value
         sendObj.images = photos
-
-        axios.post(`/api/task/create/${projectLink}`, sendObj, {
+        axios.patch(`/api/task/update/${taskId}`, sendObj, {
             headers: { Authorization: token }
         }).then(d => {
             if(d.data.success) {
-                props.history.push(`/project/${projectLink}`)
+                props.history.push(`/project/${projectLink}/task/${taskId}`)
                 return toast.success(d.data.msg, {
                     position: "bottom-center",
                     autoClose: 5000,
@@ -131,7 +173,6 @@ function Newtask(props) {
                     draggable: true,
                     progress: undefined,
                     });
-        
             }
             else 
                 return toast.error(d.data.msg, {
@@ -156,8 +197,8 @@ function Newtask(props) {
 
     return (
         <div className="task-form">
-            <Link className="task-form-link" to={`/project/${projectLink}`} ><FaArrowLeft /> Back</Link>
-            <div className="task-form-title">Create new task</div>
+            <Link className="task-form-link" to={`/project/${projectLink}/task/${taskId}`} ><FaArrowLeft /> Back</Link>
+            <div className="task-form-title">Edit task</div>
             <div className="task-form-row">
                 <div className="task-form-row-title">Title</div>
                 <input className="task-form-row-input" onChange={e => settitle(e.target.value)} value={title}></input>
@@ -220,6 +261,32 @@ function Newtask(props) {
                 />
             </div>
             <div className="task-form-row">
+                <div className="task-form-row-title">Task state</div>
+
+                <Select
+                    value={stateOption}
+                    onChange={stateChange}
+                    options={task_state}
+                    theme={theme => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                            ...theme.colors,
+                            //   primary50: '#B2D4FF',
+                            primary25: '#80B0FF',
+                            primary: '#1B1E24',
+                            primary75: '#0aa699',
+                            primary50: '#0aa699',
+                            primary25: '#0aa69981',
+                            neutral0: 'white',
+                            neutral5: 'white',
+                            neutral10: 'white',
+                            neutral20: 'white'
+                        },
+                    })}
+                />
+            </div>
+            <div className="task-form-row">
                 <div className="task-form-row-title">Photos</div>
             <div className="new-task-photo-control">
                 {photos.map((img, i) => <div key={i} onClick={() => dropImage(i)} className="new-task-photo-control-shell"><img src={img} /></div>)}
@@ -243,9 +310,9 @@ function Newtask(props) {
             </div>
             </div>
 
-            <button className="task-btn black-btn" onClick={() => createTask()}>Create new task</button>
+            <button className="task-btn black-btn" onClick={() => updateTask()}>Update task</button>
         </div>
     )
 }
 
-export default Newtask
+export default EditTask

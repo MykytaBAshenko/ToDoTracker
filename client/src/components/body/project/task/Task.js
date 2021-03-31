@@ -7,6 +7,7 @@ import types_of_task from "../../../global_vars/types_of_task"
 import how_task_is_needed from "../../../global_vars/how_task_is_needed"
 import task_state from "../../../global_vars/task_state"
 import { MdClose } from 'react-icons/md'
+import {FaArrowLeft} from 'react-icons/fa'
 import Comments from './Comments'
 function Task(props) {
     const projectLink = props.match.params.projectLink
@@ -107,7 +108,10 @@ function Task(props) {
 
     return (<>{
         !ShowPhoto ?
+            <>
             <div className="task-body">
+            <Link className="task-form-link" to={`/project/${projectLink}`} ><FaArrowLeft /> Back</Link>
+                
                 <div className="task-body-exact">
                     <div className="task-body-title">
                         {title}
@@ -173,12 +177,15 @@ function Task(props) {
                     }
 
                 </div>
-            </div> :
+                
+            </div> 
+            <Comments taskId={taskId}/>
+            </>
+            :
             <div className="task-body-photo-container">
                 <MdClose onClick={() => setShowPhoto(false)} />
                 <img src={ShowPhoto} />
             </div>}
-            <Comments taskId={taskId}/>
     </>
     )
 }

@@ -210,3 +210,25 @@
 .comment-control button.drop:hover{
     background-color: #f35958;
 }
+
+.task-form-link{
+    color: #1B1E24;
+}
+
+.task-form-link{
+    font-size: 20px;
+    display: flex;
+    font-weight: bold;
+    align-self: flex-start;
+    align-items: center;
+    padding: 0 5px 0 0 ;
+    border-bottom: 2px solid transparent;
+
+}
+.task-form-link svg{
+    height: 15px;
+}
+
+.task-form-link:hover{
+    border-bottom: 2px solid #1B1E24;
+}

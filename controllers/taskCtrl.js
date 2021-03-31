@@ -153,6 +153,27 @@ const taskCtrl = {
             console.log(err)
             return res.json({ success: false, msg: "Something broke." })
         }
+    },
+    updateTask: async(req, res) => {
+        try {
+            let task = await Task.find({ _id: mongoose.Types.ObjectId(req.params.taskId) })
+            if (task.length) {
+                task[0].title = req.body.title
+                task[0].description = req.body.description
+                task[0].state = req.body.state
+                task[0].priority = req.body.priority
+                task[0].type = req.body.type
+                task[0].images = req.body.images
+                await task[0].save()
+
+                return res.json({ success: true, msg: "Task udated." })
+            }
+            return res.json({ success: false, msg: "Task does not exist." })
+        } catch (err) {
+            console.log(1)
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        }
     }
 }
 

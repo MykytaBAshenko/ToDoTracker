@@ -7,3 +7,10 @@ export const dispatchSetChatAction = (res) => {
         payload: res
     }
 }
+
+export const dispatchSetWhatChatActiveAction = (res) => {
+    return {
+        type: ACTIONS.SET_ACTIVE_CHAT,
+        payload: res
+    }
+}
