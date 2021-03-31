@@ -14,6 +14,7 @@ const initialState = {
     email: '',
     password: ''
 }
+const GOOGLE_CLIENT = process.env.REACT_APP_GOOGLE_CLIENT
 
 function Login(props) {
     const [user, setUser] = useState(initialState)
@@ -130,23 +131,12 @@ function Login(props) {
                     </div>
                     <GoogleLogin
                         className="google-btn"
-                        clientId="762813067815-bqjtm7cqg2m3h831oclbef4kgqmau2b6.apps.googleusercontent.com"
+                        clientId={GOOGLE_CLIENT}
                         buttonText="Login with google"
                         onSuccess={responseGoogle}
                         cookiePolicy={'single_host_origin'}
                     />
                 </form>
-
-                {/* <div className="social">
-                    
-                    <FacebookLogin
-                        appId="461819241896094"
-                        autoLoad={false}
-                        fields="name,email,picture"
-                        callback={responseFacebook}
-                    /> 
-
-                </div> */}
 
             </div>
         </div>
