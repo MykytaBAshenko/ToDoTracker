@@ -52,6 +52,7 @@ button{
 
 @import url("./components/body/project/users/Users.css");
 @import url("./components/body/project/task/Task.css");
+@import url("./components/calendar/Calendar.css");
 @import url("./components/body/project/Project.css");
 @import url("./components/body/project/settings/Settings.css");
 @import url("./components/body/project/dashboard/ProjectDashboard.css");

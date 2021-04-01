@@ -173,7 +173,7 @@ function Settings(props) {
                 onwhat: onWhatLink3,
                 link: Link3
             })
-        axios.patch(`/api/project/${projectId}`, sendobj, {
+        axios.put(`/api/project/${projectId}`, sendobj, {
             headers: { Authorization: token }
         }).then(d => {
             if (d.data.success) {
@@ -245,7 +245,7 @@ function Settings(props) {
     const updateUserInfoInProject = (e) => {
         e.preventDefault()
         console.log(projectId,UserProjectId, UserAbout, UserWhatDo)
-        axios.patch(`/api/project/${projectId}/user/${UserProjectId}`, {UserAbout, UserWhatDo}, {
+        axios.put(`/api/project/${projectId}/user/${UserProjectId}`, {UserAbout, UserWhatDo}, {
             headers: { Authorization: token }
         }).then(d => {
             console.log(d)

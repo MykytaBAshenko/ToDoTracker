@@ -8,6 +8,18 @@ import how_task_is_needed from "../../../global_vars/how_task_is_needed"
 import task_state from "../../../global_vars/task_state"
 
 
+function RenderDeadLine(props) {
+    const m = new Date(props.dead)
+    return(
+        <div className="update-info">
+            Deadline: {
+                   m.getUTCFullYear() +"/"+ (m.getUTCMonth()+1) +"/"+ m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes() + ":" + m.getUTCSeconds()
+            }
+        </div>
+    )
+}
+
+
 function ProjectDashboard(props) {
     const [search, setsearch] = useState("")
     const token = useSelector(state => state.token)
@@ -21,7 +33,19 @@ function ProjectDashboard(props) {
         axios.get(`/api/task/${projectLink}?type=${typesOption.value}&state=${stateOption.value}&priority=${priorityOption.value}&search=${search}&whichShow=${whichShow}`, {
             headers: { Authorization: token }
         }).then(d => {
-            settasks(d.data.tasks_in_project)
+            if(d?.data?.success){
+                let tasks_withot_deadline = []
+                for(let y = 0;y < d?.data?.tasks_in_project.length; y++){
+                    if(d?.data?.tasks_in_project[y].deadline == 0) {
+                        tasks_withot_deadline.push(d?.data?.tasks_in_project[y])
+                        d?.data?.tasks_in_project.splice(y, 1);
+                    }
+                        
+                }
+                d?.data?.tasks_in_project.sort((a, b) => b.deadline - a.deadline)
+                settasks([...d?.data?.tasks_in_project, ...tasks_withot_deadline])
+              } 
+            // settasks(d.data.tasks_in_project)
         })
     }, [priorityOption, typesOption, stateOption, search, whichShow])
     const priorityChange = priorityOption => {
@@ -158,9 +182,12 @@ function ProjectDashboard(props) {
                             if (state.value == t.state)
                                 return <div key={i + Math.random()}>{state.label}</div>
                         })}
+                        { t.deadline ?
+                        <RenderDeadLine dead={t.deadline}/> : null
+                        }
                         <div className="update-info">
                             Last update: {
-                                t.updatedAt.replace('-', '.').replace('-', '.').substring(0, 10)
+                                t.updatedAt.replace('-', '/').replace('-', '/').substring(0, 10)
                             }
                         </div>
                     </div>

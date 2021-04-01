@@ -15,6 +15,7 @@ const io = require("socket.io")(server, {
     }, 
   });
  
+
 app.use(express.json())
 app.use(cors())
 app.use(cookieParser())
@@ -26,6 +27,8 @@ app.use('/api/auth', require('./routes/authRouter'))
 app.use('/api/task', require('./routes/taskRouter'))
 app.use('/api/project', require('./routes/projectRouter'))
 app.use('/api/comments', require('./routes/commentsRouter'))
+app.use('/api/calendar', require('./routes/calendarRouter'))
+
 
 
 app.use('/uploads', express.static('uploads'));

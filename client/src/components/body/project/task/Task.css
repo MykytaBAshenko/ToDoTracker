@@ -212,10 +212,8 @@
 }
 
 .task-form-link{
+    cursor: pointer;
     color: #1B1E24;
-}
-
-.task-form-link{
     font-size: 20px;
     display: flex;
     font-weight: bold;

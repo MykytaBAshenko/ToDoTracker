@@ -1,0 +1,31 @@
+.calendar-grid{
+    margin: 10px;
+    gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.calendar-cell{
+    background-color: rgba(27, 30, 36, .8);
+    height: 250px;
+}
+
+.calendar-header{
+    margin: 10px 10px 0;
+}
+
+.calendar-cell-header{
+    padding: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+.calendar-cell.active{
+    background-color: rgba(27, 30, 36, .95);
+}
+
+.calendar-cell:hover {
+    background-color: #0aa699;
+    cursor: pointer;
+
+}

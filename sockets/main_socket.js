@@ -27,11 +27,13 @@ io.to(socket.id).emit(FIRST_CONN, send_messages )
 socket.join(roomId);
 
 socket.on(NEW_CHAT_MESSAGE_EVENT, async (data) => {
+    let t = new Date()
     const new_msg = new Messages({
         user: mongoose.Types.ObjectId(data.senderId),
         body: data.body,
         project: mongoose.Types.ObjectId(data.projectId),
-        whosee: [data.senderId]
+        whosee: [data.senderId],
+        wascreated: t.getTime()
     })
     let msg = await new_msg.save()
     msg = await Messages.find({_id: msg._id}).populate("user")

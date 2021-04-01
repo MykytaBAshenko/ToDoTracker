@@ -11,8 +11,8 @@ router.post('/uploadlogo',auth, projectCtrl.uploadLogo)
 router.delete('/:projectLink/user/:userId',auth, projectCtrl.deleteUser)
 router.get('/:projectId/users/:userId',auth, projectCtrl.getUserInfo)
 router.delete('/:projectId',auth, projectCtrl.deleteProject)
-router.patch('/:projectId',auth, projectCtrl.upadteProject)
-router.patch('/:projectId/user/:userIdInPr',auth, projectCtrl.patchUserInProject)
+router.put('/:projectId',auth, projectCtrl.upadteProject)
+router.put('/:projectId/user/:userIdInPr',auth, projectCtrl.patchUserInProject)
 
 
 

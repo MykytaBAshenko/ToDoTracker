@@ -7,7 +7,7 @@ import ActivationEmail from './auth/ActivationEmail'
 
 import ForgotPass from '../body/auth/ForgotPassword'
 import ResetPass from '../body/auth/ResetPassword'
-
+import Calendar from '../calendar/Calendar'
 import Home from '../body/home/Home'
 import Dashboard from '../body/dashboard/Dashboard'
 import Settings from '../body/settings/Settings'
@@ -15,9 +15,7 @@ import Settings from '../body/settings/Settings'
 import Newproject from '../body/newproject/Newproject'
 import Project from '../body/project/Project'
 import Header from '../../components/header/Header'
-import EditorConvertToHTML from './EditorConvertToHTML'
 import {useSelector} from 'react-redux'
-const NotFound =() => <div>posoi</div>
 
 function Body(props) {
     const auth = useSelector(state => state.auth)
@@ -43,12 +41,13 @@ function Body(props) {
                         <Route path="/dashboard" component={isLogged ? Dashboard : Login} exact />
                         <Route path="/new" component={isLogged ? Newproject : Login} exact />
                         <Route path="/project/:projectLink" component={isLogged ? Project : Login}/>
-                        <Route path="/login" component={ Login} exact />
-                        <Route path="/register" component={Register} exact />
-                        <Route path="/settings" component={Settings} exact />
-                        <Route path="/forgot_password" component={ForgotPass} exact />
-                        <Route path="/user/reset/:token" component={ResetPass} exact />
-                        <Route path="/user/activate/:activation_token" component={ActivationEmail} exact />
+                        <Route path="/login" component={!isLogged ? Login : Dashboard} exact />
+                        <Route path="/register" component={!isLogged ? Register : Dashboard} exact />
+                        <Route path="/calendar" component={isLogged ? Calendar : Login} exact />
+                        <Route path="/settings" component={isLogged ? Settings : Login} exact />
+                        <Route path="/forgot_password" component={!isLogged ? ForgotPass : Dashboard} exact />
+                        <Route path="/user/reset/:token" component={!isLogged ?  ResetPass : Dashboard} exact />
+                        <Route path="/user/activate/:activation_token" component={!isLogged ?  ActivationEmail : Dashboard} exact />
                     </Switch>
                 </div>
                 {/* <EditorConvertToHTML/>  */}

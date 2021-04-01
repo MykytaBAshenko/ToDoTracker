@@ -4,11 +4,8 @@ const Task = require('../models/taskModel')
 const UsersInProject = require('../models/userInProjectModel')
 const mongoose = require('mongoose')
 
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const sendMail = require('./sendMail')
 const fs = require('fs');
-const projectCtrl = require('./projectCtrl')
+
 
 
 
@@ -60,7 +57,8 @@ const taskCtrl = {
                             state: req.body.state,
                             priority: req.body.priority,
                             type: req.body.type,
-                            images: req?.body?.images
+                            images: req?.body?.images,
+                            deadline: req?.body?.deadline
                         })
                         await newTask.save()
                         const tasks = await Task.find({ project: project[0]._id })

@@ -45,7 +45,7 @@ function Users(props) {
             users.push(usersIN[y])
         }
         setusersShow(users)
-    }, [usersearch])
+    }, [usersearch, usersIN])
 
     const [AddUserInput,setAddUserInput] = useState("")
 
@@ -138,17 +138,20 @@ function Users(props) {
                         <div className="user-card-content-row">
                             {u.user.email}
                         </div>
+                        {u.nickname &&
                         <div className="user-card-content-row">
                             {u.user.nickname}
-                        </div>
+                        </div>}
                         {u.about &&
                             <div className="user-card-content-row">
                                 {u.about}
                             </div>
                         }
+                        {u.whatDo &&
+
                         <div className="user-card-content-row">
                             {u.whatDo}
-                        </div>
+                        </div>}
                         { isAdminInPr &&
                         <button className="user-card-drop-user" onClick={() => dropUser(u._id)}>Drop user</button>                        
                         }</div>
@@ -159,20 +162,3 @@ function Users(props) {
 }
 
 export default Users
-// about: ""
-// createdAt: "2021-03-06T21:03:37.064Z"
-// nickname: "Mykyta Bashenko"
-// project: "6043ee282fc6cd429b1cab89"
-// status: "Owner"
-// updatedAt: "2021-03-06T21:03:37.064Z"
-// user:
-// avatar: "https://lh3.googleusercontent.com/a-/AOh14GgMk4J-NbmZMKpv8PssGqX_0li9h-GK5YvH0kej6g=s96-c"
-// createdAt: "2021-03-06T00:51:53.721Z"
-// email: "nikita.bashenko2001@gmail.com"
-// nickname: "Mykyta Bashenko"
-// password: "$2b$12$g2PpH9B8eTN..LlZ3xD1AuTQlVKCxHxxxN/PwgNhM3iegP3ypWwkS"
-// updatedAt: "2021-03-12T13:12:48.838Z"
-// __v: 0
-// _id: "6042d22966ced24a3971d80f"
-// __proto__: Object
-// whatDo: "Project owner"

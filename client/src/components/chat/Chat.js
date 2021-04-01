@@ -45,12 +45,9 @@ const useChat = (roomId, projectInfo) => {
   const [messages, setMessages] = useState([]);
   const socketRef = useRef();
   const auth = useSelector(state => state.auth)
-  const token = useSelector(state => state.token)
-  const unread = useSelector(state => state.unread)
-  const chats = useSelector(state => state.projects.projects)
+
 
   const senderId = auth.user._id
-  const dispatch = useDispatch()
 
   useEffect(() => {
     socketRef.current = socketIOClient(SOCKET_SERVER_URL, {
@@ -210,6 +207,28 @@ function Chat(props) {
 // )
 // }
 
+function RenderMyMsgDate(props) {
+  const m = new Date(props.was)
+  return(
+      <div className="my-msg-date">
+          {
+                 m.getUTCHours() + ":" + m.getUTCMinutes() + ":" + m.getUTCSeconds() + " " +  m.getUTCFullYear() +"/"+ (m.getUTCMonth()+1) +"/"+ m.getUTCDate() 
+          }
+      </div>
+  )
+}
+
+function RenderMsgDate(props) {
+  const m = new Date(props.was)
+  return(
+      <div className="msg-date">
+          {
+                 m.getUTCHours() + ":" + m.getUTCMinutes() + ":" + m.getUTCSeconds() + " " +  m.getUTCFullYear() +"/"+ (m.getUTCMonth()+1) +"/"+ m.getUTCDate() 
+          }
+      </div>
+  )
+}
+
 
 function RenderMsg(props) {
   const divRef = useRef(null);
@@ -233,12 +252,17 @@ function RenderMsg(props) {
                 {props.WhatMesShow?.user?.nickname ? props.WhatMesShow?.user?.nickname : props.WhatMesShow?.user?.email}
               </Link>
               <div className="msg-body-text">
-                {props.WhatMesShow.body}
+                <div>{props.WhatMesShow.body}</div>
+                <RenderMsgDate was={props.WhatMesShow.wascreated}/>
+
               </div>
             </div>
           </div> :
           <div className="my-msg">
-            <div className="my-msg-text">{props.WhatMesShow.body}</div>
+            <div className="my-msg-text">
+              <div>{props.WhatMesShow.body}</div>
+              <RenderMyMsgDate was={props.WhatMesShow.wascreated}/>
+            </div>
             <div className="my-msg-control">
               <button className="edit" onClick={() => {props.seteditingId(props.WhatMesShow._id); props.seteditingInput(props.WhatMesShow.body)}}><FaEdit /></button>
               <button className="drop" onClick={() => {props.DeleteMsg(props.WhatMesShow._id); props.setrmediting(!props.rmediting)}}><FaTrash /></button>

@@ -159,7 +159,7 @@ function EditTask(props) {
         sendObj.priority = priorityOption.value
         sendObj.type = typesOption.value
         sendObj.images = photos
-        axios.patch(`/api/task/update/${taskId}`, sendObj, {
+        axios.put(`/api/task/update/${taskId}`, sendObj, {
             headers: { Authorization: token }
         }).then(d => {
             if(d.data.success) {
@@ -197,7 +197,9 @@ function EditTask(props) {
 
     return (
         <div className="task-form">
-            <Link className="task-form-link" to={`/project/${projectLink}/task/${taskId}`} ><FaArrowLeft /> Back</Link>
+            <span className="task-form-link" onClick={() => {
+                props.history.goBack()
+            }}><FaArrowLeft /> Back</span>
             <div className="task-form-title">Edit task</div>
             <div className="task-form-row">
                 <div className="task-form-row-title">Title</div>

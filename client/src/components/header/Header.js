@@ -5,7 +5,7 @@ import {dispatchSetChatAction} from '../../redux/actions/chatAction'
 
 import axios from 'axios'
 import { BiMenu} from 'react-icons/bi';
-import { RiMessage2Fill } from 'react-icons/ri';
+import { RiMessage2Fill, RiCalendar2Fill } from 'react-icons/ri';
 // import Chat from "../body/project/chat/Chat"
 
 function Header(props) {
@@ -39,7 +39,9 @@ function Header(props) {
                 </div>
                 <div className="header-body-content-right">
                     <Link className="acc-control" to="/settings" ><img src={user.avatar}></img></Link>
-                    <Link to="/" onClick={handleLogout}>Sign out</Link>
+                    <Link  className="link" to="/" onClick={handleLogout}>Sign out</Link>
+                    <button className={"open-chat-btn "+ (unread.unread.length ? "unread-animation-btn" : "")} onClick={() => setOpenChat()}><RiMessage2Fill/></button >
+                    <Link to="/calendar" className="open-chat-btn" ><RiCalendar2Fill/></Link>
                 </div>
             </div>
         )
@@ -50,8 +52,8 @@ function Header(props) {
                 <div className="header-body-content-left">
                 </div>
                 <div className="header-body-content-right">
-                    <Link to="/login" >Login</Link>
-                    <Link to="/register" >Register</Link>
+                    <Link className="link" to="/login" >Login</Link>
+                    <Link  className="link" to="/register" >Register</Link>
                 </div>
             </div>
         )
@@ -73,9 +75,6 @@ function Header(props) {
             {isLogged ? 
                 Logged() : 
                 notLogged()}
-            { isLogged ?
-                <button className={"open-chat-btn "+ (unread.unread.length ? "unread-animation-btn" : "")} onClick={() => setOpenChat()}><RiMessage2Fill/></button > :null
-            }
             </header>
             {/* <Chat isshow={ isLogged && showchat} /> */}
         </div>

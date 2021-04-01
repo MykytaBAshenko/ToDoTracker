@@ -14,6 +14,7 @@
     background-color: #1B1E24;
 }
 
+
 .new-task-photo-control div img{
     max-height: 246px;
     max-width: 100%;
@@ -54,7 +55,7 @@ cursor: pointer;
     font-weight: bold;
     font-size: 24px
 }
-.task-form-row .task-form-row-title{
+.deadline-row .task-form-row-title, .task-form-row .task-form-row-title{
     font-size: 18px;
     font-weight: bold;
     
@@ -81,6 +82,13 @@ cursor: pointer;
 
 }
 
+.react-datetime-picker__wrapper{
+    background-color: white;
+    font-size: 16px;
+    border: 0px!important;
+    padding: 5px;
+}
+
 .task-form-row textarea{
     width: 100%;
     border: 0;
@@ -88,4 +96,9 @@ cursor: pointer;
     font-size: 18px;
     font-family: 'Roboto', sans-serif;
     resize: none;
+}
+
+.deadline_is_seted{
+    display: flex;
+    gap: 10px;
 }

@@ -86,7 +86,7 @@ function Task(props) {
     }
 
     const setWorker = (v) => {
-        axios.put(`/api/task/${taskId}`, { setworker: v }, {
+        axios.patch(`/api/task/${taskId}`, { setworker: v }, {
             headers: { Authorization: token }
         }).then(d => {
             if (d.data.success)
@@ -110,7 +110,9 @@ function Task(props) {
         !ShowPhoto ?
             <>
             <div className="task-body">
-            <Link className="task-form-link" to={`/project/${projectLink}`} ><FaArrowLeft /> Back</Link>
+            <span className="task-form-link" onClick={() => {
+                props.history.goBack()
+            }} ><FaArrowLeft /> Back</span>
                 
                 <div className="task-body-exact">
                     <div className="task-body-title">

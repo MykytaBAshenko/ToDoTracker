@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useHistory } from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 import { Link } from 'react-router-dom'
@@ -12,17 +12,19 @@ import { Editor } from 'react-draft-wysiwyg';
 import Dropzone from 'react-dropzone';
 import { FaPlus, FaArrowLeft  } from 'react-icons/fa'
 import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
+import DateTimePicker from 'react-datetime-picker';
 
 function Newtask(props) {
     const auth = useSelector(state => state.auth)
     const projectLink = props.match.params.projectLink;
+    const [deadline, setdeadline] = useState(new Date());
+    const [isdeadline, setisdeadline] = useState(false)
     const token = useSelector(state => state.token)
     const { isLogged, isAdmin } = auth
     const [title, settitle] = useState("")
     const [body, setbody] = useState("");
     const [photos, setphotos] = useState([])
     const [type, settype] = useState()
-
     const [priorityOption, setpriorityOption] = useState(how_task_is_needed[3])
     const [typesOption, settypesOption] = useState(types_of_task[1])
 
@@ -116,7 +118,11 @@ function Newtask(props) {
         sendObj.priority = priorityOption.value
         sendObj.type = typesOption.value
         sendObj.images = photos
-
+        if(isdeadline)
+        sendObj.deadline = deadline.getTime()
+        else
+        sendObj.deadline = 0
+        console.log(sendObj)
         axios.post(`/api/task/create/${projectLink}`, sendObj, {
             headers: { Authorization: token }
         }).then(d => {
@@ -156,7 +162,11 @@ function Newtask(props) {
 
     return (
         <div className="task-form">
-            <Link className="task-form-link" to={`/project/${projectLink}`} ><FaArrowLeft /> Back</Link>
+
+            
+            <span className="task-form-link" onClick={() => {
+                props.history.goBack()
+            }} ><FaArrowLeft /> Back</span>
             <div className="task-form-title">Create new task</div>
             <div className="task-form-row">
                 <div className="task-form-row-title">Title</div>
@@ -219,6 +229,20 @@ function Newtask(props) {
                     })}
                 />
             </div>
+            <div className="deadline-row">
+                <div className="task-form-row-title">Deadline</div>
+                {!isdeadline ? <button className="black-btn" onClick={() => setisdeadline(!isdeadline)}>Set deadline</button> : <div className="deadline_is_seted">
+                <DateTimePicker
+                    onChange={setdeadline}
+                    value={deadline}
+                    locale="en-EN"
+                />
+                <button className="black-btn" onClick={() => setisdeadline(!isdeadline)}>Remove deadline</button>
+                </div>
+                }
+                {/* {console.log(deadline)} */}
+            </div>
+
             <div className="task-form-row">
                 <div className="task-form-row-title">Photos</div>
             <div className="new-task-photo-control">

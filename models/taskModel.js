@@ -43,6 +43,10 @@ const projectSchema = new mongoose.Schema({
     images: {
         type: Array,
         default: []
+    },
+    deadline: {
+        type: Number,
+        default: 0
     }
 }, {
     timestamps: true

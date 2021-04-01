@@ -20,6 +20,10 @@ const messageSchema = new mongoose.Schema({
         type: Array,
         default: []
     },
+    wascreated: {
+        type: Number,
+        default: 0
+    }
 }, {
     timestamps: true
 })

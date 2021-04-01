@@ -41,7 +41,7 @@ span.span{
     
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
-    background: #0aa6998f; 
+    background: rgba(10, 166, 153, .5); 
     }
     
     .green-btn{
@@ -132,4 +132,69 @@ span.span{
 }
         } */
 
-       
+        .react-datetime-picker__button:enabled:hover .react-datetime-picker__button__icon, .react-datetime-picker__button:enabled:focus .react-datetime-picker__button__icon{
+            stroke: #0aa699 !important;
+        }
+
+        .react-date-picker__button:enabled:hover .react-date-picker__button__icon, .react-date-picker__button:enabled:focus .react-date-picker__button__icon{
+            stroke: #0aa699 !important;
+
+        }
+        .react-calendar{
+            font-weight: bold !important;
+            color: #1B1E24 !important;
+        }
+
+        .react-calendar__tile--active{
+            background-color: #0aa699 !important;
+        }
+        .react-calendar__navigation button{
+            font-weight: bold !important;
+
+            font-size: 20px;
+        }
+
+        .react-calendar__tile--now{
+            background-color: #f35958 !important;
+            color: white !important;
+        }
+
+        .react-calendar__tile:enabled:hover, .react-calendar__tile:enabled:focus{
+            background-color: #1B1E24 !important;
+            color: white  !important;
+        }
+
+        .react-calendar__year-view__months *{
+            /* font-size:16px !important; */
+            font-weight: bold;
+        }
+
+        .react-calendar{
+            border: 0 !important;
+        }
+
+        .react-datetime-picker__calendar{
+            margin-top: 10px;
+        }
+        .react-date-picker__calendar{
+            margin-top: 10px;
+
+        }
+        .date-picker{
+            padding: 5px;
+            background-color: white;
+            border: 0px  !important;
+        }
+        .react-date-picker__wrapper{
+            border: 0px  !important;
+
+        }
+
+        .react-calendar__navigation button:hover{
+            background-color: #1B1E24 !important;
+            color: white;
+        }
+        .react-date-picker *{
+            font-weight: bold;
+
+        }
