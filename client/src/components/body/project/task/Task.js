@@ -24,6 +24,7 @@ function Task(props) {
     const [ShowPhoto, setShowPhoto] = useState(false)
     const [deletebtn, setdeletebtn] = useState(false)
     const auth = useSelector(state => state.auth)
+    const [deadline, setdeadline] = useState(0)
 
     const set_vals = (task) => {
         settitle(task.title)
@@ -34,6 +35,7 @@ function Task(props) {
         setupdatedAt(task.updatedAt)
         setimages(task.images)
         setuser(task.user)
+        setdeadline(task.deadline)
     }
     useEffect(() => {
         axios.get(`/api/task/one/${taskId}`, {
@@ -145,18 +147,35 @@ function Task(props) {
                             </div>
                             <div className="task-body-update-info">
                                 Last update: {
-                                    updatedAt.replace('-', '.').replace('-', '.').substring(0, 10)
+                                ((new Date(updatedAt)).getUTCDate()+"."+((new Date(updatedAt)).getUTCMonth()+1)+"."+(new Date(updatedAt)).getUTCFullYear())
+
                                 }
                             </div>
+                            {deadline ?
+                            <div className="task-body-update-info">
+                                Deadline: {
+                                // ((new Date(updatedAt)).getUTCDate()+"."+((new Date(updatedAt)).getUTCMonth()+1)+"."+(new Date(updatedAt)).getUTCFullYear())
+                                ((new Date(deadline)).getUTCDate()+"."+((new Date(deadline)).getUTCMonth()+1)+"."+(new Date(deadline)).getUTCFullYear()+" "+(new Date(deadline)).getUTCHours()+"."+(new Date(deadline)).getUTCMinutes())
+
+                                }
+                            </div> : null
+                            }
                         </div>
                         {user ?
+                        <div className="worker-field">
+                            <div className="worker-field-title">
+                                Who is working on task?
+                            </div>
                             <div className="task-body-worker">
+                                
                                 <div className="task-body-worker-img-body">
                                     <img src={user.avatar}></img>
                                 </div>
+                                
                                 <div>{user.email}</div>
 
-                            </div> : <></>
+                            </div>
+                        </div> : null
                         }
                     </div>
                 </div>
@@ -173,9 +192,9 @@ function Task(props) {
                     }
                     <Link className="black-btn" to={`/project/${projectLink}/task/${taskId}/edit`} >Edit</Link>
                     {auth?.user._id == user?._id ?
-                        <button className="green-btn" onClick={() => setWorker(false)}>Remove me from charge</button>
+                        <button className="green-btn" onClick={() => setWorker(false)}>Abandon the task</button>
                         :
-                        <button className="green-btn" onClick={() => setWorker(true)}>Put me in charge</button>
+                        <button className="green-btn" onClick={() => setWorker(true)}>Take task</button>
                     }
 
                 </div>

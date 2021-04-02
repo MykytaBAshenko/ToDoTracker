@@ -14,13 +14,14 @@
   display: flex;
   flex-wrap: wrap;
   position: relative;
+  margin:10px;
+  gap: 10px;
 }
 
 .dashboard_project-card {
   display: flex;
   padding: 10px;
   max-width: 350px;
-  margin:10px;
   width: 100%;
   flex-direction: column;
   background-color: #1B1E24;

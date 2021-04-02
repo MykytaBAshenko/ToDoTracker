@@ -33,6 +33,7 @@ code {
 .App{
   /* background-image: radial-gradient(circle farthest-corner at 10% 30%, rgba(70, 168, 255, 0.8) 0, #e88eff 90%); */
   max-width: 100%;
+  transition: 1s;
 }
 
 a{

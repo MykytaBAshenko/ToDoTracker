@@ -37,8 +37,8 @@ function Body(props) {
                 </Switch>
                 <div className={(props.history.location.pathname.indexOf("/project/") == -1 ?  (chat_active ? "overflow-hidden" : "overflow-auto") : "")}>
                     <Switch>
-                        <Route path="/" component={isLogged ? Dashboard : Login} exact />
-                        <Route path="/dashboard" component={isLogged ? Dashboard : Login} exact />
+                        <Route path="/" component={isLogged ? Calendar : Login} exact />
+                        <Route path="/projects" component={isLogged ? Dashboard : Login} exact />
                         <Route path="/new" component={isLogged ? Newproject : Login} exact />
                         <Route path="/project/:projectLink" component={isLogged ? Project : Login}/>
                         <Route path="/login" component={!isLogged ? Login : Dashboard} exact />

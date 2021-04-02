@@ -111,10 +111,11 @@
     grid-template-columns: auto auto;
 }
 .task-body-meta-body-left{
-    height: 55px;
+    min-height: 80px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 2px;   
+    justify-content: center;
 }
 .comments-section-title{
     font-size: 25px;
@@ -124,6 +125,10 @@
 
 .comment-body{
 
+}
+.worker-field{
+    display: flex;
+    flex-direction: column;
 }
 
 .comment-body{
@@ -229,4 +234,9 @@
 
 .task-form-link:hover{
     border-bottom: 2px solid #1B1E24;
+}
+
+.worker-field-title{
+    font-weight: bold;
+    font-size: 20px;
 }

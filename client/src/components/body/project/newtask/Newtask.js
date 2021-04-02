@@ -235,6 +235,7 @@ function Newtask(props) {
                 <DateTimePicker
                     onChange={setdeadline}
                     value={deadline}
+                    format="dd-MM-y h:mm"
                     locale="en-EN"
                 />
                 <button className="black-btn" onClick={() => setisdeadline(!isdeadline)}>Remove deadline</button>

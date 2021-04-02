@@ -29,3 +29,65 @@
     cursor: pointer;
 
 }
+.calendar-header{
+    display: flex;
+    gap: 10px;
+}
+
+.calendar-header .calendar-select{
+    width: 250px;
+    font-weight: bold;
+}
+.calendar-cell-task{
+    background-color: white;
+
+}
+
+.calendar-cell-tasks-map{
+    padding: 0 5px 5px;
+    display: flex;
+    gap: 5px;
+    align-items: flex-start;
+    flex-direction: column;
+}
+.calendar-cell-task{
+    padding: 4px 10px 4px 6px;
+    display: flex;
+    font-weight: bold;
+    align-items: center;
+    justify-items: center;
+    gap: 5px;
+}
+.calendar-task-title{
+
+}
+
+.calendar-cell-task .icon-shell{
+    background-color: #1B1E24;
+    padding: 4px;
+    border-radius: 50%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+.calendar-cell-task .icon-shell svg{
+    height: 12px;
+    width: 12px;
+}
+
+.priority-high{
+    background-color: #f35958;
+}
+
+.priority-medium{
+    background-color: orange;
+}
+
+.priority-low{
+    background-color: green;
+}
+
+.calendar-cell-time{
+    font-size: 10px ;
+}

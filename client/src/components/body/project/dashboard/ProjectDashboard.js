@@ -8,17 +8,6 @@ import how_task_is_needed from "../../../global_vars/how_task_is_needed"
 import task_state from "../../../global_vars/task_state"
 
 
-function RenderDeadLine(props) {
-    const m = new Date(props.dead)
-    return(
-        <div className="update-info">
-            Deadline: {
-                   m.getUTCFullYear() +"/"+ (m.getUTCMonth()+1) +"/"+ m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes() + ":" + m.getUTCSeconds()
-            }
-        </div>
-    )
-}
-
 
 function ProjectDashboard(props) {
     const [search, setsearch] = useState("")
@@ -183,11 +172,17 @@ function ProjectDashboard(props) {
                                 return <div key={i + Math.random()}>{state.label}</div>
                         })}
                         { t.deadline ?
-                        <RenderDeadLine dead={t.deadline}/> : null
+                        <div className="update-info">
+                            Deadline: {
+                                ((new Date(t.deadline)).getUTCDate()+"."+((new Date(t.deadline)).getUTCMonth()+1)+"."+(new Date(t.deadline)).getUTCFullYear()+" "+(new Date(t.deadline)).getUTCHours()+"."+(new Date(t.deadline)).getUTCMinutes())
+                            }
+                        </div> : null
+
                         }
                         <div className="update-info">
                             Last update: {
-                                t.updatedAt.replace('-', '/').replace('-', '/').substring(0, 10)
+                                ((new Date(t.updatedAt)).getUTCDate()+"."+((new Date(t.updatedAt)).getUTCMonth()+1)+"."+(new Date(t.updatedAt)).getUTCFullYear())
+
                             }
                         </div>
                     </div>

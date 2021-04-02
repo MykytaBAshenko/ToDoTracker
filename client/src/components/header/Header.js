@@ -7,6 +7,7 @@ import axios from 'axios'
 import { BiMenu} from 'react-icons/bi';
 import { RiMessage2Fill, RiCalendar2Fill } from 'react-icons/ri';
 // import Chat from "../body/project/chat/Chat"
+import {AiFillProject} from 'react-icons/ai';
 
 function Header(props) {
     const dispatch = useDispatch()
@@ -42,6 +43,7 @@ function Header(props) {
                     <Link  className="link" to="/" onClick={handleLogout}>Sign out</Link>
                     <button className={"open-chat-btn "+ (unread.unread.length ? "unread-animation-btn" : "")} onClick={() => setOpenChat()}><RiMessage2Fill/></button >
                     <Link to="/calendar" className="open-chat-btn" ><RiCalendar2Fill/></Link>
+                    <Link to="/projects" className="open-chat-btn"><AiFillProject/></Link>
                 </div>
             </div>
         )
