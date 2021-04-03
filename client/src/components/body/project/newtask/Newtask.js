@@ -1,7 +1,4 @@
-import React, { useState, useEffect, useHistory } from 'react'
-import { Switch, Route } from 'react-router-dom'
-
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import types_of_task from "../../../global_vars/types_of_task"
@@ -20,15 +17,12 @@ function Newtask(props) {
     const [deadline, setdeadline] = useState(new Date());
     const [isdeadline, setisdeadline] = useState(false)
     const token = useSelector(state => state.token)
-    const { isLogged, isAdmin } = auth
     const [title, settitle] = useState("")
     const [body, setbody] = useState("");
     const [photos, setphotos] = useState([])
-    const [type, settype] = useState()
     const [priorityOption, setpriorityOption] = useState(how_task_is_needed[3])
     const [typesOption, settypesOption] = useState(types_of_task[1])
 
-    const [typesoftask, settypesoftask] = useState({})
     
 
     const priorityChange = priorityOption => {
@@ -241,7 +235,6 @@ function Newtask(props) {
                 <button className="black-btn" onClick={() => setisdeadline(!isdeadline)}>Remove deadline</button>
                 </div>
                 }
-                {/* {console.log(deadline)} */}
             </div>
 
             <div className="task-form-row">

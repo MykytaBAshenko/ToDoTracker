@@ -162,6 +162,7 @@ const taskCtrl = {
                 task[0].priority = req.body.priority
                 task[0].type = req.body.type
                 task[0].images = req.body.images
+                task[0].deadline = req.body.deadline
                 await task[0].save()
 
                 return res.json({ success: true, msg: "Task udated." })

@@ -198,3 +198,10 @@ span.span{
             font-weight: bold;
 
         }
+
+        .react-datetime-picker__clear-button{
+            display: none  !important;
+        }
+        .react-date-picker__clear-button{
+            display: none  !important;
+        } 

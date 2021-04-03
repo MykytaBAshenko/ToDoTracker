@@ -12,7 +12,6 @@ const calendarCtrl = {
     }, 
     getCalendar: async(req,res) => {
         try {
-            console.log(req.user, req.query)
             let search_task_obj = {
                 $and: [ 
                     {deadline: {$gte: req.query.minTime}},
@@ -31,9 +30,18 @@ const calendarCtrl = {
                 res.json({success:true, tasks})
             }
         }
-        // {age : {$lt : 19}}
-        // {age : {$gte : 22}}
-        //{ }
+        catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        }
+    },
+    checkIfExistEmail: async(req, res) => {
+        try {
+            const user = await Users.findOne({ email: req.body.email }).select('-password')
+            if(user)
+                return res.json({success: true, user, msg: "User exist."})
+            return res.json({success: false, msg: "User does not exist."})
+        }
         catch (err) {
             console.log(err)
             return res.json({ success: false, msg: "Something broke." })

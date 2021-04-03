@@ -62,6 +62,10 @@
 
 }
 
+
+.calendar-cell-task .icon-shell{
+    display: inline;
+}
 .calendar-cell-task .icon-shell{
     background-color: #1B1E24;
     padding: 4px;
@@ -90,4 +94,16 @@
 
 .calendar-cell-time{
     font-size: 10px ;
+}
+
+.task-form-row-add-users{
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+}
+
+.task-form-row-add-users input{
+    padding: 5px;
+    width: 250px;
+    font-size: 16px;
 }

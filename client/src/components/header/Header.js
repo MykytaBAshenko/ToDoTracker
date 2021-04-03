@@ -32,6 +32,8 @@ function Header(props) {
     const setOpenChat = () => {
         dispatch(dispatchSetChatAction(!chat_active))
     }
+    
+
 
     const Logged = () => {
         return (
@@ -39,11 +41,11 @@ function Header(props) {
                 <div className="header-body-content-left">
                 </div>
                 <div className="header-body-content-right">
-                    <Link className="acc-control" to="/settings" ><img src={user.avatar}></img></Link>
+                    <Link onClick={() => {chat_active && setOpenChat()}} className="acc-control" to="/settings" ><img src={user.avatar}></img></Link>
                     <Link  className="link" to="/" onClick={handleLogout}>Sign out</Link>
-                    <button className={"open-chat-btn "+ (unread.unread.length ? "unread-animation-btn" : "")} onClick={() => setOpenChat()}><RiMessage2Fill/></button >
-                    <Link to="/calendar" className="open-chat-btn" ><RiCalendar2Fill/></Link>
-                    <Link to="/projects" className="open-chat-btn"><AiFillProject/></Link>
+                    <button  className={"open-chat-btn "+ (unread.unread.length ? "unread-animation-btn" : "")} onClick={() => setOpenChat()}><RiMessage2Fill/></button >
+                    <Link  onClick={() => {chat_active && setOpenChat()}} to="/calendar" className="open-chat-btn" ><RiCalendar2Fill/></Link>
+                    <Link  onClick={() => {chat_active && setOpenChat()}} to="/projects" className="open-chat-btn"><AiFillProject/></Link>
                 </div>
             </div>
         )
@@ -66,7 +68,7 @@ function Header(props) {
         <div className="header-chat-container">
         <header className="header">
             {isLogged ? 
-            <div>
+            <div  onClick={() => {chat_active && setOpenChat()}}>
                 {
                     props?.showleftcontrol && !chat_active ? 
                 <button className="header-menu-btn" onClick={() => props?.changeVisibilityMenu()}><BiMenu/></button>

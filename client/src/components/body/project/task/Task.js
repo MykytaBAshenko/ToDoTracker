@@ -154,9 +154,7 @@ function Task(props) {
                             {deadline ?
                             <div className="task-body-update-info">
                                 Deadline: {
-                                // ((new Date(updatedAt)).getUTCDate()+"."+((new Date(updatedAt)).getUTCMonth()+1)+"."+(new Date(updatedAt)).getUTCFullYear())
                                 ((new Date(deadline)).getUTCDate()+"."+((new Date(deadline)).getUTCMonth()+1)+"."+(new Date(deadline)).getUTCFullYear()+" "+(new Date(deadline)).getUTCHours()+"."+(new Date(deadline)).getUTCMinutes())
-
                                 }
                             </div> : null
                             }
@@ -172,7 +170,7 @@ function Task(props) {
                                     <img src={user.avatar}></img>
                                 </div>
                                 
-                                <div>{user.email}</div>
+                                <div className="task-body-worker-text"><span>{user.nickname}</span><br/>{user.email}</div>
 
                             </div>
                         </div> : null

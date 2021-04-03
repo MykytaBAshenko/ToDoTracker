@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Switch, Route } from 'react-router-dom'
-
+import DateTimePicker from 'react-datetime-picker';
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
@@ -24,8 +24,9 @@ function EditTask(props) {
     const [title, settitle] = useState("")
     const [body, setbody] = useState("");
     const [photos, setphotos] = useState([])
-    const [type, settype] = useState()
-
+    const [deadline, setdeadline] = useState()
+    const [isdeadline, setisdeadline] = useState(false)
+    
     const [priorityOption, setpriorityOption] = useState(how_task_is_needed[3])
     const [typesOption, settypesOption] = useState(types_of_task[1])
     const [stateOption,setstateOption] = useState(task_state[3])
@@ -127,6 +128,14 @@ function EditTask(props) {
                 settypesOption(t)
         })
         setphotos(task.images)
+        if(task.deadline) {
+            setisdeadline(true)
+            setdeadline(new Date(task.deadline))
+        }
+        else {
+            setisdeadline(false)
+            setdeadline(new Date())    
+        }
     }
     useEffect(() => {
         axios.get(`/api/task/one/${taskId}`, {
@@ -159,6 +168,11 @@ function EditTask(props) {
         sendObj.priority = priorityOption.value
         sendObj.type = typesOption.value
         sendObj.images = photos
+        if(isdeadline)
+            sendObj.deadline = deadline.getTime()
+        else
+            sendObj.deadline = 0
+
         axios.put(`/api/task/update/${taskId}`, sendObj, {
             headers: { Authorization: token }
         }).then(d => {
@@ -287,6 +301,19 @@ function EditTask(props) {
                         },
                     })}
                 />
+            </div>
+            <div className="deadline-row">
+                <div className="task-form-row-title">Deadline</div>
+                {!isdeadline ? <button className="black-btn" onClick={() => setisdeadline(!isdeadline)}>Set deadline</button> : <div className="deadline_is_seted">
+                <DateTimePicker
+                    onChange={setdeadline}
+                    value={deadline}
+                    format="dd-MM-y h:mm"
+                    locale="en-EN"
+                />
+                <button className="black-btn" onClick={() => setisdeadline(!isdeadline)}>Remove deadline</button>
+                </div>
+                }
             </div>
             <div className="task-form-row">
                 <div className="task-form-row-title">Photos</div>

@@ -30,7 +30,7 @@ function Dashboard(props) {
     return (
         <div className="dashboard_page">
             <div className="dashboard_page-control">
-                <Link className="black-btn" to="/new">Create new project</Link>
+                <Link className="black-btn" to="/projects/new">Create new project</Link>
                 <input type="text" value={search} onChange={e=> setsearch(e.target.value)} />
             </div>
             <div className="dashboard_projects">

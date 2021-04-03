@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Select from 'react-select';
 import task_state from "../global_vars/task_state"
 import types_of_task from "../global_vars/types_of_task"
+import { Link } from 'react-router-dom'
 
 
 
@@ -127,6 +128,7 @@ function Calendar(props) {
                     },
                 })}
             />
+            <Link className="black-btn" to="/calendar/new">Create something</Link>
         </div>
             <div className="calendar-grid">
                 {
@@ -172,12 +174,10 @@ function Calendar(props) {
                                         <div className="calendar-cell-tasks-map">
                                         {
                                             show_day_tasks.map((t, i) => <div className={`calendar-cell-task priority-${t.priority}`} key={i}>
-                                                    <div className="icon-shell">
                                                         {types_of_task.map(state => {
                                                             if (state.value == t.type)
-                                                                return state.icon
+                                                                return <div className="icon-shell" key={Math.random()}>{state.icon}</div>
                                                         })}
-                                                    </div>
                                                     <div className="calendar-task-title">
                                                         {
                                                             t.title.length > 10 ? 

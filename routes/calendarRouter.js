@@ -7,6 +7,8 @@ const auth = require('../middleware/auth')
 // router.put('/:taskId/comment/:commentId',auth, commentsCtrl.upadteComment)
 
 router.get('/', auth, calendarCtrl.getCalendar)
+router.post('/checkemail', auth, calendarCtrl.checkIfExistEmail)
+
 
 
 
