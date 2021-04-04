@@ -65,6 +65,11 @@
 box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.43);
 }
 
+
+.ShowInnerSelectorBodyPrior .select-text{
+    font-size: 12px;
+}
+
 .calendar-cell-tasks-map{
     padding: 5px 5px 5px;
     display: flex;
@@ -166,4 +171,134 @@ box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.43);
 }
 .user_for_meeting-show svg:hover{
     fill: #f35958;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.ShowInner{
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+.ShowInnerSelectorHeader{
+    display: flex;
+    padding: 5px;
+    justify-content: space-between;
+}
+.ShowInnerSelectorHeaderBack{
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    font-weight: bold;
+    gap: 5px;
+    align-self: flex-start;
+    align-items: center;
+    padding: 0 5px 0 0 ;
+    border-bottom: 2px solid transparent;
+}
+
+
+.ShowInnerSelectorHeaderBack:hover{
+    color: #0aa699;
+}
+.ShowInnerSelectorHeaderBack:hover svg{
+    fill: #0aa699;
+}
+
+.ShowInnerSelectorHeaderBack svg{
+    height: 15px;
+    width: 15px;
+}
+.ShowInnerSelectorHeaderDate{
+    font-size: 20px;
+    font-weight: bold;
+
+}
+.ShowInnerSelectorBodyBottom{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ShowInnerSelectorBodyBottom span{
+    justify-self: right;
+}
+.ShowInnerSelector{
+    color: white;
+    height: calc(100vh - 60px);
+    overflow:auto;
+    background-color: #1B1E24;
+}
+.ShowInner{
+    height: calc(100vh - 60px);
+}
+.ShowInnerSelectorBody{
+    padding-bottom: 5px;
+}
+.ShowInnerSelectorBodyTitle{
+    font-size: 25px;
+    font-weight: bold;
+    width: 100%;
+    padding-bottom: 5px;
+}
+.ShowInnerSelectorBodySelectTitle{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.ShowInnerSelectorBodySelectTitle span{
+    align-self: flex-end;
+    font-size: 12px;
+}
+.ShowInnerSelectorBodySelectTop{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}   
+.ShowInnerSelectorBodySelect{
+    padding: 5px;
+    background-color: white;
+    color: #1B1E24;
+    font-weight: bold;
+    width: 300px;
+    flex-direction: column;
+    display: flex;
+}
+
+.ShowInnerSelectorBodySelect svg{
+    width: 30px;
+    height: 30px;
+}
+.ShowInnerSelectorBodyMap{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.ShowInnerSelector{
+    padding: 5px;
+    overflow:auto;
+}
+
+.ShowInnerSelectorBodyProjectName{
+    font-size: 12px;
+}
+
+
+.ShowInnerSelectorBodySelect{
+    transition: .5s;
+    cursor: pointer;
+}
+.ShowInnerSelectorBodySelect:hover{
+    background-color: #0aa699;
+
 }
