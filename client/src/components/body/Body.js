@@ -37,7 +37,7 @@ function Body(props) {
                     <Route path="/project/:projectLink" component={isLogged ? null : Header}/>
                     <Route path="*" component={Header} />
                 </Switch>
-                <div className={(props.history.location.pathname.indexOf("/project/") == -1 ?  (chat_active ? "overflow-hidden" : "overflow-auto") : "")}>
+                <div className={(props.history.location.pathname.indexOf("/project/") == -1 ?  (chat_active ? "display-none" : "overflow-auto") : "")}>
                     <Switch>
                         <Route path="/" component={isLogged ? Calendar : Login} exact />
                         <Route path="/projects" component={isLogged ? Dashboard : Login} exact />

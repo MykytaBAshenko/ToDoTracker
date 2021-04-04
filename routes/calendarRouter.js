@@ -8,6 +8,9 @@ const auth = require('../middleware/auth')
 
 router.get('/', auth, calendarCtrl.getCalendar)
 router.post('/checkemail', auth, calendarCtrl.checkIfExistEmail)
+router.post('/new', auth, calendarCtrl.createNewCalendar)
+router.post('/uploadphoto', auth, calendarCtrl.uploadImage)
+
 
 
 

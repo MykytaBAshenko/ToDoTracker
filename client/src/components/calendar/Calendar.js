@@ -7,6 +7,7 @@ import Select from 'react-select';
 import task_state from "../global_vars/task_state"
 import types_of_task from "../global_vars/types_of_task"
 import { Link } from 'react-router-dom'
+import calendar_type from '../global_vars/calendar_type'
 
 
 
@@ -19,6 +20,7 @@ function Calendar(props) {
     const [how_many_days, sethow_many_days] = useState()
     const [first_day, setfirst_day] = useState()
     const [last_day, setlast_day] = useState()
+    const [calendar, setcalendar] = useState([])
     const current_day = new Date()
     const token = useSelector(state => state.token)
     const projects = useSelector(state => state.projects.projects)
@@ -80,14 +82,15 @@ function Calendar(props) {
 
 
     useEffect(()=> {
-        // (new Date(last_day?.getTime() + 24* 60*60*1000-1)))
         if(first_day?.getTime() && last_day?.getTime())
         axios.get(`/api/calendar?minTime=${first_day ? first_day?.getTime() : 0}&maxTime=${last_day ? (last_day?.getTime() + 24* 60*60*1000) : 0}&selected=${select_project.value}`, {
             headers: { Authorization: token }
         }).then(d => {
             console.log(d)
-            if(d.data.success)
-            settasks(d.data.tasks)
+            if (d.data.success) {
+                settasks(d.data.tasks)
+                setcalendar(d.data.calendar)
+            }
         })
         
     },[last_day, first_day, select_project])
@@ -160,9 +163,19 @@ function Calendar(props) {
                                             show_day_tasks.push(tasks[y])
                                         }
                                     }
+                                    let show_calendar = []
+                                    for(let g = 0; g < calendar.length; g++) {
+                                        if(calendar[g].date >= output_date.getTime() && calendar[g].date < (output_date.getTime() + 86400000)) {
+                                            show_calendar.push(calendar[g])
+                                        }
+                                    }
+                                    show_calendar.sort(function (a, b) {
+                                        return a.date - b.date
+
+                                    })
                                     show_day_tasks.sort(function (a, b) {
                                         return a.deadline - b.deadline;
-                                      })
+                                    })
                                     return <div className={"calendar-cell " + ((
                                         current_day.getFullYear() == output_date.getFullYear() &&
                                         current_day.getMonth() == output_date.getMonth() &&
@@ -173,6 +186,24 @@ function Calendar(props) {
                                         </div>
                                         <div className="calendar-cell-tasks-map">
                                         {
+                                            show_calendar.map((c, i) => <div className={`calendar-cell-task priority-${c.priority}` } key={i}>
+                                                    {calendar_type.map(state => {
+                                                        if (state.value == c.type)
+                                                            return <div className="icon-shell" key={Math.random()}>{state.icon}</div>
+                                                    })}
+                                                <div className="calendar-task-title">
+                                                    {
+                                                        c.title.length > 10 ? 
+                                                        c.title.substring(0,10)+"...":
+                                                        c.title
+                                                    }
+                                                </div>
+                                                <div className="calendar-cell-time">
+                                                    {((new Date(c.date)).getHours())+"."+(new Date(c.date)).getMinutes()}
+                                                </div>
+                                            </div>)
+                                            }
+                                            {
                                             show_day_tasks.map((t, i) => <div className={`calendar-cell-task priority-${t.priority}`} key={i}>
                                                         {types_of_task.map(state => {
                                                             if (state.value == t.type)
@@ -189,6 +220,7 @@ function Calendar(props) {
                                                         {((new Date(t.deadline)).getHours())+"."+(new Date(t.deadline)).getMinutes()}
                                                     </div>
                                                 </div>)
+                                            
                                         }
                                         </div>
                                     </div>

@@ -169,7 +169,6 @@ const taskCtrl = {
             }
             return res.json({ success: false, msg: "Task does not exist." })
         } catch (err) {
-            console.log(1)
             console.log(err)
             return res.json({ success: false, msg: "Something broke." })
         }

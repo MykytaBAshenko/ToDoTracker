@@ -15,19 +15,40 @@
 }
 
 .calendar-cell-header{
-    padding: 5px;
+    padding: 5px 5px 0;
     color: white;
     font-weight: bold;
 }
 
-.calendar-cell.active{
-    background-color: rgba(27, 30, 36, .95);
+
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
-.calendar-cell:hover {
-    background-color: #0aa699;
-    cursor: pointer;
+.calendar-cell.active{
+	background: linear-gradient(-45deg, #7d1e01, #732644, #00364a, #781c00);
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+}
 
+.calendar-cell:hover ,.calendar-cell.active:hover{
+    /* background: #0aa699 !important;
+     */
+    cursor: pointer;
+	background: linear-gradient(-45deg, #1ac100, #e11c68, #1ea9dc, #dcd436);
+    animation: gradient 5s ease infinite;
+    background-size: 400% 400%;
+
+    
 }
 .calendar-header{
     display: flex;
@@ -41,12 +62,15 @@
 .calendar-cell-task{
     background-color: white;
 
+box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.43);
 }
 
 .calendar-cell-tasks-map{
-    padding: 0 5px 5px;
+    padding: 5px 5px 5px;
     display: flex;
     gap: 5px;
+    overflow: auto;
+    max-height: calc(250px - 24px);
     align-items: flex-start;
     flex-direction: column;
 }
@@ -106,4 +130,40 @@
     padding: 5px;
     width: 250px;
     font-size: 16px;
+}
+
+.users_for_meeting{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+.user_for_meeting-show{
+    display: flex;
+    gap: 10px;
+    padding: 5px;
+    align-items: center;
+    background-color: white;
+}
+
+.user_for_meeting-show img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.user_for_meeting-show-info{
+    display: flex;
+    flex-direction: column;
+}
+.user_for_meeting-show-info-nickname{
+    font-weight: bold;
+}
+
+.user_for_meeting-show svg{
+    width: 40px;
+    cursor: pointer;
+    height: 40px;
+}
+.user_for_meeting-show svg:hover{
+    fill: #f35958;
 }
