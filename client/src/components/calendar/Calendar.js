@@ -12,13 +12,24 @@ import calendar_type from '../global_vars/calendar_type'
 import { FaPlus, FaArrowLeft  } from 'react-icons/fa'
 import how_task_is_needed from '../global_vars/how_task_is_needed'
 
+function WhatShowRender(props) {
+    const [IsEdit, setIsEdit] = useState(false)
+
+
+    return <div>
+        {console.log(props)}
+    </div>
+}
+
 
 function InnerCell(props) {
     const [WhatShow, setWhatShow] = useState({})
+    const [ShowType, setShowType] = useState()
 
+    const [isShow, setisShow] = useState(false)
     useEffect(() => {
         console.log(props)
-    })
+    },[])
     return (
         <div className="ShowInner">
             <div className="ShowInnerSelector">
@@ -43,7 +54,7 @@ function InnerCell(props) {
                         <div className="ShowInnerSelectorBodyTitle">Meetings</div>
                         <div className="ShowInnerSelectorBodyMap">
                             {
-                            props.show_info.show_meetings.map((m, i) => <div key={i} className="ShowInnerSelectorBodySelect">
+                            props.show_info.show_meetings.map((m, i) => <div onClick={() => {setWhatShow(m); setisShow(true); setShowType("meet")}} key={i} className="ShowInnerSelectorBodySelect">
                                 <div className="ShowInnerSelectorBodySelectTop">
                                     {calendar_type.map(state => {
                                         if (state.value == m.calendars.type)
@@ -78,7 +89,7 @@ function InnerCell(props) {
                         <div className="ShowInnerSelectorBodyTitle">My staff</div>
                         <div className="ShowInnerSelectorBodyMap">
                             {
-                            props.show_info.show_calendar.map((c, i) => <div key={i} className="ShowInnerSelectorBodySelect">
+                            props.show_info.show_calendar.map((c, i) => <div onClick={() => {setWhatShow(c); setisShow(true);setShowType("calendar")}} key={i} className="ShowInnerSelectorBodySelect">
                                 <div className="ShowInnerSelectorBodySelectTop">
                                     {calendar_type.map(state => {
                                         if (state.value == c.type)
@@ -113,14 +124,13 @@ function InnerCell(props) {
                         </div>
                     </div> : null
                     }
-                    {/* {console.log(props.show_info.show_day_tasks)} */}
                     { 
                     props.show_info.show_day_tasks.length ?
                     <div className="ShowInnerSelectorBody">
                         <div className="ShowInnerSelectorBodyTitle">Tasks from projects</div>
                         <div className="ShowInnerSelectorBodyMap">
                             {
-                            props.show_info.show_day_tasks.map((c, i) => <div key={i} className="ShowInnerSelectorBodySelect">
+                            props.show_info.show_day_tasks.map((c, i) => <div onClick={() => {setWhatShow(c); setisShow(true);setShowType("task")}} key={i} className="ShowInnerSelectorBodySelect">
                                 <div className="ShowInnerSelectorBodySelectTop">
                                     {types_of_task .map(state => {
                                         if (state.value == c.type)
@@ -161,9 +171,11 @@ function InnerCell(props) {
                     }
                 </div>
             </div>
-            <div>
-
-            </div>
+            {
+            isShow 
+            ? <WhatShowRender WhatShow={WhatShow}/>
+            : null
+            }
         </div>
     )
 }
@@ -199,7 +211,7 @@ function Calendar(props) {
             value: 'all',
             label: <div className="select-element">All tasks</div>
         })
-        for (let y = 0; y < projects.length; y++) {
+        for (let y = 0; y < projects?.length; y++) {
             arr.push({
                 value: projects[y].project._id,
                 label: <div className="select-element">{projects[y].project.name}</div>
