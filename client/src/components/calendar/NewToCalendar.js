@@ -161,8 +161,8 @@ function NewToCalendar(props) {
         sendObj.description = description
         sendObj.images = photos
         sendObj.date = date.getTime()
-        if (type.value == 'reminder') {
-            sendObj.type = 'reminder'
+        if (type.value == 'reminder' || type.value == 'blank') {
+            sendObj.type = type.value
         }
         if (type.value == 'meeting') {
             sendObj.type = 'meeting'
@@ -171,8 +171,8 @@ function NewToCalendar(props) {
         if (type.value == 'todo') {
             sendObj.type = 'todo'
             sendObj.priority = priorityOption.value
-
         }
+
         console.log(sendObj)
 
         axios.post(`/api/calendar/new`,sendObj, {

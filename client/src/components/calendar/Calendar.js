@@ -8,18 +8,48 @@ import task_state from "../global_vars/task_state"
 import types_of_task from "../global_vars/types_of_task"
 import { Link } from 'react-router-dom'
 import calendar_type from '../global_vars/calendar_type'
+import { MdClose } from 'react-icons/md'
 
 import { FaPlus, FaArrowLeft  } from 'react-icons/fa'
 import how_task_is_needed from '../global_vars/how_task_is_needed'
 
+function CalendarRender(props) {
+    const [isEdit, setisEdit] = useState(false)
+    const [ShowPhoto, setShowPhoto] = useState(false)
+
+    return  (!ShowPhoto ? 
+            <div className="task-body">
+                <div className="task-body-exact">
+                    <div className="task-body-title">
+                        {props.WhatShow.title}
+                    </div>
+                    <div className="task-body-description">
+                        {props.WhatShow.description}
+                    </div>
+                    <div className="new-task-photo-control">
+                        {props.WhatShow.images.map((img, i) => <div onClick={() => {
+                            setShowPhoto(img)
+                        }} key={i} className="new-task-photo-control-shell select-photo"><img src={img} alt="" /></div>)}
+                    </div>
+                </div>
+            </div>: 
+            <div className="task-body-photo-container">
+            <MdClose onClick={() => setShowPhoto(false)} />
+            <img src={ShowPhoto} />
+            </div>
+            )
+}
+
 function WhatShowRender(props) {
     const [IsEdit, setIsEdit] = useState(false)
+    useEffect(() => {
 
+    },[props.WhatShow])
 
-    return <div>
-        {console.log(props)}
-    </div>
-}
+    if(props.ShowType == "calendar") 
+        return <CalendarRender WhatShow={props.WhatShow} />
+    return <div>asd</div>
+    }
 
 
 function InnerCell(props) {
@@ -148,7 +178,7 @@ function InnerCell(props) {
                                     <div className="ShowInnerSelectorBodyBottom">
                                         <div className="ShowInnerSelectorBodyPrior">
                                         {
-                                        c.priority != 'blank' && c.priority != null  && how_task_is_needed.map(prior => {
+                                         c.priority != null  && how_task_is_needed.map(prior => {
                                                 if (prior.value == c.priority)
                                                     return <div key={Math.random()}>{prior.label} </div>
                                             })
@@ -173,7 +203,7 @@ function InnerCell(props) {
             </div>
             {
             isShow 
-            ? <WhatShowRender WhatShow={WhatShow}/>
+            ? <WhatShowRender ShowType={ShowType} WhatShow={WhatShow}/>
             : null
             }
         </div>

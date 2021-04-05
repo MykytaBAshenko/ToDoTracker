@@ -11,7 +11,6 @@
 
 .chat-window-chooser{
     display: flex;
-    border-right: 2px solid #1B1E24;
     flex-direction: column;
     height: calc(100vh -60px);
     overflow-y: auto;
