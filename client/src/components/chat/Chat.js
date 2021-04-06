@@ -7,6 +7,7 @@ import { dispatchSetLastUpdateInMsg } from '../../redux/actions/projectAction'
 import { FaTrash, FaEdit } from 'react-icons/fa'
 import {IoSendSharp} from 'react-icons/io5'
 import {GrFormClose} from 'react-icons/gr'
+import { FaPlus, FaArrowLeft  } from 'react-icons/fa'
 
 import { Link } from 'react-router-dom'
 import axios from 'axios'
@@ -33,13 +34,6 @@ const check_if_exist_unread = (data, id) => {
   return false
 }
 
-// const check_on_unread_1_msg = (data, id) => {
-//   if (!id || !data)
-//     return false
-//   if (data.whosee.indexOf(id) == -1)
-//     return true
-//   return false
-// }
 
 const useChat = (roomId, projectInfo) => {
   const [messages, setMessages] = useState([]);
@@ -163,7 +157,10 @@ function Chat(props) {
 
   return (
     <div className={"chat-window " + (props.isshow ? "" : "display-none")}>
-      <div className="chat-window-chooser">
+      <div className={"chat-window-chooser "
+        + (whatIsActive ? " mobile-display-none" : "")
+
+    }>
         <input className="chat-window-input" value={chatname} onChange={e => setchatname(e.target.value)}/>
         {chats?.map((c, i) => <ChatChooser
           key={i}
@@ -183,6 +180,7 @@ function Chat(props) {
       {props.isshow && WhereSend ?
         <ChatOutput
           whatIsActive={whatIsActive}
+          setwhatIsActive={setwhatIsActive}
           auth={auth}
           DeleteMsg={DeleteMsg}
           WhatMessageWasRead={WhatMessageWasRead}
@@ -190,22 +188,13 @@ function Chat(props) {
           WhereSend={WhereSend}
           WhereEdit={WhereEdit}
         /> : 
-        <div id="msgs_body" className="choose-chat-room">
+        <div id="msgs_body" className="choose-chat-room mobile-display-none">
           Select a room
         </div>
       }</div>
   )
 }
 
-// function one_msg_render(props) {
-//   useEffect(() => {
-//     // console.log(WhereSend)
-
-// }, [])
-// return(
-
-// )
-// }
 
 function RenderMyMsgDate(props) {
   const m = new Date(props.was)
@@ -336,7 +325,14 @@ function ChatOutput(props) {
   }, [props.WhatMesShow])
 
   return (
-    <div className="msgsforrender" id="msgs_body">
+    <div className="chat-output-shell">
+      <div className="back-controll">
+      <span className="task-form-link" onClick={() => {
+        props.setwhatIsActive("")
+            }} ><FaArrowLeft /> Back</span>
+      </div>
+    <div className={"msgsforrender" + (props.whatIsActive ? "" : " mobile-display-none")} id="msgs_body">
+      
       <div className="msgsrenderexact">
         {props.WhatMesShow.map((m, i) => <RenderMsg 
                                           setrmediting={setrmediting}
@@ -344,7 +340,7 @@ function ChatOutput(props) {
                                           WhatMessageWasRead={props.WhatMessageWasRead} 
                                           auth={props.auth} 
                                           WhatMesShow={m} 
-                                          key={i}
+                                          key={i+Math.random()}
                                           how_meny_msg={props.WhatMesShow}
                                           DeleteMsg={props.DeleteMsg} 
                                           seteditingId={seteditingId}
@@ -362,6 +358,8 @@ function ChatOutput(props) {
       editingInput={editingInput}
  />
     </div>
+    </div>
+
   )
 }
 

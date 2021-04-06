@@ -116,7 +116,6 @@ function Newtask(props) {
         sendObj.deadline = deadline.getTime()
         else
         sendObj.deadline = 0
-        console.log(sendObj)
         axios.post(`/api/task/create/${projectLink}`, sendObj, {
             headers: { Authorization: token }
         }).then(d => {

@@ -77,13 +77,37 @@ function Newproject(props) {
         try {
             const file = files[0]
 
-            if (!file) console.log({ err: "No files were uploaded.", success: '' })
-
+            if (!file)
+                return toast.error("Bad file.", {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             if (file.size > 8 * 1024 * 1024)
-                alert("Size too large.")
+                return toast.error("Size too large.", {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
 
             if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.mimetype !== 'image/jpg')
-                alert("File format is incorrect.")
+                return toast.error("File format is incorrect.", {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
 
             let formData = new FormData()
             formData.append('file', file)
@@ -91,12 +115,30 @@ function Newproject(props) {
             const res = await axios.post('/api/project/uploadlogo', formData, {
                 headers: { 'content-type': 'multipart/form-data', Authorization: token }
             })
+            if (res.data.success)
+                setlogo("/" + res.data.url)
 
-            setlogo("/" + res.data.url)
+            else
+                return toast.error(res.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
 
         } catch (err) {
-            console.log(err)
-            console.log({ err: err.response?.data?.msg, success: '' })
+            return toast.error("Something broke.", {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
     }
 
@@ -128,15 +170,15 @@ function Newproject(props) {
         }).then(d => {
             if (d.data.success)
                 props.history.push(`/project/${d.data.createdProject.uniqueLink}`)
-            else 
-            return toast.error(d.data.msg, {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
+            else
+                return toast.error(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
                 });
         })
     }

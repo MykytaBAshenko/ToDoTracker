@@ -4,11 +4,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import {dispatchSetChatAction} from '../../redux/actions/chatAction'
 
 import axios from 'axios'
-import { BiMenu} from 'react-icons/bi';
 import { RiMessage2Fill, RiCalendar2Fill } from 'react-icons/ri';
 // import Chat from "../body/project/chat/Chat"
 import {AiFillProject} from 'react-icons/ai';
-
+import {GiHamburgerMenu} from 'react-icons/gi'
 function Header(props) {
     const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
@@ -33,6 +32,7 @@ function Header(props) {
         dispatch(dispatchSetChatAction(!chat_active))
     }
     
+    const [showMobile, setshowMobile] = useState(false)
 
 
     const Logged = () => {
@@ -42,10 +42,11 @@ function Header(props) {
                 </div>
                 <div className="header-body-content-right">
                     <Link onClick={() => {chat_active && setOpenChat()}} className="acc-control" to="/settings" ><img src={user.avatar}></img></Link>
-                    <Link  className="link" to="/" onClick={handleLogout}>Sign out</Link>
                     <button  className={"open-chat-btn "+ (unread.unread.length ? "unread-animation-btn" : "")} onClick={() => setOpenChat()}><RiMessage2Fill/></button >
                     <Link  onClick={() => {chat_active && setOpenChat()}} to="/calendar" className="open-chat-btn" ><RiCalendar2Fill/></Link>
                     <Link  onClick={() => {chat_active && setOpenChat()}} to="/projects" className="open-chat-btn"><AiFillProject/></Link>
+                    <Link  className="link" to="/" onClick={handleLogout}>Sign out</Link>
+
                 </div>
             </div>
         )
@@ -71,14 +72,17 @@ function Header(props) {
             <div  onClick={() => {chat_active && setOpenChat()}}>
                 {
                     props?.showleftcontrol && !chat_active ? 
-                <button className="header-menu-btn" onClick={() => props?.changeVisibilityMenu()}><BiMenu/></button>
+                <button className="header-menu-btn" onClick={() => props?.changeVisibilityMenu()}><GiHamburgerMenu onClick={() => props?.changeVisibilityMenu()}/></button>
                 : <Link className="header-logo" to="/">ToDoTracker</Link>
                 }
             </div>
             : <Link className="header-logo" to="/">ToDoTracker</Link>}
-            {isLogged ? 
-                Logged() : 
-                notLogged()}
+            <button className="mobile_menu_btn" onClick={() => setshowMobile(!showMobile)}><GiHamburgerMenu onClick={() => setshowMobile(!showMobile)}/></button>
+            <div className={showMobile ? "links-shell mobile" : "links-shell"}>
+                {isLogged ? 
+                    Logged(showMobile) : 
+                    notLogged(showMobile)}
+            </div>
             </header>
             {/* <Chat isshow={ isLogged && showchat} /> */}
         </div>

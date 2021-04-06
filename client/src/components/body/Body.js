@@ -48,6 +48,7 @@ function Body(props) {
                         <Route path="/register" component={!isLogged ? Register : Calendar} exact />
                         <Route path="/calendar" component={isLogged ? Calendar : Login} exact />
                         <Route path="/calendar/new" component={isLogged ? NewToCalendar : Login} exact />
+                        <Route path="/calendar/new/:newTime" component={isLogged ? NewToCalendar : Login} exact />
                         <Route path="/calendar/:calendarId/edit" component={isLogged ? EditCalendar : Login} exact />
                         <Route path="/settings" component={isLogged ? Settings : Login} exact />
                         <Route path="/forgot_password" component={!isLogged ? ForgotPass : Calendar} exact />

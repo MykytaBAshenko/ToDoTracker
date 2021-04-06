@@ -41,7 +41,6 @@
     display: grid;
     justify-items: center;
     align-items: center;
-    
     color: #1B1E24;
     font-weight: bold;
     border: 2px solid white;
@@ -153,3 +152,64 @@
 .header-chat-container{
     position: relative;
 }
+
+
+.mobile_menu_btn{
+    display: none;
+   
+
+}
+@media only screen and (max-width: 600px)  {
+    .mobile_menu_btn{
+        font-size: 20px;
+        transition: .5s;
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        color: #1B1E24;
+        justify-self: end;
+        font-weight: bold;
+        border: 2px solid white;
+        background-color: white;
+    }
+    .mobile_menu_btn:hover{
+        border-color: #0aa699 ;
+        background-color: #1B1E24;
+    }
+    .mobile_menu_btn:hover svg{
+        fill: #0aa699 !important;
+    }
+    .mobile_menu_btn svg{
+        fill:#1B1E24;
+        display: block;
+        width: 30px;
+        height: 30px;
+    }
+    .links-shell{
+        display: none;
+
+    }
+    .links-shell.mobile{
+        display: block;
+    }
+    .links-shell.mobile .header-body-content {
+        background-color: #1B1E24;
+    }
+    .links-shell.mobile .header-body-content .header-body-content-right{
+        flex-wrap: wrap;
+    }
+    .header {
+        gap: 0;
+    }
+    .header-body-content{
+        position: absolute;
+        right: 0;
+        z-index: 50;
+        top: 58px;
+        box-sizing:border-box;
+        padding: 10px;
+    }
+}
+

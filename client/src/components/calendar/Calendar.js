@@ -9,9 +9,11 @@ import types_of_task from "../global_vars/types_of_task"
 import { Link } from 'react-router-dom'
 import calendar_type from '../global_vars/calendar_type'
 import { MdClose } from 'react-icons/md'
+import days from '../global_vars/days'
 
 import { FaPlus, FaArrowLeft  } from 'react-icons/fa'
 import how_task_is_needed from '../global_vars/how_task_is_needed'
+
 
 
 function MeetingRender(props) {
@@ -263,14 +265,18 @@ function WhatShowRender(props) {
     useEffect(() => {
 
     },[props.WhatShow])
+    return  <div >
+        <div className="back-calendar-controll">
+      <span className="task-form-link" onClick={() => {
+        // props.setwhatIsActive("")
+        props.setisShow (false)
+            }} ><FaArrowLeft /> Back</span>
+      </div>
+        { props.ShowType == "calendar" ?  <CalendarRender WhatShow={props.WhatShow}/> : null }
+        { props.ShowType == "meeting" ?  <MeetingRender WhatShow={props.WhatShow}/> : null }
+        { props.ShowType == "task" ?  <TaskRender WhatShow={props.WhatShow} /> : null }
+    </div>
 
-    if(props.ShowType == "calendar") 
-        return <CalendarRender WhatShow={props.WhatShow} />
-    if(props.ShowType == "meeting") 
-        return <MeetingRender WhatShow={props.WhatShow} />
-    if(props.ShowType == "task") 
-        return <TaskRender WhatShow={props.WhatShow} />
-    return <></>
     }
 
 
@@ -284,7 +290,7 @@ function InnerCell(props) {
     },[])
     return (
         <div className="ShowInner">
-            <div className="ShowInnerSelector">
+            <div className={"ShowInnerSelector " + (isShow ? "mobile2-display-none" : "")}>
                 <div className="ShowInnerSelectorHeader">
                     <span className="ShowInnerSelectorHeaderBack" onClick={() => {
                     props.setshow_inner(false)
@@ -298,6 +304,10 @@ function InnerCell(props) {
                     }.
                     {props.show_info.output_date.getFullYear()}
                     </div>
+                </div>
+                <div className="link-container">
+                    <Link className="black-btn light-btn" to={`/calendar/new/${props.show_info.output_date.getTime()}`}>Create something</Link>
+
                 </div>
                 <div className="ShowInnerSelectorBody">
                     { 
@@ -425,7 +435,7 @@ function InnerCell(props) {
             </div>
             {
             isShow 
-            ? <WhatShowRender ShowType={ShowType} WhatShow={WhatShow}/>
+            ? <WhatShowRender setWhatShow={setWhatShow} isShow={isShow } setisShow ={setisShow}  ShowType={ShowType} WhatShow={WhatShow}/>
             : null
             }
         </div>
@@ -451,7 +461,7 @@ function Calendar(props) {
     const [select_project, setselect_project] = useState(task_select[0])
     const [meetings, setmeetings] = useState([])
     const [meetings_users, setmeetings_users] = useState([])
-
+ 
 
     const [show_info, setshow_info] = useState({})
     const [show_inner, setshow_inner] = useState(false)
@@ -571,21 +581,21 @@ function Calendar(props) {
                                 function () {
                                     let output_date = new Date(first_day.getTime() + l * 86400000)
                                     let show_day_tasks = []
-                                    for (let y = 0; y < tasks.length; y++) {
+                                    for (let y = 0; y < tasks?.length; y++) {
                                         if (tasks[y].deadline >= output_date.getTime() && tasks[y].deadline < (output_date.getTime() + 86400000)) {
                                             show_day_tasks.push(tasks[y])
                                         }
                                     }
                                     let show_calendar = []
-                                    for (let g = 0; g < calendar.length; g++) {
+                                    for (let g = 0; g < calendar?.length; g++) {
                                         if (calendar[g].date >= output_date.getTime() && calendar[g].date < (output_date.getTime() + 86400000)) {
                                             show_calendar.push(calendar[g])
                                         }
                                     }
                                     let show_meetings = []
-                                    for (let y = 0; y < meetings.length; y++) {
+                                    for (let y = 0; y < meetings?.length; y++) {
                                         if (meetings[y].calendars.date >= output_date.getTime() && meetings[y].calendars.date < (output_date.getTime() + 86400000)) {
-                                            for (let r = 0; r < meetings_users.length; r++) {
+                                            for (let r = 0; r < meetings_users?.length; r++) {
                                                 if (meetings_users[r].cal_id == meetings[y]._id)
                                                     meetings[y].users = meetings_users[r].users
                                             }
@@ -617,7 +627,7 @@ function Calendar(props) {
                                         current_day.getDate() == output_date.getDate()
                                     ) ? " active" : "")} key={l}>
                                         <div className="calendar-cell-header">
-                                            {output_date.getDate() + "." + (output_date.getMonth() + 1) + "." + output_date.getFullYear()}
+                                            {output_date.getDate() + "." + (output_date.getMonth() + 1) + "." + output_date.getFullYear() + " " + days[ output_date.getDay()]}
                                         </div>
                                         <div className="calendar-cell-tasks-map">
                                             {

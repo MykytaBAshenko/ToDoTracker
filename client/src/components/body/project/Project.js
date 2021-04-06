@@ -21,8 +21,6 @@ import {AiFillProject} from 'react-icons/ai';
 import { MdDashboard } from 'react-icons/md';
 import {FaUsers} from 'react-icons/fa'
 
-import {MdUpdate} from 'react-icons/md'
-
 function Project(props) {
     const projectLink = props.match.params.projectLink;
     const auth = useSelector(state => state.auth)
@@ -56,7 +54,7 @@ function Project(props) {
 
     return (
       <div className="dashboard-body">
-         {!chat_active ? <div className="left-control">
+         {!chat_active  ? <div className={"left-control " + (showleft ? "" : "mobile-display-none")}>
          <div>
             <Link to={"/project/"+projectLink+"/tasks"} className="left-control-link"> <RiTaskFill /> { showleft ? <div className="left-control-link-text">Tasks</div>:null}</Link>
             <Link to={"/project/"+projectLink+"/users"} className="left-control-link"> <FaUsers/> { showleft ? <div className="left-control-link-text">Users</div>:null}</Link>

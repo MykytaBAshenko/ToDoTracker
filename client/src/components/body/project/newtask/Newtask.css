@@ -103,3 +103,16 @@ cursor: pointer;
     display: flex;
     gap: 10px;
 }
+
+@media only screen and (max-width: 1500px)  {
+    .new-task-photo-control{
+        grid-template-columns: 1fr 1fr 1fr ;
+    
+    }
+}
+@media only screen and (max-width: 700px)  {
+    .new-task-photo-control{
+        grid-template-columns: 1fr ;
+    
+    }
+}

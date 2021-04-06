@@ -5,7 +5,8 @@
 }
 
 .dashboard_page-control {
-  margin: 10px 0 0 10px;
+  margin: 10px 0px 0 10px;
+  padding-right: 10px;
 }
 
 .dashboard_projects {
@@ -72,6 +73,7 @@
 .dashboard_page-control{
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
   align-items: center;
 }
 
@@ -84,4 +86,9 @@
 .dashboard_page-control input:focus{
   border: 2px solid #1B1E24;
 
+}
+@media only screen and (max-width:440px)  {
+  .dashboard_project-card{
+    max-width: 100%;
+}
 }

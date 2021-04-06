@@ -16,7 +16,8 @@ function NewToCalendar(props) {
     const token = useSelector(state => state.token)
     const [photos, setphotos] = useState([])
     const [priorityOption, setpriorityOption] = useState(how_task_is_nedded[3])
-    const [date, setdate] = useState(new Date())
+
+    const [date, setdate] = useState(props.match.params.newTime ? new Date(parseInt(props.match.params.newTime)) : new Date())
     const [type, settype] = useState(calendar_type[0])
     const [list_of_users_for_meeting, setlist_of_users_for_meeting] = useState([auth?.user?._id])
     const [list_of_users_for_meeting_show, setlist_of_users_for_meeting_show] = useState([])

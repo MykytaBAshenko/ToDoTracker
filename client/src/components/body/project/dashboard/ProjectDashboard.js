@@ -151,13 +151,11 @@ function ProjectDashboard(props) {
                             t.title.substring(0, 15) + "..." :
                             t.title
                         }
-                        {console.log(t.title.length)}
                     </Link>
                     <div className="task_cell-description">{t.description.length > 125 ?
                         t.description.substring(0, 125) + "..." :
                         t.description
                     }</div>
-                    {/* {console.log(t)} */}
                     <div className="task_cell-meta">
                         {t.priority != 'blank' && how_task_is_needed.map(prior => {
                             if (prior.value == t.priority)

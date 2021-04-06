@@ -16,30 +16,32 @@ const fs = require('fs');
 const projectCtrl = {
     uploadLogo: async (req,res) => {
         try {
-            console.log(req.user)
             if (!req.files || Object.keys(req.files).length === 0)
-                return res.status(400).json({ msg: "No files were uploaded." })
+                return res.json({success: false, msg: "No files were uploaded." })
             const file = req.files.file;
 
             if (file.size > 30 * 1024 * 1024) {
                 removeTmp(file.tempFilePath)
-                return res.status(400).json({ msg: "Size too large." })
+                return res.json({success: false, msg: "Size too large." })
             } //30mb
 
             if (file.mimetype !== 'image/jpeg' && file.mimetype !== 'image/png' && file.mimetype !== 'image/jpg') {
                 removeTmp(file.tempFilePath)
-                return res.status(400).json({ msg: "File format is incorrect." })
+                return res.json({success: false, msg: "File format is incorrect." })
             }
+            console.log(req.user)
+
             let new_image_name = `uploads/projects/${Date.now()}_${file.name}`
             fs.rename(file.tempFilePath, new_image_name, (err,) => {
 
                 if (err) {
-                    return res.status(500).json({ msg: err })
+                    return res.json({ msg: err })
                 }
-                return res.json({ url: new_image_name })
+                return res.json({success: true, url: new_image_name })
             });
         } catch (err) {
-            return res.status(500).json({ msg: err.message })
+            console.log(err)
+            return res.json({success: false, msg:"Something broke!"})
         }
     },
     createProject: async (req,res) => {
@@ -166,7 +168,8 @@ const projectCtrl = {
     },
     deleteUser: async (req, res) => {
         try {
-            const project = await Project.find({ "uniqueLink": req.params.projectLink })
+            const project = await Project.find({_id: mongoose.Types.ObjectId(req.params.projectId) })
+            console.log(req.params)
             if(project.length) {
                 const UsersIn = await UsersInProject
                     .find({project: project[0]._id})
@@ -175,7 +178,7 @@ const projectCtrl = {
                     if(UsersIn[o]._id.toString() == req.params.userId.toString() ) {
                         UsersIn[o].remove()
                         UsersIn.splice(o, 1)
-                        return res.json({success: true, msg: "User has been deleted!", UsersInProject: UsersIn})
+                        return res.json({success: true, msg: "The project was abandoned!", UsersInProject: UsersIn})
                     }
                 }
                 return res.json({success: false, msg: "Something went wrong!"})

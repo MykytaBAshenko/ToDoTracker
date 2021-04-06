@@ -53,6 +53,7 @@
 .calendar-header{
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .calendar-header .calendar-select{
@@ -323,4 +324,66 @@ box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.43);
 }
 .users_for_meeting{
     padding-bottom: 5px;
+}
+
+@media only screen and (max-width: 1390px)  {
+    .calendar-grid{
+        margin: 10px;
+        gap: 10px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .calendar-grid > *{
+        width: 200px;
+    }
+    .calendar-empty-cell{
+        display: none;
+    }
+}
+@media only screen and (max-width:440px)  {
+
+    .calendar-grid > *{
+        width: 100%;
+    }
+
+}
+.black-btn.light-btn{
+    border: 2px solid white;
+
+}
+.link-container{
+    padding: 5px 0;
+}
+.back-calendar-controll{
+    display: none;
+}
+
+@media only screen and (max-width:800px)  {
+
+    .back-calendar-controll{
+        display: block;
+    }
+    .back-calendar-controll{
+
+    }
+    .back-calendar-controll .task-form-link{
+        background-color: #1B1E24;
+        color: white;
+        border: 2px solid white;
+    }
+    .ShowInnerSelectorBodySelect{
+
+        width: 100%;
+
+    }
+    .ShowInnerSelector{
+        width: 100%;
+    }
+    .ShowInner{
+        width: 100%;
+        grid-template-columns: 1fr;
+    }
+    .mobile2-display-none{
+        display: none;
+    }
 }
