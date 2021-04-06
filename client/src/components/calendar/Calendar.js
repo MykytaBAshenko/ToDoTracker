@@ -13,6 +13,97 @@ import { MdClose } from 'react-icons/md'
 import { FaPlus, FaArrowLeft  } from 'react-icons/fa'
 import how_task_is_needed from '../global_vars/how_task_is_needed'
 
+
+function MeetingRender(props) {
+    const [ShowPhoto, setShowPhoto] = useState(false)
+    const auth = useSelector(state => state.auth)
+
+    return  (!ShowPhoto ? 
+            <div className="task-body">
+                <div className="task-body-exact">
+                    {console.log(props.WhatShow)}
+                    <div className="task-body-title">
+                        {props.WhatShow.calendars.title}
+                    </div>
+                    <div className="task-body-description">
+                        {props.WhatShow.calendars.description}
+                    </div>
+                    {
+                        props.WhatShow.users.length > 1 ? 
+                        <div className="users_for_meeting_title">Users in meeting</div> : null
+                    }
+                    <div className="users_for_meeting">
+                   
+                    {props.WhatShow.users.map((u, i) => u.user._id != auth.user._id ? <div key={i} className="user_for_meeting-show">   
+                        <img src={u.user.avatar}/>
+                        <div className="user_for_meeting-show-info">
+                            <div className="user_for_meeting-show-info-nickname">
+                                {u.user.nickname}
+                            </div>
+                            <div className="user_for_meeting-show-info-email">
+                                {u.user.email}
+                            </div>
+                        </div>
+                    </div>:null)}
+                </div>
+                {props.WhatShow.calendars.images.length > 0 ?
+                    <div className="new-task-photo-control">
+                        {props.WhatShow.calendars.images.map((img, i) => <div onClick={() => {
+                            setShowPhoto(img)
+                        }} key={i} className="new-task-photo-control-shell select-photo"><img src={img} alt="" /></div>)}
+                    </div>: null}
+                    <div className="calendar-inner-info">
+                        {calendar_type.map(state => {
+                            if (state.value == props.WhatShow.calendars.type)
+                                return <div className="icon-shell" key={Math.random()}>{state.label}</div>
+                        })}
+                        {
+                        props.WhatShow.calendars.priority != 'blank' && props.WhatShow.calendars.priority != null  && how_task_is_needed.map(prior => {
+                                if (prior.value == props.WhatShow.calendars.priority)
+                                    return <div key={Math.random()}>{prior.label} </div>
+                            })
+                        }
+                        <div >
+                            Last update: {
+                            ( (((new Date(props.WhatShow.calendars.updatedAt)).getUTCDate() < 10 ? '0' : '')+((new Date(props.WhatShow.calendars.updatedAt)).getUTCDate()))
+                            +"."+
+                            
+                            ( (((new Date(props.WhatShow.calendars.updatedAt)).getUTCMonth()+1) < 10 ? '0' : '')+((new Date(props.WhatShow.calendars.updatedAt)).getUTCMonth()+1))
+
+                            +"."+
+                            (new Date(props.WhatShow.calendars.updatedAt)).getUTCFullYear())
+
+                            }
+                        </div>
+                        <div >
+                            On date: {
+                            
+                            ( (((new Date(props.WhatShow.calendars.date)).getUTCDate()< 10 ? '0' : '')+((new Date(props.WhatShow.calendars.date)).getUTCDate()))
+
+                            +"."+
+                            ( (((new Date(props.WhatShow.calendars.date)).getUTCMonth()+1< 10 ? '0' : '')+((new Date(props.WhatShow.calendars.date)).getUTCMonth()+1)))
+                            +"."+
+                            (new Date(props.WhatShow.calendars.date)).getUTCFullYear()
+                            +" "+
+                            ( (((new Date(props.WhatShow.calendars.date)).getUTCHours()< 10 ? '0' : '')+((new Date(props.WhatShow.calendars.date)).getUTCHours())))
+                            +"."+
+                            ( (((new Date(props.WhatShow.calendars.date)).getUTCMinutes()< 10 ? '0' : '')+((new Date(props.WhatShow.calendars.date)).getUTCMinutes()))))
+                            }
+                        </div> 
+
+                    </div>
+                    <Link to={`/calendar/${props.WhatShow.calendars._id}/edit`} className="black-btn">Update calendar event</Link>
+                </div>
+            </div>: 
+            <div className="task-body-photo-container">
+            <MdClose onClick={() => setShowPhoto(false)} />
+            <img src={ShowPhoto} />
+            </div>
+            )
+}
+
+
+
 function CalendarRender(props) {
     const [isEdit, setisEdit] = useState(false)
     const [ShowPhoto, setShowPhoto] = useState(false)
@@ -20,6 +111,7 @@ function CalendarRender(props) {
     return  (!ShowPhoto ? 
             <div className="task-body">
                 <div className="task-body-exact">
+                    {console.log(props.WhatShow)}
                     <div className="task-body-title">
                         {props.WhatShow.title}
                     </div>
@@ -31,6 +123,47 @@ function CalendarRender(props) {
                             setShowPhoto(img)
                         }} key={i} className="new-task-photo-control-shell select-photo"><img src={img} alt="" /></div>)}
                     </div>
+                    <div className="calendar-inner-info">
+                        {calendar_type.map(state => {
+                            if (state.value == props.WhatShow.type)
+                                return <div className="icon-shell" key={Math.random()}>{state.label}</div>
+                        })}
+                        {
+                        props.WhatShow.priority != 'blank' && props.WhatShow.priority != null  && how_task_is_needed.map(prior => {
+                                if (prior.value == props.WhatShow.priority)
+                                    return <div key={Math.random()}>{prior.label} </div>
+                            })
+                        }
+                        <div >
+                            Last update: {
+                            ( (((new Date(props.WhatShow.updatedAt)).getUTCDate() < 10 ? '0' : '')+((new Date(props.WhatShow.updatedAt)).getUTCDate()))
+                            +"."+
+                            
+                            ( (((new Date(props.WhatShow.updatedAt)).getUTCMonth()+1) < 10 ? '0' : '')+((new Date(props.WhatShow.updatedAt)).getUTCMonth()+1))
+
+                            +"."+
+                            (new Date(props.WhatShow.updatedAt)).getUTCFullYear())
+
+                            }
+                        </div>
+                        <div >
+                            On date: {
+                            
+                            ( (((new Date(props.WhatShow.date)).getUTCDate()< 10 ? '0' : '')+((new Date(props.WhatShow.date)).getUTCDate()))
+
+                            +"."+
+                            ( (((new Date(props.WhatShow.date)).getUTCMonth()+1< 10 ? '0' : '')+((new Date(props.WhatShow.date)).getUTCMonth()+1)))
+                            +"."+
+                            (new Date(props.WhatShow.date)).getUTCFullYear()
+                            +" "+
+                            ( (((new Date(props.WhatShow.date)).getUTCHours()< 10 ? '0' : '')+((new Date(props.WhatShow.date)).getUTCHours())))
+                            +"."+
+                            ( (((new Date(props.WhatShow.date)).getUTCMinutes()< 10 ? '0' : '')+((new Date(props.WhatShow.date)).getUTCMinutes()))))
+                            }
+                        </div> 
+
+                    </div>
+                    <Link to={`/calendar/${props.WhatShow._id}/edit`} className="black-btn">Update calendar event</Link>
                 </div>
             </div>: 
             <div className="task-body-photo-container">
@@ -40,6 +173,91 @@ function CalendarRender(props) {
             )
 }
 
+
+
+function TaskRender(props) {
+    const [ShowPhoto, setShowPhoto] = useState(false)
+
+    return  (!ShowPhoto ? 
+            <div className="task-body">
+                <div className="task-body-exact">
+                    {console.log(props.WhatShow)}
+                    <div className="task-body-title">
+                        {props.WhatShow.title}
+                    </div>
+                    <div className="task-body-description">
+                        {props.WhatShow.description}
+                    </div>
+                    <div className="new-task-photo-control">
+                        {props.WhatShow.images.map((img, i) => <div onClick={() => {
+                            setShowPhoto(img)
+                        }} key={i} className="new-task-photo-control-shell select-photo"><img src={img} alt="" /></div>)}
+         </div>
+                    <div className="calendar-inner-info">
+                        {calendar_type.map(state => {
+                            if (state.value == props.WhatShow.type)
+                                return <div className="icon-shell" key={Math.random()}>{state.label}</div>
+                        })}
+                        {
+                        props.WhatShow.priority != 'blank' && props.WhatShow.priority != null  && how_task_is_needed.map(prior => {
+                                if (prior.value == props.WhatShow.priority)
+                                    return <div key={Math.random()}>{prior.label} </div>
+                            })
+                        }
+                        {
+                        props.WhatShow.type != 'blank' && props.WhatShow.type != null  && types_of_task.map(type => {
+                                if (type.value == props.WhatShow.type)
+                                    return <div key={Math.random()}>{type.label} </div>
+                            })
+                        }
+                        {
+                        props.WhatShow.state != 'blank' && props.WhatShow.state != null  && task_state.map(s => {
+                                if (s.value == props.WhatShow.state )
+                                    return <div key={Math.random()}>{s.label} </div>
+                            })
+                        }
+                        <div >
+                            Last update: {
+                            ( (((new Date(props.WhatShow.updatedAt)).getUTCDate() < 10 ? '0' : '')+((new Date(props.WhatShow.updatedAt)).getUTCDate()))
+                            +"."+
+                            
+                            ( (((new Date(props.WhatShow.updatedAt)).getUTCMonth()+1) < 10 ? '0' : '')+((new Date(props.WhatShow.updatedAt)).getUTCMonth()+1))
+
+                            +"."+
+                            (new Date(props.WhatShow.updatedAt)).getUTCFullYear())
+
+                            }
+                        </div>
+                        <div >
+                            Deadline: {
+                            
+                            ( (((new Date(props.WhatShow.deadline)).getUTCDate()< 10 ? '0' : '')+((new Date(props.WhatShow.deadline)).getUTCDate()))
+
+                            +"."+
+                            ( (((new Date(props.WhatShow.deadline)).getUTCMonth()+1< 10 ? '0' : '')+((new Date(props.WhatShow.deadline)).getUTCMonth()+1)))
+                            +"."+
+                            (new Date(props.WhatShow.deadline)).getUTCFullYear()
+                            +" "+
+                            ( (((new Date(props.WhatShow.deadline)).getUTCHours()< 10 ? '0' : '')+((new Date(props.WhatShow.deadline)).getUTCHours())))
+                            +"."+
+                            ( (((new Date(props.WhatShow.deadline)).getUTCMinutes()< 10 ? '0' : '')+((new Date(props.WhatShow.deadline)).getUTCMinutes()))))
+                            }
+                        </div> 
+
+                    </div>
+                    <Link to={`project/${props.WhatShow.project.uniqueLink}/task/${props.WhatShow._id}/edit`} className="black-btn">Update task</Link>
+                </div>
+            </div>: 
+            <div className="task-body-photo-container">
+            <MdClose onClick={() => setShowPhoto(false)} />
+            <img src={ShowPhoto} />
+            </div>
+            )
+}
+
+
+
+
 function WhatShowRender(props) {
     const [IsEdit, setIsEdit] = useState(false)
     useEffect(() => {
@@ -48,7 +266,11 @@ function WhatShowRender(props) {
 
     if(props.ShowType == "calendar") 
         return <CalendarRender WhatShow={props.WhatShow} />
-    return <div>asd</div>
+    if(props.ShowType == "meeting") 
+        return <MeetingRender WhatShow={props.WhatShow} />
+    if(props.ShowType == "task") 
+        return <TaskRender WhatShow={props.WhatShow} />
+    return <></>
     }
 
 
@@ -84,7 +306,7 @@ function InnerCell(props) {
                         <div className="ShowInnerSelectorBodyTitle">Meetings</div>
                         <div className="ShowInnerSelectorBodyMap">
                             {
-                            props.show_info.show_meetings.map((m, i) => <div onClick={() => {setWhatShow(m); setisShow(true); setShowType("meet")}} key={i} className="ShowInnerSelectorBodySelect">
+                            props.show_info.show_meetings.map((m, i) => <div onClick={() => {setWhatShow(m); setisShow(true); setShowType("meeting")}} key={i} className="ShowInnerSelectorBodySelect">
                                 <div className="ShowInnerSelectorBodySelectTop">
                                     {calendar_type.map(state => {
                                         if (state.value == m.calendars.type)

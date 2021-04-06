@@ -137,6 +137,89 @@ const calendarCtrl = {
             console.log(err)
             return res.json({ success: false, msg: "Something broke." })
         }
+    },
+    getCalendarForEditing: async(req,res) => {
+        try {
+            let cal = await Calendar.find({_id: mongoose.Types.ObjectId(req.params.calendarId)})
+            if (cal.length) {
+                if(cal[0].type != 'meeting') {
+                    return res.json({ success: true, calendar: cal })
+                }else {
+                    let users = await usersForMeeting.find({calendars: mongoose.Types.ObjectId(req.params.calendarId)}).populate("user")
+                    return res.json({ success: true, calendar: cal, users }) 
+                }
+            }
+            return res.json({ success: false, msg: "Does not exist." })
+        }
+        catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        }
+    },
+    updateCalendar: async(req, res) => {
+        try {
+            let cal = await Calendar.find({_id: mongoose.Types.ObjectId(req.params.calendarId)})
+            if (cal.length) {
+                console.log(cal)
+                if(req.body.type != 'meeting') {
+                    cal[0].title = req.body.title
+                    cal[0].description = req.body.description
+                    cal[0].type = req.body.type
+                    cal[0].images = req.body.images
+                    cal[0].date = req.body.date
+                    cal[0].priority = req.body.priority
+
+                    await cal[0].save()
+                    return res.json({success: true, msg: `Сalendar event has been updated.`})
+                }
+                else {
+                    cal[0].title = req.body.title
+                    cal[0].description = req.body.description
+                    cal[0].type = req.body.type
+                    cal[0].images = req.body.images
+                    cal[0].date = req.body.date
+                    cal[0].priority = null
+                    await cal[0].save()
+                    await usersForMeeting.deleteMany({calendars: cal[0]._id})
+
+                    for(let o = 0; o < req.body.users.length; o++) {
+                        const newMeetingUser = new usersForMeeting({
+                            user: mongoose.Types.ObjectId(req.body.users[o]),
+                            calendars: cal[0]._id
+                        })
+                        await newMeetingUser.save()
+                    }
+            console.log(req.body)
+
+                    return res.json({success: true, msg: `Meeting was successfully updated.`})
+                }
+            }
+            return res.json({ success: false, msg: "Does not exist." })
+        }
+        catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        }
+    },
+    deleteCalendar: async(req, res) => {
+        try {
+            console.log(req.body)
+            console.log(req.user)
+            let cal = await Calendar.find({_id: mongoose.Types.ObjectId(req.params.calendarId)})
+            if (cal.length) {
+                if(cal[0].type == 'meeting')
+                {
+                    await usersForMeeting.deleteMany({calendars: cal[0]._id})
+                }
+                cal[0].remove()
+                return res.json({success: true, msg: `Сalendar event has been updated.`})
+            }
+            return res.json({ success: false, msg: "Does not exist." })
+        }
+        catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        }
     }
 }
 module.exports = calendarCtrl

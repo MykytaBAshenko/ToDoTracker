@@ -302,3 +302,25 @@ box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.43);
     background-color: #0aa699;
 
 }
+.calendar-inner-info{
+    padding-bottom: 5px;
+}
+
+.drop-ctrl{
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.users_for_meeting_title{
+    font-size: 20px;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+.ShowInner .task-body-description{
+    padding-bottom: 0;
+
+}
+.users_for_meeting{
+    padding-bottom: 5px;
+}

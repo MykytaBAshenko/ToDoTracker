@@ -145,7 +145,8 @@ function EditTask(props) {
                 set_vals(d.data.task)
             }
             else {
-                props.history.push(`/project/${projectLink}`)
+                // props.history.push(`/project/${projectLink}`)
+                props.history.goBack()
                 return toast.error(d.data.msg, {
                     position: "bottom-center",
                     autoClose: 5000,
@@ -177,7 +178,9 @@ function EditTask(props) {
             headers: { Authorization: token }
         }).then(d => {
             if(d.data.success) {
-                props.history.push(`/project/${projectLink}/task/${taskId}`)
+                // props.history.push(`/project/${projectLink}/task/${taskId}`)
+                props.history.goBack()
+
                 return toast.success(d.data.msg, {
                     position: "bottom-center",
                     autoClose: 5000,
