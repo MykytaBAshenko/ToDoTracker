@@ -1,13 +1,24 @@
-#BugTracker/Chat/Calendar
-###Technology stack
-#####1. React
-#####2. Redux
-#####3. Node
-#####4. Mongo
-#####5. Express
-#####6. Socket.io
 
-####Live [https://todotrackerapp.herokuapp.com/](https://todotrackerapp.herokuapp.com/)
+
+
+# BugTracker/Chat/Calendar
+
+### Technology stack
+
+##### 1. React
+
+##### 2. Redux
+
+##### 3. Node
+
+##### 4. Mongo
+
+##### 5. Express
+
+##### 6. Socket.io
+
+
+#### Live [https://todotrackerapp.herokuapp.com/](https://todotrackerapp.herokuapp.com/)
 
 
 # Some photo
