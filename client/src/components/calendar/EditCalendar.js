@@ -139,7 +139,6 @@ function EditCalendar(props) {
         }).then(d => {
             if (d.data.success) {
                 // set_vals(d.data.task)
-                console.log(d.data)
                 let calendar = d.data.calendar[0]
                 settitle(calendar.title)
                 setdescription(calendar.description)
@@ -156,7 +155,6 @@ function EditCalendar(props) {
                 }
                 if(d.data.users) {
                     let gg = d.data.users.filter(function(u) {
-                        console.log(u.user._id != auth.user._id, u.user._id, auth.user._id)
                         return u.user._id != auth.user._id;
                     })
 
@@ -227,12 +225,10 @@ function EditCalendar(props) {
         sendObj.priority = priorityOption.value
     }
 
-    console.log(sendObj)
 
     axios.put(`/api/calendar/${someId}`,sendObj, {
         headers: { Authorization: token }
     }).then(d => {
-        console.log(d)
 
         if (d.data.success) {
             props.history.push(`/calendar`)

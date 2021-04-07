@@ -180,12 +180,10 @@ function NewToCalendar(props) {
             sendObj.priority = priorityOption.value
         }
 
-        console.log(sendObj)
 
         axios.post(`/api/calendar/new`,sendObj, {
             headers: { Authorization: token }
         }).then(d => {
-            // console.log(d)
 
             if (d.data.success) {
                 props.history.push(`/calendar`)
@@ -213,14 +211,6 @@ function NewToCalendar(props) {
     }
     return(
         <div className="task-form">
-            {
-                
-                    console.log(list_of_users_for_meeting)
-            }
-            {
-                console.log(list_of_users_for_meeting_show)
-
-            }
             <span className="task-form-link" onClick={() => {
                 props.history.goBack()
             }} ><FaArrowLeft /> Back</span>

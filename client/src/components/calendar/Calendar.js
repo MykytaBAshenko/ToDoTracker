@@ -23,7 +23,6 @@ function MeetingRender(props) {
     return  (!ShowPhoto ? 
             <div className="task-body">
                 <div className="task-body-exact">
-                    {console.log(props.WhatShow)}
                     <div className="task-body-title">
                         {props.WhatShow.calendars.title}
                     </div>
@@ -113,7 +112,6 @@ function CalendarRender(props) {
     return  (!ShowPhoto ? 
             <div className="task-body">
                 <div className="task-body-exact">
-                    {console.log(props.WhatShow)}
                     <div className="task-body-title">
                         {props.WhatShow.title}
                     </div>
@@ -183,7 +181,6 @@ function TaskRender(props) {
     return  (!ShowPhoto ? 
             <div className="task-body">
                 <div className="task-body-exact">
-                    {console.log(props.WhatShow)}
                     <div className="task-body-title">
                         {props.WhatShow.title}
                     </div>
@@ -285,9 +282,6 @@ function InnerCell(props) {
     const [ShowType, setShowType] = useState()
 
     const [isShow, setisShow] = useState(false)
-    useEffect(() => {
-        console.log(props)
-    },[])
     return (
         <div className="ShowInner">
             <div className={"ShowInnerSelector " + (isShow ? "mobile2-display-none" : "")}>
@@ -506,7 +500,6 @@ function Calendar(props) {
             axios.get(`/api/calendar?minTime=${first_day ? first_day?.getTime() : 0}&maxTime=${last_day ? (last_day?.getTime() + 24 * 60 * 60 * 1000) : 0}&selected=${select_project.value}`, {
                 headers: { Authorization: token }
             }).then(d => {
-                console.log(d)
                 if (d.data.success) {
                     settasks(d.data.tasks)
                     setcalendar(d.data.calendar)
@@ -515,7 +508,7 @@ function Calendar(props) {
                 }
             })
 
-    }, [last_day, first_day, select_project])
+    }, [last_day, first_day, select_project, token])
 
 
 
@@ -561,7 +554,6 @@ function Calendar(props) {
                     function () {
                         let cells = []
                         let how_many = first_day?.getDay()
-                        console.log(how_many)
                         for (let l = 0; l < how_many - 1; l++) {
                             cells.push(
 
