@@ -20,7 +20,7 @@
 
 #### Live [https://todotrackerapp.herokuapp.com/](https://todotrackerapp.herokuapp.com/)
 
-
+```python
 ### env
 ACCESS_TOKEN_SECRET=secret1
 
@@ -40,7 +40,7 @@ REACT_APP_SOCKET_SERVER_URL=https://todotrackerapp.herokuapp.com
 
 REFRESH_TOKEN_SECRET=secret3
 
-
+```
 
 # Some images
 
