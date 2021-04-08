@@ -21,7 +21,7 @@
 #### Live [https://todotrackerapp.herokuapp.com/](https://todotrackerapp.herokuapp.com/)
 
 
-# Some photo
+# Some images
 
 ![](readme/1.png)
 ![](readme/2.png)
