@@ -74,7 +74,7 @@ const companyCtrl = {
   },
   getCompanys: async(req, res) => {
     try {
-      let companys = await UserInCompany.find({"user": mongoose.Types.ObjectId(req.user.id)}).populate("project")
+      let companys = await UserInCompany.find({"user": mongoose.Types.ObjectId(req.user.id)}).populate("company")
       res.json({success:true, companys})
     } catch (err) {
         res.json({success: false, msg:"Something broke!"})

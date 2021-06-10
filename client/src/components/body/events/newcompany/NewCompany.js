@@ -115,7 +115,7 @@ function NewCompany(props) {
         }
     }
 
-    const createNewProject = async (e) => {
+    const createNewCompany = async (e) => {
         e.preventDefault()
         const sendobj = {}
         sendobj.name = name
@@ -125,8 +125,9 @@ function NewCompany(props) {
         axios.post("/api/company/new", sendobj, {
             headers: { Authorization: token }
         }).then(d => {
+            console.log(d.data)
             if (d.data.success)
-                props.history.push(`/project/${d.data.createdProject.uniqueLink}`)
+                props.history.push(`/events/companys/${d.data.createdCompany.uniqueLink}`)
             else
                 return toast.error(d.data.msg, {
                     position: "bottom-center",
@@ -143,7 +144,7 @@ function NewCompany(props) {
     return (
         <div className="form-container">
             <div className="form-body">
-                <form onSubmit={(e) => createNewProject(e)}>
+                <form onSubmit={(e) => createNewCompany(e)}>
                     <div className="title text-center">Create new company</div>
                     <div className="image-form-conroler">
 
@@ -189,7 +190,7 @@ function NewCompany(props) {
                             value={uniqueLink} onChange={(e) => handleChangeUniqueLink(e)} />
                         {isuniqueLink ? <label className="error-text">{isuniqueLink}</label > : null}
                     </div>
-                    <button className="black-btn" onClick={(e) => createNewProject(e)}>Create new company</button>
+                    <button className="black-btn" onClick={(e) => createNewCompany(e)}>Create new company</button>
                 </form>
             </div>
         </div>

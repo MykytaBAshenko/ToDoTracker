@@ -48,7 +48,7 @@ window.onload = function(e){
         }
       }
       
-      setInterval(updateGradient,1);
+      setInterval(updateGradient,1000);
 
     }
     

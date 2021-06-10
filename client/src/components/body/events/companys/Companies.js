@@ -11,19 +11,17 @@ function Companies(props) {
     const [search, setsearch] = useState("")
 
     const [projects, setprojects] = useState([])
+
     useEffect(() => {
-        axios.get(`/api/project`, {
+        axios.get(`/api/company`, {
             headers: {  Authorization: token }
           }).then(d => {
+              console.log(d.data)
               if(d?.data?.success){
-                // setprojects(d?.data?.projects)
-                console.log(d.data)
+                setprojects(d?.data?.projects)
               } 
           })
     }, [token])
-
-
-
     
     return (
         <div className="dashboard_page">
@@ -31,27 +29,27 @@ function Companies(props) {
                 <Link className="black-btn" to="/events/companys/new">Create new company</Link>
                 <input type="text" value={search} onChange={e=> setsearch(e.target.value)} />
             </div>
-            <div className="dashboard_projects">
-            {/* {projects.map((p, i) =>   (p.project?.name.indexOf(search) != -1 || p.project.description.indexOf(search) != -1) ?
-                <div key={i} className="dashboard_project-card">
-                    <div className="dashboard_project-card-header">
-                        <div className="dashboard_project-card-header-img">
-                            <img src={p.project.logo}/>
+            <div className="comapny_map">
+                {/* {projects.map((p, i) =>   (p.project?.name.indexOf(search) != -1 || p.project.description.indexOf(search) != -1) ?
+                    <div key={i} className="dashboard_project-card">
+                        <div className="dashboard_project-card-header">
+                            <div className="dashboard_project-card-header-img">
+                                <img src={p.project.logo}/>
+                            </div>
+                            <Link to={"/project/"+p.project.uniqueLink}>
+                            {p.project.name.length > 25 ? 
+                            p.project.name.substring(0,25)+"...":
+                            p.project.name
+                        }</Link> 
                         </div>
-                        <Link to={"/project/"+p.project.uniqueLink}>
-                        {p.project.name.length > 25 ? 
-                        p.project.name.substring(0,25)+"...":
-                        p.project.name
-                       }</Link> 
-                    </div>
-                    <div  className="dashboard_project-card-body">
-                        {p.project.description.length > 135 ? 
-                        p.project.description.substring(0,135)+"...":
-                        p.project.description
-                       }
-                    </div>
-                </div> : null
-      )} */}
+                        <div  className="dashboard_project-card-body">
+                            {p.project.description.length > 135 ? 
+                            p.project.description.substring(0,135)+"...":
+                            p.project.description
+                        }
+                        </div>
+                    </div> : null
+                )} */}
             </div>
         </div>
     )

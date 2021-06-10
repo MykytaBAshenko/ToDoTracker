@@ -70,6 +70,7 @@ function Project(props) {
             <Switch>
               <Route path="/events/companys" component={Companies} exact/>
               <Route path="/events/companys/new" component={NewCompany} exact/>
+              <Route path="/events/companys/:uniqueLink" component={Companies} exact/>
 
             </Switch>
           </div>
