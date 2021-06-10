@@ -9,6 +9,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const sendMail = require('./sendMail')
 const fs = require('fs');
+const { search } = require('../routes/authRouter')
 
 
 const companyCtrl = {
@@ -50,13 +51,14 @@ const companyCtrl = {
             if(!company.length) {
                 const newCompany = new Company({
                     name: req.body.name,
+                    description: req.body.description,
                     logo: req.body.logo,
                     uniqueLink: req.body.uniqueLink,
                 })
                 const createdCompany = await newCompany.save()
                 const UserInComp = new UserInCompany({
                     user: mongoose.Types.ObjectId(req.user.id),
-                    project: mongoose.Types.ObjectId(createdCompany._id),
+                    company: mongoose.Types.ObjectId(createdCompany._id),
                     status: "Owner"
                 })
                 const userInCompany = await UserInComp.save()
@@ -79,8 +81,27 @@ const companyCtrl = {
     } catch (err) {
         res.json({success: false, msg:"Something broke!"})
     }
+  },
+  getCompany: async(req, res) => {
+    try {
+        const comapny = await Company.find({ "uniqueLink": req.params.uniqueLink })
+        if(comapny.length) {
+            const UsersIn = await UserInCompany
+                .find({$and: [{company: comapny[0]._id, user: req.user.id }]})
+                .populate("user")
+                .select('-password')
+            return res.json({success: true,msg:"Project exist", UserInCompany: UsersIn, Company: company[0]})
+            
+        } 
+        else {
+            return res.json({success: false, msg: "Project does not exist"})
+        }
+    } catch (err) {
+        console.log(err)
+        res.json({success: false, msg:"Something broke!"})
+    }
   }
 }
 
 
-module.exports = companyCtrl
+module.exports = companyCtrl    

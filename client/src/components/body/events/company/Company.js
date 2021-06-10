@@ -6,41 +6,39 @@ import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 
 function Company(props) {
-    const projectLink = props.match.params.projectLink;
+    const uniqueLink = props.match.params.uniqueLink;
     const auth = useSelector(state => state.auth)
     const token = useSelector(state => state.token)
     const { isLogged, isAdmin } = auth
-    const [showleft, setshowleft] = useState(false)
-    const chat_active = useSelector(state => state.chat_active.chat_active)
+    const [whatShow, setwhatShow] = useState(0)
+   
+    useEffect(() => {
+        axios.get(`/api/comapny/get/${uniqueLink}`, {
+        headers: {  Authorization: token }
+    }).then(d => {
+        console.log(d)
 
-    const changeVisibilityMenu = () => {
-        setshowleft(!showleft)
-    }
-    //   useEffect(() => {
-    //       console.log(projectLink)
-    //         axios.get(`/api/project/get/${projectLink}`, {
-    //       headers: {  Authorization: token }
-    //     }).then(d => {
-    //       console.log(d)
-
-    //         if(d?.data?.success){
-    //           console.log(d)
-    //         } else {
-    //             props.history.push("/dashboard")
-    //         }
-    //     })
-    //   }, [projectLink])
-
-    //   useEffect(() => {
-    //     console.log(projectLink)
-
-    // }, [projectLink])
+        if(d?.data?.success){
+            console.log(d)
+        } else {
+            props.history.push("/dashboard")
+        }
+    })
+    }, [uniqueLink])
 
     return (
         <div className="dashboard_page">
             <div className="dashboard_page-control">
-                <Link className="black-btn" to="/events/companys/new">Create new company</Link>
-                <input type="text" value={search} onChange={e => setsearch(e.target.value)} />
+                {/* <Link className="black-btn" to={`/events/companys/${uniqueLink}/events`}>Events</Link>
+                <Link className="black-btn" to={`/events/companys/${uniqueLink}/events`}>About</Link>
+                <Link className="black-btn" to={`/events/companys/${uniqueLink}/events`}>Users</Link>
+                <Link className="black-btn" to={`/events/companys/${uniqueLink}/events`}>Settings</Link> */}
+                <button className="black-btn" onClick={() => setwhatShow(0)}>Events</button>
+                <button className="black-btn" onClick={() => setwhatShow(1)}>About</button>
+                <button className="black-btn" onClick={() => setwhatShow(2)}>Users</button>
+                <button className="black-btn" onClick={() => setwhatShow(3)}>Settings</button>
+
+                
             </div>
             <div className="dashboard_projects">
 

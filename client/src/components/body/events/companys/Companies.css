@@ -1,4 +1,8 @@
 .comapny_map{
     display: flex;
     flex-wrap: wrap;
+    margin-top: 10px;
+    padding: 0 10px;
+    width: 100%;
+    gap: 10px;
 }

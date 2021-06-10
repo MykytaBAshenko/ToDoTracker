@@ -3,7 +3,7 @@ const companyCtrl = require('../controllers/companyCtrl')
 const auth = require('../middleware/auth')
 
 router.get('/',auth, companyCtrl.getCompanys)
-// router.get('/get/:projectLink',auth, projectCtrl.getProject)
+router.get('/get/:uniqueLink',auth, companyCtrl.getCompany)
 // router.post('/:projectLink/adduser',auth, projectCtrl.addUser)
 // router.get('/:projectLink/users',auth, projectCtrl.getUsers)
 router.post('/new',auth, companyCtrl.createCompany)

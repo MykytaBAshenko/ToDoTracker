@@ -10,7 +10,7 @@ function Companies(props) {
     const token = useSelector(state => state.token)
     const [search, setsearch] = useState("")
 
-    const [projects, setprojects] = useState([])
+    const [companys, setcompanys] = useState([])
 
     useEffect(() => {
         axios.get(`/api/company`, {
@@ -18,7 +18,7 @@ function Companies(props) {
           }).then(d => {
               console.log(d.data)
               if(d?.data?.success){
-                setprojects(d?.data?.projects)
+                setcompanys(d?.data?.companys)
               } 
           })
     }, [token])
@@ -50,9 +50,32 @@ function Companies(props) {
                         </div>
                     </div> : null
                 )} */}
+
+                {
+                    companys.map((p, i) =>   (p.company?.name.indexOf(search) != -1 || p.company.description.indexOf(search) != -1) ?
+                    <div key={i} className="dashboard_project-card">
+                        <div className="dashboard_project-card-header">
+                            <div className="dashboard_project-card-header-img">
+                                <img src={p.company.logo}/>
+                            </div>
+                            <Link to={"/events/companys/"+p.company.uniqueLink}>
+                            {p.company.name.length > 25 ? 
+                            p.company.name.substring(0,25)+"...":
+                            p.company.name
+                        }</Link> 
+                        </div>
+                        <div  className="dashboard_project-card-body">
+                            {p?.company?.description?.length > 135 ? 
+                            p?.company?.description?.substring(0,135)+"...":
+                            p?.company?.description
+                        }
+                        </div>
+                    </div> : null)
+                }
             </div>
         </div>
     )
 }
 
 export default Companies
+
