@@ -5,6 +5,7 @@ import {dispatchSetChatAction} from '../../redux/actions/chatAction'
 
 import axios from 'axios'
 import { RiMessage2Fill, RiCalendar2Fill } from 'react-icons/ri';
+import {FaMapMarkedAlt} from "react-icons/fa"
 // import Chat from "../body/project/chat/Chat"
 import {AiFillProject} from 'react-icons/ai';
 import {GiHamburgerMenu} from 'react-icons/gi'
@@ -41,10 +42,12 @@ function Header(props) {
                 <div className="header-body-content-left">
                 </div>
                 <div className="header-body-content-right">
-                    <Link onClick={() => {chat_active && setOpenChat()}} className="acc-control" to="/settings" ><img src={user.avatar}></img></Link>
+                    <Link onClick={() => {chat_active && setOpenChat()}} className="acc-control" to="/settings" ><img src={user?.avatar}></img></Link>
                     <button  className={"open-chat-btn "+ (unread.unread.length ? "unread-animation-btn" : "")} onClick={() => setOpenChat()}><RiMessage2Fill/></button >
+
                     <Link  onClick={() => {chat_active && setOpenChat()}} to="/calendar" className="open-chat-btn" ><RiCalendar2Fill/></Link>
                     <Link  onClick={() => {chat_active && setOpenChat()}} to="/projects" className="open-chat-btn"><AiFillProject/></Link>
+                    <Link onClick={() => {chat_active && setOpenChat()}} to="/events" className="open-chat-btn"><FaMapMarkedAlt/></Link>
                     <Link  className="link" to="/" onClick={handleLogout}>Sign out</Link>
 
                 </div>

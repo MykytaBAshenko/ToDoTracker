@@ -12,6 +12,8 @@ import NewToCalendar from '../calendar/NewToCalendar'
 import EditCalendar  from '../calendar/EditCalendar'
 
 import Home from '../body/home/Home'
+import EventsIndex from '../body/events/EventsIndex'
+
 import Dashboard from '../body/dashboard/Dashboard'
 import Settings from '../body/settings/Settings'
 
@@ -36,14 +38,20 @@ function Body(props) {
                 <Switch>
                     
                     <Route path="/project/:projectLink" component={isLogged ? null : Header}/>
+                    <Route path="/events" component={isLogged ? null : Header}  />
+
                     <Route path="*" component={Header} />
                 </Switch>
-                <div className={(props.history.location.pathname.indexOf("/project/") == -1 ?  (chat_active ? "display-none" : "overflow-auto") : "")}>
+                <div className={((props.history.location.pathname.indexOf("/project/") == -1 && props.history.location.pathname.indexOf("/events") == -1 ) ?  (chat_active ? "display-none" : "overflow-auto") : "")}>
                     <Switch>
                         <Route path="/" component={isLogged ? Calendar : Login} exact />
                         <Route path="/projects" component={isLogged ? Dashboard : Login} exact />
                         <Route path="/projects/new" component={isLogged ? Newproject : Login} exact />
                         <Route path="/project/:projectLink" component={isLogged ? Project : Login}/>
+
+                        <Route path="/events" component={isLogged ? EventsIndex : Login} />
+
+
                         <Route path="/login" component={!isLogged ? Login : Calendar} exact />
                         <Route path="/register" component={!isLogged ? Register : Calendar} exact />
                         <Route path="/calendar" component={isLogged ? Calendar : Login} exact />

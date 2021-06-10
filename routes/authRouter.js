@@ -24,6 +24,6 @@ router.post('/uploadimage', userCtrl.uploadImage)
 
 router.patch('/changeinfo',auth, userCtrl.changeUser)
 
-
+router.post('/checkadmincode',auth, userCtrl.checkAdmin)
 
 module.exports = router

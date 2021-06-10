@@ -1,0 +1,17 @@
+.left-control  a {
+  color: white;
+
+}
+.left-control  a path{
+ 
+  stroke: white;
+}
+
+.left-control  a:hover path{
+  stroke: #0aa699;
+
+}
+
+.left-control a:hover{
+  color: #0aa699;
+}

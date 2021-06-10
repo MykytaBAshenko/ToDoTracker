@@ -271,6 +271,35 @@ const userCtrl = {
             console.log(err)
             return res.status(500).json({success: false, msg: "Something broke!" })
         }
+    },
+    checkAdmin: async(req, res) => {
+        try {
+            console.log(req.body)
+            const {admincode} = req.body
+            console.log(admincode, req.user)
+            if (!req.body.is_become_admin) {
+                let user = await Users.findOneAndUpdate({ _id: req.user.id }, {
+                    isAdmin: false
+                })
+                if (user) 
+                    return res.json({success: true, msg: "You stopped being an admin!"})
+                
+            }
+            if (process.env.SECRET_ADMIN_CODE === admincode){
+                let user = await Users.findOneAndUpdate({ _id: req.user.id }, {
+                    isAdmin: true
+                })
+                if (user) 
+                    return res.json({success: true, msg: "You admin now!"})
+            }
+            else {
+                return res.json({success: false,  msg: "Wrong code!" })
+            }
+        }
+        catch (err) {
+            consolr.log(err)
+            return res.json({success: false, msg: "Something went wrong!"})
+        }
     }
     // facebookLogin: async (req, res) => {
     //     try {

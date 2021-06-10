@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
     avatar: {
         type: String,
         default: "/images/defaultUser.jpg"
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

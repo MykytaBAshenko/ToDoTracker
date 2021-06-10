@@ -63,5 +63,6 @@ button{
 @import url("./components/chat/Chat.css");
 @import url("./components/header/header.css");
 @import url("./components/body/auth/auth.css");
+@import url("./components/body/events/EventsIndex.css");
 @import url("./css/item.css");
 

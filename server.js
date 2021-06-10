@@ -25,6 +25,7 @@ app.use(fileUpload({
 app.use('/api/auth', require('./routes/authRouter'))
 app.use('/api/task', require('./routes/taskRouter'))
 app.use('/api/project', require('./routes/projectRouter'))
+app.use('/api/company', require('./routes/companyRouter'))
 app.use('/api/comments', require('./routes/commentsRouter'))
 app.use('/api/calendar', require('./routes/calendarRouter'))
 
