@@ -21,6 +21,22 @@ function CompanyAbout(props) {
     )
 }
 
+function CompanyUsers(props) {
+    return (
+        <div className="comapny-about"> 
+            <div className="comapny-about-head">
+                <div className="comapny-about-head-img">
+                    <img src={props.Company.logo}></img>
+                </div>
+                <div className="company-about-head-title">{props.Company.name}</div>
+            </div>
+            <div className="comapny-about-body">
+                {props.Company.description}
+            </div>
+        </div>
+    )
+}
+
 function Company(props) {
     const uniqueLink = props.match.params.uniqueLink;
     const auth = useSelector(state => state.auth)
