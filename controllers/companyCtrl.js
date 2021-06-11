@@ -84,13 +84,13 @@ const companyCtrl = {
   },
   getCompany: async(req, res) => {
     try {
-        const comapny = await Company.find({ "uniqueLink": req.params.uniqueLink })
-        if(comapny.length) {
+        const company = await Company.find({ "uniqueLink": req.params.uniqueLink })
+        if(company.length) {
             const UsersIn = await UserInCompany
-                .find({$and: [{company: comapny[0]._id, user: req.user.id }]})
+                .find({$and: [{company: company[0]._id, user: req.user.id }]})
                 .populate("user")
                 .select('-password')
-            return res.json({success: true,msg:"Project exist", UserInCompany: UsersIn, Company: company[0]})
+            return res.json({success: true,msg:"Company exist", UserInCompany: UsersIn, Company: company[0]})
             
         } 
         else {

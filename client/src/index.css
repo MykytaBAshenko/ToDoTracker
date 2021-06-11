@@ -61,6 +61,8 @@ button{
 @import url("./components/body/newproject/Newproject.css");
 @import url("./components/body/dashboard/Dashboard.css");
 @import url("./components/body/events/companys/Companies.css");
+@import url("./components/body/events/company/Company.css");
+
 @import url("./components/chat/Chat.css");
 @import url("./components/header/header.css");
 @import url("./components/body/auth/auth.css");
