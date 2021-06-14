@@ -84,7 +84,7 @@ const companyCtrl = {
   },
   getCompany: async(req, res) => {
     try {
-        const company = await Company.find({ "uniqueLink": req.params.uniqueLink })
+        const company = await Company.find({ "uniqueLink": req.params.companyLink })
         if(company.length) {
             const UsersIn = await UserInCompany
                 .find({$and: [{company: company[0]._id, user: req.user.id }]})
@@ -100,7 +100,92 @@ const companyCtrl = {
         console.log(err)
         res.json({success: false, msg:"Something broke!"})
     }
-  }
+  },
+  addUser: async (req,res) => {
+        try {
+            let company = await Company.find({uniqueLink: req.params.companyLink})
+            console.log(req.body)
+            if(company.length) {
+                let users_in_company = await UserInCompany.find({company: company[0]._id })
+                let user_exist = false
+                for(let o  = 0; o < users_in_company.length; o++) {
+                    if (users_in_company[o].user.toString() == req.user.id)
+                        user_exist = true
+                }
+                if(user_exist) {
+                    let invate_user = await Users.find({ email:req.body.adduser})
+                    if(invate_user.length) {
+                        let user_exist_in_proj = false
+                        for (let y = 0; y < users_in_company.length; y++)
+                            if(invate_user[0]._id.toString() == users_in_company[y].user.toString())
+                                user_exist_in_proj = true
+                        if(!user_exist_in_proj) {
+                            const UserInProj = new UserInCompany({
+                                user: invate_user[0]._id,
+                                company: mongoose.Types.ObjectId(company[0]._id),
+                                status: "Member",
+                            })
+                            await UserInProj.save()
+                            const UsersInProj = await UserInCompany.find({company:mongoose.Types.ObjectId(company[0]._id)}).populate("user")
+                            return res.json({success:true,msg: "User added to the company", UsersInProject: UsersInProj })
+                        }
+                        return res.json({success:false, msg: "User with such mail already exists in the company."  })
+                    }
+                    return res.json({success:false, msg: "User with such mail does not exist."  })
+                }
+                return res.json({success:false, msg: "Company does not exist."  })
+            } else {
+                return res.json({success:false, msg: "Current user not in company."  })
+            }
+        } catch (err) {
+            console.log(err)
+            res.json({success: false, msg:"Something broke!"})
+        }
+    },
+    getUsers: async (req,res) => {
+        try {
+            console.log(req.params)
+            const company = await Company.find({ "uniqueLink": req.params.companyLink })
+            if(company.length) {
+                const UsersIn = await UserInCompany
+                    .find({company: company[0]._id})
+                    .populate("user")
+                    .select('-password')
+                return res.json({success: true, UsersInCompany: UsersIn})
+            } 
+            else {
+                return res.json({success: false, msg: "Comapny does not exist"})
+            }
+        } catch (err) {
+            console.log(err)
+            res.json({success: false, msg:"Something broke!"})
+        }
+    },
+    deleteUser: async (req, res) => {
+        try {
+            const company = await Company.find({"uniqueLink": req.params.companyLink })
+            if(company.length) {
+                const UsersIn = await UserInCompany
+                    .find({company: company[0]._id})
+                    .populate("user")
+                for(let o = 0; o < UsersIn.length; o++){
+                    if(UsersIn[o]._id.toString() == req.params.userId.toString() ) {
+                        UsersIn[o].remove()
+                        UsersIn.splice(o, 1)
+                        return res.json({success: true, msg: "User deleted!", UsersInProject: UsersIn})
+                    }
+                }
+                return res.json({success: false, msg: "Something went wrong!"})
+                
+            } 
+            else {
+                return res.json({success: false, msg: "Company does not exist"})
+            }
+        } catch (err) {
+            console.log(err)
+            res.json({success: false, msg:"Something broke!"})
+        }
+    },
 }
 
 

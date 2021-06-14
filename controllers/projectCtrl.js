@@ -169,7 +169,6 @@ const projectCtrl = {
     deleteUser: async (req, res) => {
         try {
             const project = await Project.find({_id: mongoose.Types.ObjectId(req.params.projectId) })
-            console.log(req.params)
             if(project.length) {
                 const UsersIn = await UsersInProject
                     .find({project: project[0]._id})

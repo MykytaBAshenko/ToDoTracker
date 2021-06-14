@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import Companies from './companys/Companies'
 import NewCompany from './newcompany/NewCompany'
 
+import NewEvent from './newevent/NewEvent'
+
 import Company from './company/Company'
 
 
@@ -72,6 +74,8 @@ function Project(props) {
               <Route path="/events/companys" component={Companies} exact/>
               <Route path="/events/companys/new" component={NewCompany} exact/>
               <Route path="/events/companys/:uniqueLink" component={Company} exact/>
+              <Route path="/events/companys/:uniqueLink/new" component={NewEvent} exact/>
+
 
             </Switch>
           </div>
