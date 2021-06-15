@@ -28,6 +28,7 @@ app.use('/api/project', require('./routes/projectRouter'))
 app.use('/api/company', require('./routes/companyRouter'))
 app.use('/api/comments', require('./routes/commentsRouter'))
 app.use('/api/calendar', require('./routes/calendarRouter'))
+app.use('/api/event', require('./routes/eventRouter'))
 
 
 

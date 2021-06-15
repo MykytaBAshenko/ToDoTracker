@@ -207,7 +207,7 @@ function EditTask(props) {
         let new_photos = []
         for(let y = 0; y < photos.length; y++) {
             if(i != y)
-                new_photos.push(photos[i])
+                new_photos.push(photos[y])
         }
         setphotos(new_photos)
     }

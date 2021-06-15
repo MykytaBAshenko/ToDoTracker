@@ -1,0 +1,19 @@
+.map-row {
+    display: flex;
+    flex-direction: column;
+}
+.map-row-title {
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+.map-row .map-input{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    padding-bottom: 5px;
+}
+
+.map-row .map-input input{
+    border: 2px solid white;
+}

@@ -19,9 +19,9 @@ function Newtask(props) {
     const token = useSelector(state => state.token)
     const [title, settitle] = useState("")
     const [body, setbody] = useState("");
-    const [photos, setphotos] = useState([])
     const [priorityOption, setpriorityOption] = useState(how_task_is_needed[3])
     const [typesOption, settypesOption] = useState(types_of_task[1])
+    const [photos, setphotos] = useState([])
 
     
 
@@ -98,9 +98,6 @@ function Newtask(props) {
         }
     }
 
-    useEffect(() => {
-
-    }, [])
 
     const [AddUserInput, setAddUserInput] = useState("")
 
@@ -148,7 +145,7 @@ function Newtask(props) {
         let new_photos = []
         for(let y = 0; y < photos.length; y++) {
             if(i != y)
-                new_photos.push(photos[i])
+                new_photos.push(photos[y])
         }
         setphotos(new_photos)
     }
