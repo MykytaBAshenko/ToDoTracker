@@ -13,7 +13,7 @@ import NewEvent from './newevent/NewEvent'
 
 import Company from './company/Company'
 
-
+import Admin from "./admin/Admin"
 import Header from '../../header/Header'
 
 import { IoListSharp } from 'react-icons/io5';
@@ -58,7 +58,7 @@ function Project(props) {
              <Link to={"/events/"} className="left-control-link"> <IoListSharp/> { showleft ? <div className="left-control-link-text">Events</div>:null}</Link>
             <Link to={"/events/companys"} className="left-control-link"><AiOutlineFileDone/>{ showleft ? <div className="left-control-link-text">Сompanys</div>:null}</Link>
             <Link to={"/events/tickets"} className="left-control-link"><ImTicket/>{ showleft ? <div className="left-control-link-text">Tickets</div>:null}</Link>
-            {auth.user.isAdmin ? <Link to={"/events/tickets"} className="left-control-link"><GrUserSettings/>{ showleft ? <div className="left-control-link-text">Tickets</div>:null}</Link> : null }
+            {auth.user.isAdmin ? <Link to={"/events/admin"} className="left-control-link"><GrUserSettings/>{ showleft ? <div className="left-control-link-text">Tickets</div>:null}</Link> : null }
             {/*<Link to={"/project/"+projectLink+"/users"} className="left-control-link"> <FaUsers/> { showleft ? <div className="left-control-link-text">Users</div>:null}</Link>
             <Link to={"/project/"+projectLink+"/updates"} className="left-control-link"> <MdUpdate/> { showleft ? <div className="left-control-link-text">Updates</div>:null}</Link>
             <Link to={"/project/"+projectLink+"/settings"} className="left-control-link"> <AiFillProject /> { showleft ? <div className="left-control-link-text">Settings</div>:null}</Link>
@@ -75,6 +75,7 @@ function Project(props) {
               <Route path="/events/companys/new" component={NewCompany} exact/>
               <Route path="/events/companys/:uniqueLink" component={Company} exact/>
               <Route path="/events/companys/:uniqueLink/new" component={NewEvent} exact/>
+              <Route path="/events/admin" component={Admin } exact/>
 
 
             </Switch>

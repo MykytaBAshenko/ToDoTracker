@@ -221,44 +221,54 @@ function NewEvent(props) {
 
 
     const createEvent = () => {
-        // let sendObj = {}
-        // sendObj.title = title
-        // sendObj.description = body
-        // sendObj.state = "progress"
-        // sendObj.priority = priorityOption.value
-        // sendObj.type = typesOption.value
-        // sendObj.images = photos
-        // if(isdeadline)
-        // sendObj.deadline = deadline.getTime()
-        // else
-        // sendObj.deadline = 0
-        // axios.post(`/api/task/create/${projectLink}`, sendObj, {
-        //     headers: { Authorization: token }
-        // }).then(d => {
-        //     if(d.data.success) {
-        //         props.history.push(`/project/${projectLink}`)
-        //         return toast.success(d.data.msg, {
-        //             position: "bottom-center",
-        //             autoClose: 5000,
-        //             hideProgressBar: false,
-        //             closeOnClick: true,
-        //             pauseOnHover: true,
-        //             draggable: true,
-        //             progress: undefined,
-        //             });
+        console.log(title,
+            body,
+            typesOption.value,
+            cost,
+            photos,
+            ondate,
+            latitude,
+            longitude
+            
+            )
+
+        let sendObj = {}
+        sendObj.title = title
+        sendObj.description = body
+        sendObj.type = typesOption.value
+        sendObj.images = photos
+        sendObj.cost = cost
+        sendObj.date = ondate.getTime()
+        sendObj.latitude = latitude
+        sendObj.longitude = longitude
+        // console.log(sendObj)
+        axios.post(`/api/event/create/${uniqueLink}`, sendObj, {
+            headers: { Authorization: token }
+        }).then(d => {
+            if(d.data.success) {
+                props.history.push(`/events/companys/${uniqueLink}`)
+                return toast.success(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
         
-        //     }
-        //     else 
-        //         return toast.error(d.data.msg, {
-        //             position: "bottom-center",
-        //             autoClose: 5000,
-        //             hideProgressBar: false,
-        //             closeOnClick: true,
-        //             pauseOnHover: true,
-        //             draggable: true,
-        //             progress: undefined,
-        //             });
-        // })
+            }
+            else 
+                return toast.error(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+        })
     }
 
     return(

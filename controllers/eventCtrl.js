@@ -1,6 +1,7 @@
 const Users = require('../models/userModel')
 const Company = require('../models/companyModel')
 const UserInCompany = require('../models/userInCompanyModel')
+const Event = require('../models/eventModel')
 
 const mongoose = require('mongoose')
 
@@ -10,7 +11,7 @@ const fs = require('fs');
 
 
 
-const taskCtrl = {
+const eventCtrl = {
     uploadImage: async (req, res) => {
         try {
             if (!req.files || Object.keys(req.files).length === 0)
@@ -38,9 +39,54 @@ const taskCtrl = {
         } catch (err) {
             return res.json({ success: false, msg: "Something broke." })
         }
+    },
+    createEvent: async(req, res) => {
+        try {
+            let company = await Company.find({ uniqueLink: req.params.companyLink })
+            if (company.length) {
+                let users_in_company = await UserInCompany.find({ company: company[0]._id })
+                let user_exist_in_company = false
+                for (let o = 0; o < users_in_company.length; o++)
+                    if (users_in_company[o]?.user?._id.toString() == req.user.id)
+                        user_exist_in_company = true
+                if (user_exist_in_company) {
+                    if (req.body.title && req.body.description && req.body.type && req.body.latitude && req.body.longitude) {
+                        const newEvent = new Event({
+                            company: company[0]._id,
+                            title: req.body.title,
+                            description: req.body.description,
+                            type: req.body.type,
+                            images: req?.body?.images,
+                            date: req?.body?.date,
+                            cost: req?.body?.cost,
+                            latitude: req?.body?.latitude,
+                            longitude: req?.body?.longitude
+                        })
+                        await newEvent.save()
+                        return res.json({ success: true, msg: "Event sent for review."})
+                    }
+                    return res.json({ success: false, msg: "Some field is empty." })
+                }
+                return res.json({ success: false, msg: "User not in company." })
+            }
+            return res.json({ success: false, msg: "Company does not exist." })
+        } catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        }
+    },
+    getNonApproved: async(req, res) => {
+        try {
+            let NonApproved = await Event.find({approved:false})
+            console.log(NonApproved)
+            res.json({success: true, NonApproved})
+        } catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        }
     }
 }
 
 
 
-module.exports = taskCtrl
+module.exports = eventCtrl
