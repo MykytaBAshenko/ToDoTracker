@@ -77,8 +77,10 @@ const eventCtrl = {
     },
     getNonApproved: async(req, res) => {
         try {
-            let NonApproved = await Event.find({approved:false})
-            console.log(NonApproved)
+            let user = await Users.find({_id: req.user.id})
+            if(!user.length)
+                res.json({success: false, msg: "User is not admin"})
+            let NonApproved = await Event.find({approved:false}).populate("company")
             res.json({success: true, NonApproved})
         } catch (err) {
             console.log(err)
