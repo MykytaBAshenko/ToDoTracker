@@ -50,7 +50,7 @@ const eventCtrl = {
                     if (users_in_company[o]?.user?._id.toString() == req.user.id)
                         user_exist_in_company = true
                 if (user_exist_in_company) {
-                    if (req.body.title && req.body.description && req.body.type && req.body.latitude && req.body.longitude) {
+                    if (req.body.title && req.body.description && req.body.type) {
                         const newEvent = new Event({
                             company: company[0]._id,
                             title: req.body.title,
@@ -82,6 +82,48 @@ const eventCtrl = {
                 res.json({success: false, msg: "User is not admin"})
             let NonApproved = await Event.find({approved:false}).populate("company")
             res.json({success: true, NonApproved})
+        } catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        }
+    },
+    approveEvent: async(req, res) => {
+        try {
+            let user = await Users.find({_id: req.user.id})
+            if(!user.length)
+                res.json({success: false, msg: "User is not admin"})
+            console.log(req.body)
+            let ChangeEvent = await Event.find({_id:req.body.id})
+                if(ChangeEvent.length) {
+                    ChangeEvent[0].approved = true
+                    await ChangeEvent[0].save()
+                    let NonApproved = await Event.find({approved:false}).populate("company")
+                    res.json({success: true, NonApproved, msg: "Event admitted successfully."})
+                }
+                else {
+                    res.json({success: false, msg: "Something broke."})
+                }
+        } catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        }
+    },
+    dropEvent: async(req, res) => {
+        try {
+            let user = await Users.find({_id: req.user.id})
+            if(!user.length)
+                res.json({success: false, msg: "User is not admin"})
+            console.log(req.body)
+            let ChangeEvent = await Event.find({_id:req.body.id})
+                if(ChangeEvent.length) {
+                    ChangeEvent[0].approved = true
+                    await ChangeEvent[0].remove()
+                    let NonApproved = await Event.find({approved:false}).populate("company")
+                    res.json({success: true, NonApproved, msg: "Event removed successfully."})
+                }
+                else {
+                    res.json({success: false, msg: "Something broke."})
+                }
         } catch (err) {
             console.log(err)
             return res.json({ success: false, msg: "Something broke." })

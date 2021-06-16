@@ -71,6 +71,7 @@ function Project(props) {
           <Header showleftcontrol={true} changeVisibilityMenu={changeVisibilityMenu}></Header>
           <div className="right-content-exact">
             <Switch>
+              <Route path="/events/" component={Companies} exact/>
               <Route path="/events/companys" component={Companies} exact/>
               <Route path="/events/companys/new" component={NewCompany} exact/>
               <Route path="/events/companys/:uniqueLink" component={Company} exact/>

@@ -31,22 +31,91 @@ function AproveEvents(props) {
             }
         })
     },[])
+
+
+    const dropEvent = id => {
+        axios.post("/api/event/remove", {id}, {
+            headers: { Authorization: token }
+        }).then(d => {
+            if(d.data.success) {
+                setNonApproved(d.data.NonApproved)
+                toast.success(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+            else {
+                toast.error(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        })
+    }
+
+    const approveEvent = id => {
+        axios.post("/api/event/approve", {id}, {
+            headers: { Authorization: token }
+        }).then(d => {
+            if(d.data.success) {
+                setNonApproved(d.data.NonApproved)
+                toast.success(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+            else {
+                toast.error(d.data.msg, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        })
+    }
+
+
     return (
         <div className="approveMap">
-
+            {NonApproved.length == 0 ? <div className="nothingToApprove">Nothing to approve!</div> : null}
             {NonApproved.map((na, i) => <div key={i} className="approve-block">
-                <div>{na.title}</div>
-                <div>{na.description}</div>
-                <div>{na.cost} $</div>
-                <div>{(new Date(na.date)).getUTCDate()+"."+((new Date(na.date)).getUTCMonth()+1)+"."+(new Date(na.date)).getUTCFullYear()+" "+(new Date(na.date)).getHours()+"."+(new Date(na.date)).getMinutes()}</div>
-                <div>{na.images.map((img, i) => <div><img key={i} src={img}/></div>)}</div>
+                <div className="approve-block-title">{na.title}</div>
+                <div className="approve-block-description">{na.description}</div>
+                <div className="approve-block-images">{na.images.map((img, i) => <img key={i} src={img}/>)}</div>
+                <div className="approve-block-meta">
                 {na.type != 'blank' && event_type.map(t => {
                         if (t.value == na.type)
                             return <div key={Math.random()}>{t.label}</div>
                     })}
-                <div>
-                    <button>
-                        
+                <div>{na.cost} $</div>
+                <div>{(new Date(na.date)).getUTCDate()+"."+((new Date(na.date)).getUTCMonth()+1)+"."+(new Date(na.date)).getUTCFullYear()+" "+(new Date(na.date)).getHours()+"."+(new Date(na.date)).getMinutes()}</div>
+                    <a className="approve-block-link" href={"/events/companys/"+na.company.uniqueLink} target="_blank">{na.company.name}</a>
+                </div>
+                <div className="approve-block-control">
+                    <button onClick={() => approveEvent(na._id)} className="green-btn">
+                    Approve event
+                    </button>
+                    <button onClick={() => dropEvent(na._id)} className="danger-btn">
+                        Drop event
                     </button>
                 </div>
             </div>)}
@@ -70,6 +139,8 @@ function Admin(props) {
             <div className="dashboard_page-control">
                 <button className="black-btn" onClick={() => setwhatShow(0)}>Approve</button>
                 <button className="black-btn" onClick={() => setwhatShow(1)}>Transactions</button>
+                <button className="black-btn" onClick={() => setwhatShow(2)}>Payment</button>
+
 
             </div>
             <div className="comapny_events_show">
