@@ -128,6 +128,33 @@ const eventCtrl = {
             console.log(err)
             return res.json({ success: false, msg: "Something broke." })
         }
+    },
+    getEvents: async(req, res) => {
+        try {
+            console.log(req.query)
+                let search_obj = {}
+                if (req.query.type)
+                    search_obj.type = req.query.type
+                if(req.query.fromdate||req.query.tilldate) {
+                    search_obj.date = {}
+                }
+                if(req.query.fromdate) {
+                    search_obj.date.$gte = req.query.fromdate
+                }            
+                if(req.query.tilldate) {
+                    search_obj.date.$lt = req.query.tilldate
+                }            
+                if (req.query.search) {
+                    search_obj.$or = [{ title: { "$regex": req.query.search, "$options": "i" } }, { description: { "$regex": req.query.search, "$options": "i" } }]
+                }
+
+                let events = await Event.find(search_obj).populate("company")
+                return res.json({ success: true, events })
+
+        } catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        }
     }
 }
 
