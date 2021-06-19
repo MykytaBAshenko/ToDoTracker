@@ -106,11 +106,63 @@ function Events(props) {
                     />
             </div>
             <div className="events_map">
-                    {events.map((e,i) => <div key={i}>{e.title}</div>)}
+                {events.map((e,i) => <div className="eventCard" key={i}>
+                        {/* {console.log(e)} */}
+                        <div className="eventCardImg">
+                            <img src={e.images[0]}/>
+                        </div>
+                        <Link to={"/events/event/"+e._id}>{e.title}</Link>
+                        <div className="eventCardAll">
+                        <div key={Math.random()}> {e.cost ? e.cost+" $" : "Free"}</div>
+
+                        {e.type != 'blank' && event_type.map(t => {
+                            if (t.value == e.type)
+                                return <div key={Math.random()}>{t.label}</div>
+                        })}
+                        </div>
+
+                        <div className="eventCardDate">
+                        {(new Date(e.date)).getDate()}.
+                        {(new Date(e.date)).getMonth()+1}.
+                        {(new Date(e.date)).getUTCFullYear()}
+                        {" / "}
+                        {(new Date(e.date)).getHours()}.
+                        {(new Date(e.date)).getMinutes()}
+
+                        </div>
+                        <Link className="companyLink" to={"/events/companys/"+e.company.uniqueLink}>{e.company.name}</Link>
+                </div>)}
             </div>
         </div>
     )
 }
-
+// active: false
+// approved: true
+// company:
+// createdAt: "2021-06-11T13:44:56.700Z"
+// description: "asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v↵asdfgfxc;v"
+// logo: "/images/company-placeholder.png"
+// name: "asdfgfxc;v"
+// uniqueLink: "asdfgfxc;v"
+// updatedAt: "2021-06-11T13:44:56.700Z"
+// __v: 0
+// _id: "60c368d89e15f5047c68fcbe"
+// __proto__: Object
+// cost: 123
+// createdAt: "2021-06-16T15:15:01.164Z"
+// date: 1624708076459
+// description: "1231231231"
+// images: Array(2)
+// 0: "/uploads/tasks/1623844374576_4.png"
+// 1: "/uploads/tasks/1623844380446_9.png"
+// length: 2
+// __proto__: Array(0)
+// latitude: 12
+// longitude: 12
+// title: "12312312"
+// type: "meeting"
+// updatedAt: "2021-06-17T19:53:40.940Z"
+// __v: 0
+// _id: "60ca1575df6b5c1cd499722f"
 export default Events
 

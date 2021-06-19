@@ -34,7 +34,7 @@ function Project(props) {
     }
     useEffect(() => {
         console.log(projectLink)
-          axios.get(`/api/project/get/${projectLink}`, {
+      axios.get(`/api/project/get/${projectLink}`, {
         headers: {  Authorization: token }
       }).then(d => {
         console.log(d)

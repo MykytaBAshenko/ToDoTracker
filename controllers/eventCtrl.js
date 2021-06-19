@@ -7,10 +7,7 @@ const mongoose = require('mongoose')
 
 const fs = require('fs');
 
-
-
-
-
+ 
 const eventCtrl = {
     uploadImage: async (req, res) => {
         try {
@@ -50,6 +47,8 @@ const eventCtrl = {
                     if (users_in_company[o]?.user?._id.toString() == req.user.id)
                         user_exist_in_company = true
                 if (user_exist_in_company) {
+                    if(!req.body.images[0])
+                        req.body.images[0]="/images/defaultEvent.jpg"
                     if (req.body.title && req.body.description && req.body.type) {
                         const newEvent = new Event({
                             company: company[0]._id,
@@ -124,6 +123,19 @@ const eventCtrl = {
                 else {
                     res.json({success: false, msg: "Something broke."})
                 }
+        } catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        }
+    },
+    getEvent: async(req, res) => {
+        try {
+            let event = await Event.find({ _id: mongoose.Types.ObjectId(req.params.eventid) }).populate('user')
+            if (event.length) {
+                return res.json({ success: true, event: event[0] })
+            }
+            return res.json({ success: false, msg: "Event does not exist." })
+
         } catch (err) {
             console.log(err)
             return res.json({ success: false, msg: "Something broke." })

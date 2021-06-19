@@ -11,6 +11,7 @@ import Companies from './companys/Companies'
 import NewCompany from './newcompany/NewCompany'
 
 import NewEvent from './newevent/NewEvent'
+import Event from './event/Event'
 
 import Company from './company/Company'
 
@@ -73,6 +74,8 @@ function Project(props) {
           <div className="right-content-exact">
             <Switch>
               <Route path="/events/" component={Events} exact/>
+              <Route path="/events/event/:eventid" component={Event} exact/>
+
               <Route path="/events/companys" component={Companies} exact/>
               <Route path="/events/companys/new" component={NewCompany} exact/>
               <Route path="/events/companys/:uniqueLink" component={Company} exact/>

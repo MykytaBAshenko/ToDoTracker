@@ -66,6 +66,8 @@ button{
 
 
 @import url("./components/body/events/newevent/NewEvent.css");
+@import url("./components/body/events/events/Events.css");
+
 
 @import url("./components/chat/Chat.css");
 @import url("./components/header/header.css");

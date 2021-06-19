@@ -7,6 +7,7 @@ router.post('/uploadphoto',auth, eventCtrl.uploadImage)
 router.post('/create/:companyLink',auth, eventCtrl.createEvent)
 router.get('/nonapproved',auth, eventCtrl.getNonApproved)
 router.get('/',auth, eventCtrl.getEvents)
+router.get('/single/:eventid',auth, eventCtrl.getEvent)
 
 router.post('/approve', auth, eventCtrl.approveEvent)
 router.post('/remove', auth, eventCtrl.dropEvent)

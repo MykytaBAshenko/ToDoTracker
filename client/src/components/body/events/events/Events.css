@@ -1,0 +1,62 @@
+.events_map{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+}
+.eventCard{
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    width: 300px;
+    padding: 10px;
+    background-color: #1B1E24;
+    color: white;
+}
+.eventCard a{
+    font-size: 25px;
+    color: white;
+    font-weight: bold;
+}
+.eventCard a:hover{
+    text-decoration: underline;
+}
+.eventCardImg{
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    height: 200px;
+}
+.eventCardImg img{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    height: 100%;
+}
+.eventCardAll{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.eventCard a.companyLink{
+    font-size: 13px;
+
+}
+
+.task-body-meta-cost{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.task-body-meta-body-left .eventCardDate{
+    font-size: 20px;
+    font-weight: bold;
+}
+.task-body-meta-body-left{
+}
+
+.event-map{
+    width: 100%;
+}
