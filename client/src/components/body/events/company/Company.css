@@ -40,3 +40,37 @@
   white-space: pre-line;
 
 }
+
+.comapny-settings{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.transaction-line{
+    background-color: #1B1E24;
+    padding: 10px;
+}
+
+.transaction-line a{
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.transaction-line-top-line{
+    display: flex;
+    color: white;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    justify-content: space-between;
+}
+.transaction-line-meta{
+    display: flex;
+    padding-top: 5px;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    color: white;
+}

@@ -60,3 +60,10 @@
 .event-map{
     width: 100%;
 }
+
+.event-exist{
+    font-size: 25px;
+    padding-bottom: 20px;
+    color: #ff0000;
+    font-weight: bold;
+}

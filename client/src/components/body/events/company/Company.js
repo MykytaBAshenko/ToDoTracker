@@ -22,6 +22,62 @@ function CompanyAbout(props) {
     )
 }
 
+function CompanySettings(props) {
+    const token = useSelector(state => state.token)
+    const [transactions, settransactions] = useState([])
+    useEffect(() => {
+        axios.get(`/api/event/company/${props.Company._id}/earnings`, {
+            headers: {  Authorization: token }
+        }).then(d => {
+            console.log(d.data)
+            settransactions(d.data.sendArr)
+        })
+    }, [])
+    
+    return (
+        <div className="comapny-settings"> 
+            {
+                transactions.map((t,i) => t.length ?
+                    <div className="transaction-line" key={i}>
+                       <div className="transaction-line-top-line">
+                            <Link to={"/events/event/"+t[0]?.event?._id}>{t[0]?.event?.title}</Link>
+                            <div>
+                                Total: {t.length * t[0]?.event?.cost}  $
+                            </div>
+                        </div>
+                            {t.map((tt, ii) => <div className="transaction-line-meta" key={ii}>
+                            {console.log(tt)}
+                            <div >
+                                {tt.user.email}
+                            </div>
+                            <div>
+                                {tt.paymentID}
+                            </div>
+                            <div>
+                                {tt.paymentToken}
+                            </div>
+                            {/* 
+                            createdAt: "2021-06-20T18:49:45.715Z"
+event: {images: Array(2), approved: true, active: false, latitude: 12, longitude: 12, …}
+paymentID: "PAYID-MDHY3KQ8BU95273FT7131049"
+paymentToken: "EC-57B31256X9362433K"
+updatedAt: "2021-06-20T18:49:45.715Z"
+user: {avatar: "https://lh3.googleusercontent.com/a-/AOh14GgMk4J-NbmZMKpv8PssGqX_0li9h-GK5YvH0kej6g=s96-c", isAdmin: true, _id: "60be1ee59eac7915487155a1", email: "nikita.bashenko2001@gmail.com", password: "$2b$12$eBjcoAz2YlEfrS6LeKgzL.wXLEcKjKYqBu1khy6sNIcg1Z2G3z/M6", …}
+
+                            */}
+
+                            </div>
+                            )}
+                        
+
+                    </div>:null
+                )
+            }
+        </div>
+    )
+
+}
+
 function CompanyUsers(props) {
     const auth = useSelector(state => state.auth)
     const token = useSelector(state => state.token)
@@ -227,7 +283,7 @@ function Company(props) {
                 { UserIn ?                
                     <>
                         <button className="black-btn" onClick={() => setwhatShow(2)}>Users</button>
-                        <button className="black-btn" onClick={() => setwhatShow(3)}>Settings</button> 
+                        <button className="black-btn" onClick={() => setwhatShow(3)}>Earnings</button> 
                     </> :
                     null
                 }
@@ -248,6 +304,11 @@ function Company(props) {
                 {
                     whatShow === 2 ? 
                         <CompanyUsers uniqueLink={uniqueLink} Company={Company}/> : 
+                        null
+                }
+                {
+                    whatShow === 3 ? 
+                        <CompanySettings uniqueLink={uniqueLink} Company={Company}/> : 
                         null
                 }
             </div>

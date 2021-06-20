@@ -75,3 +75,6 @@ button{
 @import url("./components/body/events/EventsIndex.css");
 @import url("./css/item.css");
 
+.event-map > * > *, .event-map > * {
+  width: 100% !important;
+}

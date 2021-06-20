@@ -15,3 +15,28 @@
 .left-control a:hover{
   color: #0aa699;
 }
+
+.tickets{
+  padding: 10px;
+}
+.tickets-map{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.tickets-map > div{
+  background-color: white;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+.tickets-map > div > a{
+  color: #1B1E24;
+  text-decoration: underline;
+  font-size: 20px;font-weight: bold;
+}
+.tickets-map > div > a:hover{
+  text-decoration: none;
+}

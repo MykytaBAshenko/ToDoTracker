@@ -2,6 +2,7 @@ const Users = require('../models/userModel')
 const Company = require('../models/companyModel')
 const UserInCompany = require('../models/userInCompanyModel')
 const Event = require('../models/eventModel')
+const Ticket = require('../models/ticketModel')
 
 const mongoose = require('mongoose')
 
@@ -131,8 +132,10 @@ const eventCtrl = {
     getEvent: async(req, res) => {
         try {
             let event = await Event.find({ _id: mongoose.Types.ObjectId(req.params.eventid) }).populate('user')
+            let ticket = await Ticket.find( { $and: [ { user: req.user.id }, { event: event[0]._id  } ] } )
             if (event.length) {
-                return res.json({ success: true, event: event[0] })
+                console.log(ticket)
+                return res.json({ success: true, event: event[0], ticket: ticket[0] })
             }
             return res.json({ success: false, msg: "Event does not exist." })
 
@@ -167,6 +170,52 @@ const eventCtrl = {
             console.log(err)
             return res.json({ success: false, msg: "Something broke." })
         }
+    },
+    buyEvent: async(req, res) => {
+        try {
+            let event = await Event.find({ _id: mongoose.Types.ObjectId(req.params.eventid) }).populate('user')
+            console.log(event)
+            if(event.length && req.body.paymentToken) {
+                const newTicket = new Ticket({
+                    event: event[0]._id,    
+                    user: mongoose.Types.ObjectId(req.user.id),
+                    paymentToken: req.body.paymentToken,
+                    paymentID: req.body.paymentID
+                })
+                await newTicket.save()
+                return res.json({ success: true, msg: "Event was successfully purchased." })
+            }
+            return res.json({ success: false, msg: "Event does not exist." })
+        } catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        }
+    },
+    getTickets: async(req, res) => {
+        try {
+            let tickets = await Ticket.find({
+                user: mongoose.Types.ObjectId(req.user.id)
+            }).populate("event")
+            return res.json({ success: true, tickets })
+        } catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        } 
+    },
+    getCompanyEarnings: async(req, res) => {
+        try {
+            let events = await Event.find({ company: mongoose.Types.ObjectId(req.params.comapanyId) }).populate('user')
+            let sendArr = []
+            for(let u = 0; u < events.length; u++) {
+                let transactions = await Ticket.find({event: events[u]._id}).populate('user').populate('event')
+                sendArr.push(transactions)
+            }
+            return res.json({ success: true, sendArr })
+
+        } catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        } 
     }
 }
 

@@ -7,6 +7,96 @@ import {FaArrowLeft} from 'react-icons/fa'
 import { MdClose } from 'react-icons/md'
 import ReactMapGL, {Marker} from "react-map-gl"
 import {FaMapMarkerAlt} from "react-icons/fa"
+import PaypalExpressBtn from 'react-paypal-express-checkout';
+import { toast } from 'react-toastify';
+import QRCode from "react-qr-code";
+
+// {paid: true, cancelled: false, payerID: "ZLASZGXE4KMUC", paymentID: "PAYID-MDHX3KY2XA556480K551324F", paymentToken: "EC-4MT81063ER655634L", …}
+// address:
+// city: "San Jose"
+// country_code: "US"
+// line1: "1 Main St"
+// postal_code: "95131"
+// recipient_name: "John Doe"
+// state: "CA"
+// __proto__: Object
+// cancelled: false
+// email: "sb-js0lv2883309@personal.example.com"
+// paid: true
+// payerID: "ZLASZGXE4KMUC"
+// paymentID: "PAYID-MDHX3KY2XA556480K551324F"
+// paymentToken: "EC-4MT81063ER655634L"
+// returnUrl: "https://www.paypal.com/checkoutnow/error?paymentId=PAYID-MDHX3KY2XA556480K551324F&token=EC-4MT81063ER655634L&PayerID=ZLASZGXE4KMUC"
+
+
+class Paypal extends React.Component {
+    render() {
+        const onSuccess = (payment) => {
+            
+            axios.post(`/api/event/buy/${this?.props?.eventId}`, payment, {
+                headers: {  Authorization: this?.props?.token }, 
+              }).then(d => {
+                console.log(d)
+        
+                  if(d?.data?.success){
+                    console.log(d)
+                  } else {
+                    toast.error(d.data.msg, {
+                        position: "bottom-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+              })
+        }
+        const transactionError = () => {
+            console.log('Paypal error')
+          }
+          
+          const transactionCanceled = () => {
+            console.log('Transaction canceled')
+          }
+        const onCancel = (data) => {
+            console.log('The payment was cancelled!', data);
+        }
+  
+        const onError = (err) => {
+            console.log("Error!", err);
+        }
+  
+        let env = 'sandbox'; 
+        let currency = 'USD'; 
+        let total = this.props.toPay; 
+  
+        const client = {
+            sandbox: 'AfyGTdb67AGvKUAa1kpLTn-s2ycDsk0t2oosnETXZzlBW22-Rzhhgntk7bj-0zDgZvMY3GkkLmwqLaYm',
+            production: 'YOUR-PRODUCTION-APP-ID',
+        }
+       return (
+            <PaypalExpressBtn
+                env={env}
+                client={client}
+                currency={currency}
+                total={total}
+                onError={onError}
+                onSuccess={onSuccess}
+                onCancel={onCancel}
+                style={{ 
+                    size:'large',
+                    color:'blue',
+                    shape: 'rect',
+                    label: 'checkout'
+                }}
+                 />
+        );
+    }
+  }
+  
+
 function Map(props){
     let [viewport, setviewport] = useState({
         latitude: Number.parseFloat(props.latitude), 
@@ -45,21 +135,25 @@ function Event(props) {
 
     const token = useSelector(state => state.token)
     const [event, setevent] = useState({})
+    const [ticket, setticket] = useState({})
     useEffect(() => {
         axios.get(`/api/event/single/${props.match.params.eventid}`, {
             headers: {  Authorization: token }
           }).then(d => {
-            console.log(d)
+            console.log(d.data)
     
               if(d?.data?.success){
                 // console.log(d)
                 setevent(d.data.event)
+                setticket(d.data.ticket)
               } else {
                   props.history.push("/events")
               }
           })
     }, [props.match])
+    const onSuccess = (data) => {
 
+    }
 
     return (
         <>{
@@ -109,6 +203,22 @@ function Event(props) {
 
                             </div>
                         </div>
+                        {
+                            ticket?._id ?<>
+                            <QRCode value={"ticket/"+ticket?._id}  />
+                            <div className="event-exist">
+                            </div>
+                            </> :
+                            <Paypal
+                            toPay={event?.cost ?? 0}
+                            onSuccess = {onSuccess}   
+                            eventId={event?._id}      
+                            token={token}  
+                                 
+                        />
+                
+                        }
+                        
                         <div className="event-map">
                             <div>
                                 Latitude: {event?.latitude}
