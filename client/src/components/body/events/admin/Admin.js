@@ -123,6 +123,40 @@ function AproveEvents(props) {
     )
 }
 
+function Transactions(props) {
+    const auth = useSelector(state => state.auth)
+    const token = useSelector(state => state.token)
+    const [tickets, settickets] = useState([])
+    useEffect(() => {
+        axios.get(`/api/event/admin/transactions`, {
+            headers: {  Authorization: token }
+          }).then(d => {
+              if(d?.data?.success){
+                settickets(d.data.tickets)
+              } 
+          })
+    }, [auth.user?.isLogged])
+    
+    return(
+        <div className="micro-transactions">
+            {tickets.map((t,i) => <div key={i}>
+                {console.log(t)}
+                <div className="micro-transactions-header">
+                    <Link to={"/events/event/"+t.event._id}>{t.event.title}</Link>
+                    <div>{t.event.cost} $</div>
+                </div>
+                <div className="micro-transactions-metainfo">
+                    <div>{t.user.email}</div>
+                    <div>{t.paymentID}</div>
+                    <div>{t.paymentToken}</div>
+                    <Link to={"/events/companys/"+t.event.company.uniqueLink}>{t.event.company.name}</Link>
+
+                </div>
+            </div>)}
+        </div>
+    )
+}
+
 
 function Admin(props) {
     const auth = useSelector(state => state.auth)
@@ -139,7 +173,6 @@ function Admin(props) {
             <div className="dashboard_page-control">
                 <button className="black-btn" onClick={() => setwhatShow(0)}>Approve</button>
                 <button className="black-btn" onClick={() => setwhatShow(1)}>Transactions</button>
-                <button className="black-btn" onClick={() => setwhatShow(2)}>Payment</button>
 
 
             </div>
@@ -148,6 +181,11 @@ function Admin(props) {
             {
                 whatShow === 0 ? 
                     <AproveEvents/> : 
+                    null
+            }
+            {
+                whatShow === 1 ? 
+                    <Transactions/> : 
                     null
             }
             </div>

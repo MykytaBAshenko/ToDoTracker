@@ -148,6 +148,7 @@ const eventCtrl = {
         try {
             console.log(req.query)
                 let search_obj = {}
+                search_obj.approved = true
                 if (req.query.type)
                     search_obj.type = req.query.type
                 if(req.query.fromdate||req.query.tilldate) {
@@ -162,6 +163,16 @@ const eventCtrl = {
                 if (req.query.search) {
                     search_obj.$or = [{ title: { "$regex": req.query.search, "$options": "i" } }, { description: { "$regex": req.query.search, "$options": "i" } }]
                 }
+                if (req.query.mincost || req.query.maxcost) {
+                    search_obj.cost = {}
+                    if(req.query.mincost) {
+                        search_obj.cost.$gte = req.query.mincost
+                    }
+                    if(req.query.maxcost) {
+                        search_obj.cost.$lt = req.query.maxcost
+                    }
+                }
+
 
                 let events = await Event.find(search_obj).populate("company")
                 return res.json({ success: true, events })
@@ -216,6 +227,39 @@ const eventCtrl = {
             console.log(err)
             return res.json({ success: false, msg: "Something broke." })
         } 
+    },
+    getCompanyEvents: async(req, res) => {
+        try {
+
+            let company = await Company.find({ uniqueLink: req.params.uniqueLink })
+            
+            if(company.length) {
+                let events = await Event.find({ company: company[0]._id,approved: true })
+            return res.json({ success: true, events })
+
+            }            
+            // let events = await Event.find({ company: mongoose.Types.ObjectId(req.params.comapanyId) }).populate('user')
+            // let sendArr = []
+            // for(let u = 0; u < events.length; u++) {
+            //     let transactions = await Ticket.find({event: events[u]._id}).populate('user').populate('event')
+            //     sendArr.push(transactions)
+            // }
+            // return res.json({ success: true, sendArr })
+            return res.json({ success: false, msg: "Something broke." })
+
+        } catch (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Something broke." })
+        } 
+    },
+    getAdminTransactions: async(req, res) => {
+        let tickets = await Ticket.find().populate({
+            path : 'event',
+            populate : {
+              path : 'company'
+            }
+          }).populate("user")
+        return res.json({success: true, tickets})
     }
 }
 

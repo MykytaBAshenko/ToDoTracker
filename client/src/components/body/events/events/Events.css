@@ -59,6 +59,13 @@
 
 .event-map{
     width: 100%;
+    margin-top:10px;
+}
+
+.event-map > div{
+    line-height: 35px;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .event-exist{

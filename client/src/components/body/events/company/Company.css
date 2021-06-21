@@ -50,6 +50,7 @@
 .transaction-line{
     background-color: #1B1E24;
     padding: 10px;
+    margin-bottom: 10px;
 }
 
 .transaction-line a{

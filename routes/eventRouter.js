@@ -11,7 +11,8 @@ router.get('/single/:eventid',auth, eventCtrl.getEvent)
 router.post('/buy/:eventid',auth, eventCtrl.buyEvent) 
 router.get('/tickets',auth, eventCtrl.getTickets)
 router.get('/company/:comapanyId/earnings',auth, eventCtrl.getCompanyEarnings)
-
+router.get('/company/events/:uniqueLink',auth, eventCtrl.getCompanyEvents)
+router.get('/admin/transactions', auth, eventCtrl.getAdminTransactions)
 router.post('/approve', auth, eventCtrl.approveEvent)
 router.post('/remove', auth, eventCtrl.dropEvent)
 

@@ -11,22 +11,6 @@ import PaypalExpressBtn from 'react-paypal-express-checkout';
 import { toast } from 'react-toastify';
 import QRCode from "react-qr-code";
 
-// {paid: true, cancelled: false, payerID: "ZLASZGXE4KMUC", paymentID: "PAYID-MDHX3KY2XA556480K551324F", paymentToken: "EC-4MT81063ER655634L", …}
-// address:
-// city: "San Jose"
-// country_code: "US"
-// line1: "1 Main St"
-// postal_code: "95131"
-// recipient_name: "John Doe"
-// state: "CA"
-// __proto__: Object
-// cancelled: false
-// email: "sb-js0lv2883309@personal.example.com"
-// paid: true
-// payerID: "ZLASZGXE4KMUC"
-// paymentID: "PAYID-MDHX3KY2XA556480K551324F"
-// paymentToken: "EC-4MT81063ER655634L"
-// returnUrl: "https://www.paypal.com/checkoutnow/error?paymentId=PAYID-MDHX3KY2XA556480K551324F&token=EC-4MT81063ER655634L&PayerID=ZLASZGXE4KMUC"
 
 
 class Paypal extends React.Component {
@@ -37,9 +21,9 @@ class Paypal extends React.Component {
                 headers: {  Authorization: this?.props?.token }, 
               }).then(d => {
                 console.log(d)
-        
+
                   if(d?.data?.success){
-                    console.log(d)
+                    this?.props?.onSuccess()
                   } else {
                     toast.error(d.data.msg, {
                         position: "bottom-center",
@@ -136,6 +120,7 @@ function Event(props) {
     const token = useSelector(state => state.token)
     const [event, setevent] = useState({})
     const [ticket, setticket] = useState({})
+    const [act, setact] = useState(false)
     useEffect(() => {
         axios.get(`/api/event/single/${props.match.params.eventid}`, {
             headers: {  Authorization: token }
@@ -150,10 +135,14 @@ function Event(props) {
                   props.history.push("/events")
               }
           })
-    }, [props.match])
+    }, [props.match, act])
     const onSuccess = (data) => {
+        setact(!act)
 
     }
+
+    useEffect(() => {
+    }, [ticket])
 
     return (
         <>{
@@ -209,13 +198,34 @@ function Event(props) {
                             <div className="event-exist">
                             </div>
                             </> :
+                            event?.cost ?
                             <Paypal
                             toPay={event?.cost ?? 0}
                             onSuccess = {onSuccess}   
                             eventId={event?._id}      
                             token={token}  
-                                 
-                        />
+                        /> : <button onClick={() => {
+                            axios.post(`/api/event/buy/${event?._id}`, {paymentToken: "FREE",paymentID:"FREE"}, {
+                                headers: {  Authorization: token }, 
+                              }).then(d => {
+                                  if(d?.data?.success){
+                                    console.log(d)
+                                    setact(!act)
+                                  } else {
+                                    toast.error(d.data.msg, {
+                                        position: "bottom-center",
+                                        autoClose: 5000,
+                                        hideProgressBar: false,
+                                        closeOnClick: true,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        progress: undefined,
+                                    });
+                                }
+                              })
+                        }} className="danger-btn">
+                            Get Ticket for free
+                        </button>
                 
                         }
                         

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-toastify';
+import event_type from "../../../global_vars/event_type"
 
 function CompanyAbout(props) {
     return (
@@ -224,9 +225,25 @@ function CompanyUsers(props) {
 
 
 function CompanyEvents(props) {
+    const [SearchEvent, setSearchEvent] = useState("")
     // const [SearchEvent, setSearchEvent] = useState("")
-    // const [SearchEvent, setSearchEvent] = useState("")
-
+    const token = useSelector(state => state.token)
+    const [events, setevents] = useState([])
+    useEffect(() => {
+        if(props.uniqueLink)
+        axios.get(`/api/event/company/events/${props.uniqueLink}?search=${SearchEvent}`, {
+            headers: {  Authorization: token }
+        }).then(d => {
+            console.log(d.data)
+            setevents(d.data.events.sort(function(a, b) {
+                return b.date - a.date;
+              })
+              
+              )
+            if(d?.data?.success){
+            } 
+        })
+    }, [SearchEvent, props.uniqueLink])
 
     return (
         <div>
@@ -234,12 +251,38 @@ function CompanyEvents(props) {
                 {props.UserIn &&
                 <Link className="green-btn" to={`/events/companys/${props.uniqueLink}/new`}>Add new event</Link>
                 }
-                {/* <input value={AddUserInput} placeholder="User email" onChange={e => setAddUserInput(e.target.value)}></input>
-                <button className="black-btn" onClick={() => AddUserToProject()}>Add user in project</button>
+                <input value={SearchEvent} placeholder="Search event" onChange={e => setSearchEvent(e.target.value)}></input>
+                 {/*<button className="black-btn" onClick={() => AddUserToProject()}>Add user in project</button>
                 <input value={usersearch} placeholder="Search user" onChange={e => setusersearch(e.target.value)}></input> */}
             
             </div>
-            
+            <div className="events_map">
+                {events.map((e,i) => <div className="eventCard" key={i}>
+                        {/* {console.log(e)} */}
+                        <div className="eventCardImg">
+                            <img src={e.images[0]}/>
+                        </div>
+                        <Link to={"/events/event/"+e._id}>{e.title}</Link>
+                        <div className="eventCardAll">
+                        <div key={Math.random()}> {e.cost ? e.cost+" $" : "Free"}</div>
+
+                        {e.type != 'blank' && event_type.map(t => {
+                            if (t.value == e.type)
+                                return <div key={Math.random()}>{t.label}</div>
+                        })}
+                        </div>
+
+                        <div className="eventCardDate">
+                        {(new Date(e.date)).getDate()}.
+                        {(new Date(e.date)).getMonth()+1}.
+                        {(new Date(e.date)).getUTCFullYear()}
+                        {" / "}
+                        {(new Date(e.date)).getHours()}.
+                        {(new Date(e.date)).getMinutes()}
+
+                        </div>
+                </div>)}
+            </div>
         </div>
     )
 }

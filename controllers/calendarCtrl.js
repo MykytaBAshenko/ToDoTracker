@@ -6,6 +6,7 @@ const Calendar = require('../models/calendarModel')
 const usersForMeeting = require('../models/usersForMeeting')
 const mongoose = require('mongoose')
 const fs = require('fs');
+const Ticket = require('../models/ticketModel')
 
 
 const calendarCtrl = {
@@ -65,6 +66,13 @@ const calendarCtrl = {
                 let tasks = await Task.find(search_task_obj).populate("project")
                 let calendar = await Calendar.find(search_calendar_obj)
                 let meetings = await usersForMeeting.find({user: mongoose.Types.ObjectId(req.user.id)}).populate("calendars")
+                let tickets = await Ticket.find({user: mongoose.Types.ObjectId(req.user.id)}).find().populate({
+                    path : 'event',
+                    populate : {
+                      path : 'company'
+                    }
+                  }).populate("user")
+
                 let array_of_users_for_meetings = []
 
 
@@ -75,7 +83,7 @@ const calendarCtrl = {
                     push_arr.users = await usersForMeeting.find({calendars: meetings[y].calendars}).populate("user")
                     array_of_users_for_meetings.push(push_arr)
                 }
-                return res.json({success:true, tasks, calendar, meetings, array_of_users_for_meetings})
+                return res.json({success:true, tasks, calendar, meetings, array_of_users_for_meetings, tickets})
             }
         }
         catch (err) {

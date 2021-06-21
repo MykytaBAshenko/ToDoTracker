@@ -25,7 +25,7 @@ function Tickets(props) {
             {tickets.length ? 
                 <div className="tickets-map">
                     {tickets.map((t, i) => 
-                    <div>
+                    <div key={i}>
                         <Link to={"/events/event/"+t.event._id}>
                             {t.event.title}
                         </Link>

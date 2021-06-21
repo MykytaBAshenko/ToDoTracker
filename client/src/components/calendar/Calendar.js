@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom'
 import calendar_type from '../global_vars/calendar_type'
 import { MdClose } from 'react-icons/md'
 import days from '../global_vars/days'
+import event_type from "../global_vars/event_type"
 
 import { FaPlus, FaArrowLeft  } from 'react-icons/fa'
 import how_task_is_needed from '../global_vars/how_task_is_needed'
@@ -425,6 +426,45 @@ function InnerCell(props) {
                         </div>
                     </div> : null
                     }
+                                        { 
+                    props.show_info.show_ticket.length ?
+                    <div className="ShowInnerSelectorBody">
+                        <div className="ShowInnerSelectorBodyTitle">Tickets</div>
+                        <div className="ShowInnerSelectorBodyMap">
+                            {
+                            props.show_info.show_ticket.map((c, i) => <Link to={"/events/event/"+c.event._id} key={i} className="ShowInnerSelectorBodySelect">
+                                <div className="ShowInnerSelectorBodySelectTop">
+                                    {event_type .map(state => {
+                                        if (state.value == c.event.type &&  c.event.type != 'blank')
+                                            return <div className="icon-shell" key={Math.random()}>{state.icon}</div>
+                                    })}
+                                    <div className="ShowInnerSelectorBodySelectTitle">
+                                        <div>
+                                        {
+                                    c.event.title.length > 30 ?
+                                    c.event.title.substring(0, 30) + "..." :
+                                    c.event.title
+                                    }
+                                    </div>
+                                    
+                                    <div className="ShowInnerSelectorBodyBottom">
+                                        <div className="ShowInnerSelectorBodyPrior">
+                                            </div>
+                                            <div className="ShowInnerSelectorBodyProjectName">
+                                        {/* {c.project.name} */}
+                                    </div>
+                                        <span>
+                                            { ((new Date(c.event.date)).getHours() <10 ? '0' : '') + (new Date(c.event.date)).getHours() + "." + 
+                                            ((new Date(c.event.date)).getMinutes() <10 ? '0' : '') + (new Date(c.event.date)).getMinutes()}
+                                        </span>
+                                    </div>
+                                    </div>
+                                </div>
+                            </Link>)
+                            }
+                        </div>
+                    </div> : null
+                    }
                 </div>
             </div>
             {
@@ -459,7 +499,7 @@ function Calendar(props) {
 
     const [show_info, setshow_info] = useState({})
     const [show_inner, setshow_inner] = useState(false)
-
+    const [tickets, settickets] = useState([])
 
     useEffect(() => {
         let arr = []
@@ -501,10 +541,12 @@ function Calendar(props) {
                 headers: { Authorization: token }
             }).then(d => {
                 if (d.data.success) {
+                    console.log(d.data)
                     settasks(d.data.tasks)
                     setcalendar(d.data.calendar)
                     setmeetings(d.data.meetings)
                     setmeetings_users(d.data.array_of_users_for_meetings)
+                    settickets(d.data.tickets)
                 }
             })
 
@@ -595,6 +637,20 @@ function Calendar(props) {
 
                                         }
                                     }
+
+
+                                    let show_ticket = []
+
+                                    for (let y = 0; y < tickets?.length; y++) {
+                                        if (tickets[y].event.date >= output_date.getTime() && tickets[y].event.date < (output_date.getTime() + 86400000)) {
+                                        
+                                            show_ticket.push(tickets[y])
+
+                                        }
+                                    }
+                                    show_ticket.sort(function(a,b) {
+                                        return a.event.date - b.event.date
+                                    })
                                     show_meetings.sort(function (a, b) {
                                         return a.date - b.date
                                     })
@@ -611,7 +667,8 @@ function Calendar(props) {
                                             show_day_tasks,
                                             show_calendar,
                                             show_meetings,
-                                            output_date
+                                            output_date,
+                                            show_ticket
                                         })
                                     }} className={"calendar-cell " + ((
                                         current_day.getFullYear() == output_date.getFullYear() &&
@@ -678,6 +735,26 @@ function Calendar(props) {
                                                         ((new Date(t.deadline)).getMinutes() <10 ? '0' : '') + (new Date(t.deadline)).getMinutes()}
                                                     </div>
                                                 </div>)
+                                            }
+                                            {
+                                                show_ticket.map((t,i) => <div className={`calendar-cell-task priority-${t.priority}`} key={i}>
+                                                {event_type.map(state => {
+                                                    if (state.value == t.event.type &&  t.event.type != 'blank')
+                                                        return <div className="icon-shell" key={Math.random()}>{state.icon}</div>
+                                                })}
+                                                <div className="calendar-task-title">
+                                                    {
+                                                        t.event.title.length > 10 ?
+                                                            t.event.title.substring(0, 10) + "..." :
+                                                            t.event.title
+                                                    }
+                                                </div>
+                                                <div className="calendar-cell-time">
+                                                { ((new Date(t.event.date)).getHours() <10 ? '0' : '') + (new Date(t.event.date)).getHours() + "." + 
+                                                    ((new Date(t.event.date)).getMinutes() <10 ? '0' : '') + (new Date(t.event.date)).getMinutes()}
+                                                </div>
+                                            </div>)
+
                                             }
 
                                         </div>
